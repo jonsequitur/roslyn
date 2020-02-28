@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
         void OnSourceFileUpdated(DocumentId documentId);
 
         void StartDebuggingSession();
-        void StartEditSession();
+        void StartEditSession(ActiveStatementProvider activeStatementsProvider);
         void EndEditSession();
         void EndDebuggingSession();
 
