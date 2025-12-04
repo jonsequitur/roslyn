@@ -723,7 +723,7 @@ a + b";
 
             // EOF Invalid span for childnode
             var classDecl2 = (TypeDeclarationSyntax)root.ChildNodes().Last();
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(EOFSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(EOFSpan)).Should().Throw<ArgumentOutOfRangeException>();
 
             // Check end position included in node span
             var nodeEndPositionSpan = new TextSpan(classDecl.FullSpan.End, 0);
@@ -733,19 +733,19 @@ a + b";
             classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: false).Should().Be(classDecl2);
             classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: true).Should().Be(classDecl2);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl.FindNode(nodeEndPositionSpan));
+            FluentActions.Invoking(() => classDecl.FindNode(nodeEndPositionSpan)).Should().Throw<ArgumentOutOfRangeException>();
 
             // Invalid spans.
             var invalidSpan = new TextSpan(100, 100);
-            Assert.Throws<ArgumentOutOfRangeException>(() => root.FindNode(invalidSpan));
+            FluentActions.Invoking(() => root.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(root.FullSpan.End - 1, 2);
-            Assert.Throws<ArgumentOutOfRangeException>(() => root.FindNode(invalidSpan));
+            FluentActions.Invoking(() => root.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(classDecl2.FullSpan.Start - 1, root.FullSpan.End);
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(invalidSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(classDecl.FullSpan.End, root.FullSpan.End);
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(invalidSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             // Parent node's span.
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl.FindNode(root.FullSpan));
+            FluentActions.Invoking(() => classDecl.FindNode(root.FullSpan)).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [WorkItem(539941, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/539941")]
@@ -2117,10 +2117,10 @@ class Test
             var stat2 = SyntaxFactory.ParseStatement("m2(y)");
 
             // you cannot replace a node that is a single node member with multiple nodes
-            Assert.Throws<InvalidOperationException>(() => ifstatement.ReplaceNode(then, new[] { stat1, stat2 }));
+            FluentActions.Invoking(() => ifstatement.ReplaceNode(then, new[] { stat1, stat2 })).Should().Throw<InvalidOperationException>();
 
             // you cannot replace a node that is a single node member with an empty list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.ReplaceNode(then, new StatementSyntax[] { }));
+            FluentActions.Invoking(() => ifstatement.ReplaceNode(then, new StatementSyntax[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2157,10 +2157,10 @@ class Test
             var stat2 = SyntaxFactory.ParseStatement("m2(y)");
 
             // you cannot insert nodes before/after a node that is not part of a list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.InsertNodesBefore(then, new[] { stat1, stat2 }));
+            FluentActions.Invoking(() => ifstatement.InsertNodesBefore(then, new[] { stat1, stat2 })).Should().Throw<InvalidOperationException>();
 
             // you cannot insert nodes before/after a node that is not part of a list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.InsertNodesAfter(then, new StatementSyntax[] { }));
+            FluentActions.Invoking(() => ifstatement.InsertNodesAfter(then, new StatementSyntax[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2258,10 +2258,10 @@ class Test
             var identifierB = SyntaxFactory.ParseToken("B");
 
             // you cannot replace a token that is a single token member with multiple tokens
-            Assert.Throws<InvalidOperationException>(() => cu.ReplaceToken(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.ReplaceToken(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
 
             // you cannot replace a token that is a single token member with an empty list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.ReplaceToken(identifierC, new SyntaxToken[] { }));
+            FluentActions.Invoking(() => cu.ReplaceToken(identifierC, new SyntaxToken[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2289,10 +2289,10 @@ class Test
             var identifierB = SyntaxFactory.ParseToken("B");
 
             // you cannot insert a token before/after a token that is not part of a list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.InsertTokensBefore(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.InsertTokensBefore(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
 
             // you cannot insert a token before/after a token that is not part of a list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.InsertTokensAfter(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.InsertTokensAfter(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -3445,9 +3445,9 @@ class Program
             SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, intType });
             SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, intType, commaToken });
 
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { commaToken }));
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, commaToken }));
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, intType }));
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { commaToken })).Should().Throw<ArgumentException>();
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, commaToken })).Should().Throw<ArgumentException>();
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, intType })).Should().Throw<ArgumentException>();
         }
 
         [WorkItem(543310, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543310")]
@@ -3547,11 +3547,11 @@ class C
         public void Test_SyntaxTree_ParseTextInvalidArguments()
         {
             // Invalid arguments - Validate Exceptions     
-            Assert.Throws<System.ArgumentNullException>(delegate
+            FluentActions.Invoking(delegate
             {
                 SourceText st = null;
                 var treeFromSource_invalid2 = SyntaxFactory.ParseSyntaxTree(st);
-            });
+            }).Should().Throw<System.ArgumentNullException>();
         }
 
         [Fact]
@@ -3634,7 +3634,7 @@ namespace HelloWorld
 
             // With null tree
             SyntaxTree BlankTree = null;
-            Assert.Throws<ArgumentNullException>(() => FirstUsingClause.SyntaxTree.GetChanges(BlankTree));
+            FluentActions.Invoking(() => FirstUsingClause.SyntaxTree.GetChanges(BlankTree)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact, WorkItem(658329, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/658329")]
@@ -3668,7 +3668,7 @@ namespace HelloWorld
 
             // With null tree
             SyntaxTree BlankTree = null;
-            Assert.Throws<ArgumentNullException>(() => FirstUsingClause.SyntaxTree.GetChangedSpans(BlankTree));
+            FluentActions.Invoking(() => FirstUsingClause.SyntaxTree.GetChangedSpans(BlankTree)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

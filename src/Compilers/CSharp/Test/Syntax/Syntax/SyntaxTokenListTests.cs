@@ -51,10 +51,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         [Fact]
         public void TestEnumeratorEquality()
         {
-            Assert.Throws<NotSupportedException>(() => default(SyntaxTokenList.Enumerator).GetHashCode());
-            Assert.Throws<NotSupportedException>(() => default(SyntaxTokenList.Enumerator).Equals(default(SyntaxTokenList.Enumerator)));
-            Assert.Throws<NotSupportedException>(() => default(SyntaxTokenList.Reversed.Enumerator).GetHashCode());
-            Assert.Throws<NotSupportedException>(() => default(SyntaxTokenList.Reversed.Enumerator).Equals(default(SyntaxTokenList.Reversed.Enumerator)));
+            FluentActions.Invoking(() => default(SyntaxTokenList.Enumerator).GetHashCode()).Should().Throw<NotSupportedException>();
+            FluentActions.Invoking(() => default(SyntaxTokenList.Enumerator).Equals(default(SyntaxTokenList.Enumerator))).Should().Throw<NotSupportedException>();
+            FluentActions.Invoking(() => default(SyntaxTokenList.Reversed.Enumerator).GetHashCode()).Should().Throw<NotSupportedException>();
+            FluentActions.Invoking(() => default(SyntaxTokenList.Reversed.Enumerator).Equals(default(SyntaxTokenList.Reversed.Enumerator))).Should().Throw<NotSupportedException>();
         }
 
         [Fact]
@@ -176,17 +176,17 @@ namespace Microsoft.CodeAnalysis.CSharp
             newList.ToFullString().Should().Be("A B ");
 
             list.IndexOf(tokenD).Should().Be(-1);
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(list.Count + 1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(list.Count + 1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(-1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(list.Count));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxToken)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxToken)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxToken>)null));
+            FluentActions.Invoking(() => list.Insert(-1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(list.Count + 1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(list.Count + 1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(-1)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(list.Count)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxToken>)null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -223,17 +223,17 @@ namespace Microsoft.CodeAnalysis.CSharp
             newList.Count.Should().Be(0);
 
             list.IndexOf(tokenD).Should().Be(-1);
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(list.Count + 1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Replace(tokenD, tokenE));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.ReplaceRange(tokenD, new[] { tokenE }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxToken)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxToken)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxToken>)null));
+            FluentActions.Invoking(() => list.RemoveAt(0)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(-1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(list.Count + 1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Replace(tokenD, tokenE)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.ReplaceRange(tokenD, new[] { tokenE })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxToken>)null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

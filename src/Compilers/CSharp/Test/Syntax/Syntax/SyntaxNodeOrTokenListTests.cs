@@ -31,8 +31,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         [Fact]
         public void EnumeratorEquality()
         {
-            Assert.Throws<NotSupportedException>(() => default(SyntaxNodeOrTokenList.Enumerator).GetHashCode());
-            Assert.Throws<NotSupportedException>(() => default(SyntaxNodeOrTokenList.Enumerator).Equals(default(SyntaxNodeOrTokenList.Enumerator)));
+            FluentActions.Invoking(() => default(SyntaxNodeOrTokenList.Enumerator).GetHashCode()).Should().Throw<NotSupportedException>();
+            FluentActions.Invoking(() => default(SyntaxNodeOrTokenList.Enumerator).Equals(default(SyntaxNodeOrTokenList.Enumerator))).Should().Throw<NotSupportedException>();
         }
 
         [Fact]
@@ -154,19 +154,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             newList.ToFullString().Should().Be("A B ");
 
             list.IndexOf(tokenD).Should().Be(-1);
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(list.Count + 1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(list.Count + 1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(-1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(list.Count));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Replace(tokenD, nameE));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.ReplaceRange(tokenD, new[] { nameE }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxNodeOrToken)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxNodeOrToken)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxNodeOrToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxNodeOrToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxNodeOrToken>)null));
+            FluentActions.Invoking(() => list.Insert(-1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(list.Count + 1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(list.Count + 1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(-1)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(list.Count)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Replace(tokenD, nameE)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.ReplaceRange(tokenD, new[] { nameE })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxNodeOrToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxNodeOrToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxNodeOrToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxNodeOrToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxNodeOrToken>)null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -203,15 +203,15 @@ namespace Microsoft.CodeAnalysis.CSharp
             newList.Count.Should().Be(0);
 
             list.IndexOf(tokenD).Should().Be(-1);
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { tokenD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxNodeOrToken)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxNodeOrToken)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxNodeOrToken>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxNodeOrToken>)null));
+            FluentActions.Invoking(() => list.RemoveAt(0)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(-1, tokenD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { tokenD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxNodeOrToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxNodeOrToken))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxNodeOrToken>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxNodeOrToken>)null)).Should().Throw<ArgumentNullException>();
         }
     }
 }

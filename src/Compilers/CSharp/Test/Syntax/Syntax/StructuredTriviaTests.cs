@@ -195,22 +195,22 @@ class Program
             trivia.Count.Should().Be(1);
 
             // Bounds checking exceptions
-            Assert.Throws<System.ArgumentOutOfRangeException>(delegate
+            FluentActions.Invoking(delegate
             {
                 var t2 = trivia[1];
-            });
+            }).Should().Throw<System.ArgumentOutOfRangeException>();
 
-            Assert.Throws<System.ArgumentOutOfRangeException>(delegate
+            FluentActions.Invoking(delegate
             {
                 var t3 = trivia[-1];
-            });
+            }).Should().Throw<System.ArgumentOutOfRangeException>();
 
             // Invalid Use create SyntaxTriviaList
-            Assert.Throws<System.ArgumentOutOfRangeException>(delegate
+            FluentActions.Invoking(delegate
             {
                 var trl = new SyntaxTriviaList();
                 var t2 = trl[0];
-            });
+            }).Should().Throw<System.ArgumentOutOfRangeException>();
         }
     }
 }

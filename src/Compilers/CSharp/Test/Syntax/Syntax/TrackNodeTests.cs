@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var currentA = trackedExpr.GetCurrentNode(originalA);
             // replace all identifiers with same 'a'
             var replacedExpr = trackedExpr.ReplaceNodes(trackedExpr.DescendantNodes().OfType<IdentifierNameSyntax>(), (original, changed) => currentA);
-            Assert.Throws<InvalidOperationException>(() => replacedExpr.GetCurrentNode(originalA));
+            FluentActions.Invoking(() => replacedExpr.GetCurrentNode(originalA)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestTrackNodeThatIsNotInTheSubtreeThrows()
         {
             var expr = SyntaxFactory.ParseExpression("a + b");
-            Assert.Throws<ArgumentException>(() => expr.TrackNodes(SyntaxFactory.IdentifierName("c")));
+            FluentActions.Invoking(() => expr.TrackNodes(SyntaxFactory.IdentifierName("c"))).Should().Throw<ArgumentException>();
         }
     }
 }

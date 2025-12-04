@@ -27,9 +27,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         [Fact]
         public void TextIsCompleteSubmission()
         {
-            Assert.Throws<ArgumentNullException>(() => SyntaxFactory.IsCompleteSubmission(null));
-            Assert.Throws<ArgumentException>(() =>
-                SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree("", options: TestOptions.Regular)));
+            FluentActions.Invoking(() => SyntaxFactory.IsCompleteSubmission(null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() =>
+                SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree("", options: TestOptions.Regular))).Should().Throw<ArgumentException>();
 
             AssertCompleteSubmission("");
             AssertCompleteSubmission("//hello");
