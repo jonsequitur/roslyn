@@ -404,7 +404,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         internal override IEnumerable<InternalSyntax.SyntaxToken> GetTokens(string text)
         {
-            Assert.DoesNotContain("'", text, StringComparison.Ordinal);
+            text.Should().NotContain("'");
             using (var lexer = new InternalSyntax.Lexer(SourceText.From(text + "'"), TestOptions.RegularWithDocumentationComments))
             {
                 while (true)

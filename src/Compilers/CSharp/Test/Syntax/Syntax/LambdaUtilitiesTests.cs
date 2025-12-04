@@ -21,6 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             string markedSource = @"
 using System;
 using System.Linq;
+using AwesomeAssertions;
 
 class C 
 { 
@@ -36,8 +37,8 @@ class C
             TextSpan? span;
             MarkupTestFile.GetPositionAndSpan(markedSource, out source, out position, out span);
 
-            Assert.Null(position);
-            Assert.NotNull(span);
+            position.Should().BeNull();
+            span.Should().NotBeNull();
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var compilation = CreateCompilationWithMscorlib45(new[] { tree }, new[] { SystemCoreRef });
@@ -49,15 +50,15 @@ class C
             bool expected = enclosingMethod.MethodKind == MethodKind.LambdaMethod && enclosingSyntax.Span.Contains(span.Value);
 
             var node = tree.GetRoot().FindNode(span.Value);
-            Assert.False(isLambdaBody && isReducedLambdaBody);
-            Assert.Equal(expected, LambdaUtilities.IsLambdaBody(node, allowReducedLambdas: true));
-            Assert.Equal(isLambdaBody || isReducedLambdaBody, expected);
-            Assert.Equal(isLambdaBody, LambdaUtilities.IsLambdaBody(node));
+            isLambdaBody && isReducedLambdaBody.Should().BeFalse();
+            LambdaUtilities.IsLambdaBody(node, allowReducedLambdas: true).Should().Be(expected);
+            expected.Should().Be(isLambdaBody || isReducedLambdaBody);
+            LambdaUtilities.IsLambdaBody(node).Should().Be(isLambdaBody);
 
             var methodDef = tree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Where(d => d.Identifier.ValueText == "M").Single();
-            Assert.Equal("C", model.GetEnclosingSymbol(methodDef.SpanStart).ToTestDisplayString());
-            Assert.Equal("C", model.GetEnclosingSymbol(methodDef.ParameterList.CloseParenToken.SpanStart).ToTestDisplayString());
-            Assert.Equal("void C.M()", model.GetEnclosingSymbol(methodDef.Body.SpanStart).ToTestDisplayString());
+            model.GetEnclosingSymbol(methodDef.SpanStart).ToTestDisplayString().Should().Be("C");
+            model.GetEnclosingSymbol(methodDef.ParameterList.CloseParenToken.SpanStart).ToTestDisplayString().Should().Be("C");
+            model.GetEnclosingSymbol(methodDef.Body.SpanStart).ToTestDisplayString().Should().Be("void C.M()");
         }
 
         [Fact]
@@ -200,97 +201,97 @@ class C
         [Fact]
         public void AreEquivalentIgnoringLambdaBodies1()
         {
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(1)"),
-                SyntaxFactory.ParseExpression("F(1)")));
+                SyntaxFactory.ParseExpression("F(1)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(1)"),
-                SyntaxFactory.ParseExpression("F(2)")));
+                SyntaxFactory.ParseExpression("F(2)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(a => 1)"),
-                SyntaxFactory.ParseExpression("F(a => 2)")));
+                SyntaxFactory.ParseExpression("F(a => 2)")).Should().BeTrue();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(() => 1)"),
-                SyntaxFactory.ParseExpression("F(() => 2)")));
+                SyntaxFactory.ParseExpression("F(() => 2)")).Should().BeTrue();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(delegate { return 1; })"),
-                SyntaxFactory.ParseExpression("F(delegate { return 2; })")));
+                SyntaxFactory.ParseExpression("F(delegate { return 2; })")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(delegate (int a) { return 1; })"),
-                SyntaxFactory.ParseExpression("F(delegate (bool a) { return 1; })")));
+                SyntaxFactory.ParseExpression("F(delegate (bool a) { return 1; })")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(delegate (int a) { return 1; })"),
-                SyntaxFactory.ParseExpression("F(delegate (int a) { return 2; })")));
+                SyntaxFactory.ParseExpression("F(delegate (int a) { return 2; })")).Should().BeTrue();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(() => { return 1; })"),
-                SyntaxFactory.ParseExpression("F(() => { return 1; })")));
+                SyntaxFactory.ParseExpression("F(() => { return 1; })")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(() => { return 1; })"),
-                SyntaxFactory.ParseExpression("F((a) => { return 1; })")));
+                SyntaxFactory.ParseExpression("F((a) => { return 1; })")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } select a + 1)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } select a + 1)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } where a > 0 select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } where a > 0 select a + 1)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } where a > 0 select a + 1)")).Should().BeFalse();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a select a + 1)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a select a + 1)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } let b = 1 select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } let b = 1 select a + 1)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } let b = 1 select a + 1)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } where b > 0 select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } where b > 0 select a)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } from b in new[] { 3, 4 } where b > 0 select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } from b in new[] { 3, 4, 5 } where b > 1 select a + 1)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } from b in new[] { 3, 4, 5 } where b > 1 select a + 1)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a equals b select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4, 5 } on a equals b select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4, 5 } on a equals b select a)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a equals b select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a + 1 equals b + 1 select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a + 1 equals b + 1 select a)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a equals b select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } join b in new[] { 3, 4 } on a equals b select a)")).Should().BeFalse();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a into g select g)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a + 1 by a into g select g)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a + 1 by a into g select g)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a into g select g)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a + 1 into g select g)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a + 1 into g select g)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a into g select g)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a into q select q)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } group a by a into q select q)")).Should().BeFalse();
 
-            Assert.True(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a, a descending, a ascending select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a + 1, a - 1 descending, a + 1 ascending select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a + 1, a - 1 descending, a + 1 ascending select a)")).Should().BeTrue();
 
-            Assert.False(LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
+            LambdaUtilities.AreEquivalentIgnoringLambdaBodies(
                 SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a, a descending, a ascending select a)"),
-                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a, a descending, a descending select a)")));
+                SyntaxFactory.ParseExpression("F(from a in new[] { 1, 2 } orderby a, a descending, a descending select a)")).Should().BeFalse();
         }
     }
 }

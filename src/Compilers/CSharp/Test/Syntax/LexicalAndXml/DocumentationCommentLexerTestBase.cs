@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.Text;
 using Roslyn.Test.Utilities;
 using Xunit;
 using InternalSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -47,21 +48,21 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     }
                     else if (!actualHadNext)
                     {
-                        Assert.True(expectedHadNext);
+                        expectedHadNext.Should().BeTrue();
                         AssertEx.Fail("Unmatched expected: " + expectedEnumerator.Current);
                     }
                     else if (!expectedHadNext)
                     {
-                        Assert.True(actualHadNext);
+                        actualHadNext.Should().BeTrue();
                         AssertEx.Fail("Unmatched actual: " + expectedEnumerator.Current);
                     }
 
                     var actualToken = actualEnumerator.Current;
                     var expectedToken = (TokenDescription)expectedEnumerator.Current;
 
-                    Assert.Equal(expectedToken.Text, actualToken.Text); //This first, since it's easiest to debug.
-                    Assert.Equal(expectedToken.ValueText, actualToken.ValueText);
-                    Assert.Equal(expectedToken.Kind, actualToken.Kind);
+                    actualToken.Text.Should().Be(expectedToken.Text); //This first, since it's easiest to debug.
+                    actualToken.ValueText.Should().Be(expectedToken.ValueText);
+                    actualToken.Kind.Should().Be(expectedToken.Kind);
                 }
             }
             catch

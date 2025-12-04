@@ -33,12 +33,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var text = string.Empty;
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.IdentifierName, expr.Kind());
-            Assert.True(((IdentifierNameSyntax)expr).Identifier.IsMissing);
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(1, expr.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_ExpressionExpected, expr.Errors()[0].Code);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.IdentifierName);
+            ((IdentifierNameSyntax)expr).Identifier.IsMissing.Should().BeTrue();
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(1);
+            expr.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_ExpressionExpected);
         }
 
         [Fact]
@@ -418,8 +418,8 @@ class C
             }
             EOF();
 
-            Assert.Equal("Text with ", expr.Contents[0].ToString());
-            Assert.Equal(" parts and new line expressions!", expr.Contents[2].ToString());
+            expr.Contents[0].ToString().Should().Be("Text with ");
+            expr.Contents[2].ToString().Should().Be(" parts and new line expressions!");
         }
 
         [Fact]
@@ -428,11 +428,11 @@ class C
             var text = "goo";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.IdentifierName, expr.Kind());
-            Assert.False(((IdentifierNameSyntax)expr).Identifier.IsMissing);
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.IdentifierName);
+            ((IdentifierNameSyntax)expr).Identifier.IsMissing.Should().BeFalse();
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -441,10 +441,10 @@ class C
             var text = "(goo)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
         }
 
         private void TestLiteralExpression(SyntaxKind kind)
@@ -452,13 +452,13 @@ class C
             var text = SyntaxFacts.GetText(kind);
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetLiteralExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.Errors().Length.Should().Be(0);
             var us = (LiteralExpressionSyntax)expr;
-            Assert.NotEqual(default, us.Token);
-            Assert.Equal(kind, us.Token.Kind());
+            us.Token.Should().NotBe(default);
+            us.Token.Kind().Should().Be(kind);
         }
 
         [Fact]
@@ -475,22 +475,22 @@ class C
             var text = SyntaxFacts.GetText(kind);
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetInstanceExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.Errors().Length.Should().Be(0);
             SyntaxToken token;
             switch (expr.Kind())
             {
                 case SyntaxKind.ThisExpression:
                     token = ((ThisExpressionSyntax)expr).Token;
-                    Assert.NotEqual(default, token);
-                    Assert.Equal(kind, token.Kind());
+                    token.Should().NotBe(default);
+                    token.Kind().Should().Be(kind);
                     break;
                 case SyntaxKind.BaseExpression:
                     token = ((BaseExpressionSyntax)expr).Token;
-                    Assert.NotEqual(default, token);
-                    Assert.Equal(kind, token.Kind());
+                    token.Should().NotBe(default);
+                    token.Kind().Should().Be(kind);
                     break;
             }
         }
@@ -508,12 +508,12 @@ class C
             var text = "\"stuff\"";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.StringLiteralExpression, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.StringLiteralExpression);
+            expr.Errors().Length.Should().Be(0);
             var us = (LiteralExpressionSyntax)expr;
-            Assert.NotEqual(default, us.Token);
-            Assert.Equal(SyntaxKind.StringLiteralToken, us.Token.Kind());
+            us.Token.Should().NotBe(default);
+            us.Token.Kind().Should().Be(SyntaxKind.StringLiteralToken);
         }
 
         [WorkItem(540379, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/540379")]
@@ -523,13 +523,13 @@ class C
             var text = "@\"\"\"stuff\"\"\"";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.StringLiteralExpression, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.StringLiteralExpression);
+            expr.Errors().Length.Should().Be(0);
             var us = (LiteralExpressionSyntax)expr;
-            Assert.NotEqual(default, us.Token);
-            Assert.Equal(SyntaxKind.StringLiteralToken, us.Token.Kind());
-            Assert.Equal("\"stuff\"", us.Token.ValueText);
+            us.Token.Should().NotBe(default);
+            us.Token.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            us.Token.ValueText.Should().Be("\"stuff\"");
         }
 
         [Fact]
@@ -538,12 +538,12 @@ class C
             var text = "'c'";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.CharacterLiteralExpression, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.CharacterLiteralExpression);
+            expr.Errors().Length.Should().Be(0);
             var us = (LiteralExpressionSyntax)expr;
-            Assert.NotEqual(default, us.Token);
-            Assert.Equal(SyntaxKind.CharacterLiteralToken, us.Token.Kind());
+            us.Token.Should().NotBe(default);
+            us.Token.Kind().Should().Be(SyntaxKind.CharacterLiteralToken);
         }
 
         [Fact]
@@ -552,12 +552,12 @@ class C
             var text = "0";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.NumericLiteralExpression, expr.Kind());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.NumericLiteralExpression);
+            expr.Errors().Length.Should().Be(0);
             var us = (LiteralExpressionSyntax)expr;
-            Assert.NotEqual(default, us.Token);
-            Assert.Equal(SyntaxKind.NumericLiteralToken, us.Token.Kind());
+            us.Token.Should().NotBe(default);
+            us.Token.Kind().Should().Be(SyntaxKind.NumericLiteralToken);
         }
 
         private void TestPrefixUnary(SyntaxKind kind)
@@ -565,17 +565,17 @@ class C
             var text = SyntaxFacts.GetText(kind) + "a";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetPrefixUnaryExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var us = (PrefixUnaryExpressionSyntax)expr;
-            Assert.NotEqual(default, us.OperatorToken);
-            Assert.Equal(kind, us.OperatorToken.Kind());
-            Assert.NotNull(us.Operand);
-            Assert.Equal(SyntaxKind.IdentifierName, us.Operand.Kind());
-            Assert.Equal("a", us.Operand.ToString());
+            us.OperatorToken.Should().NotBe(default);
+            us.OperatorToken.Kind().Should().Be(kind);
+            us.Operand.Should().NotBeNull();
+            us.Operand.Kind().Should().Be(SyntaxKind.IdentifierName);
+            us.Operand.ToString().Should().Be("a");
         }
 
         [Fact]
@@ -596,17 +596,17 @@ class C
             var text = "a" + SyntaxFacts.GetText(kind);
             var expr = this.ParseExpression(text, options: options);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetPostfixUnaryExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var us = (PostfixUnaryExpressionSyntax)expr;
-            Assert.NotEqual(default, us.OperatorToken);
-            Assert.Equal(kind, us.OperatorToken.Kind());
-            Assert.NotNull(us.Operand);
-            Assert.Equal(SyntaxKind.IdentifierName, us.Operand.Kind());
-            Assert.Equal("a", us.Operand.ToString());
+            us.OperatorToken.Should().NotBe(default);
+            us.OperatorToken.Kind().Should().Be(kind);
+            us.Operand.Should().NotBeNull();
+            us.Operand.Kind().Should().Be(SyntaxKind.IdentifierName);
+            us.Operand.ToString().Should().Be("a");
         }
 
         [Fact]
@@ -622,18 +622,18 @@ class C
             var text = "(a) " + SyntaxFacts.GetText(kind) + " b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetBinaryExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var b = (BinaryExpressionSyntax)expr;
-            Assert.NotEqual(default, b.OperatorToken);
-            Assert.Equal(kind, b.OperatorToken.Kind());
-            Assert.NotNull(b.Left);
-            Assert.NotNull(b.Right);
-            Assert.Equal("(a)", b.Left.ToString());
-            Assert.Equal("b", b.Right.ToString());
+            b.OperatorToken.Should().NotBe(default);
+            b.OperatorToken.Kind().Should().Be(kind);
+            b.Left.Should().NotBeNull();
+            b.Right.Should().NotBeNull();
+            b.Left.ToString().Should().Be("(a)");
+            b.Right.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -668,18 +668,18 @@ class C
             var text = "(a) " + SyntaxFacts.GetText(kind) + " b";
             var expr = this.ParseExpression(text, options);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetAssignmentExpression(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var a = (AssignmentExpressionSyntax)expr;
-            Assert.NotEqual(default, a.OperatorToken);
-            Assert.Equal(kind, a.OperatorToken.Kind());
-            Assert.NotNull(a.Left);
-            Assert.NotNull(a.Right);
-            Assert.Equal("(a)", a.Left.ToString());
-            Assert.Equal("b", a.Right.ToString());
+            a.OperatorToken.Should().NotBe(default);
+            a.OperatorToken.Kind().Should().Be(kind);
+            a.Left.Should().NotBeNull();
+            a.Right.Should().NotBeNull();
+            a.Left.ToString().Should().Be("(a)");
+            a.Right.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -705,16 +705,16 @@ class C
             var text = "(a)" + SyntaxFacts.GetText(kind) + " b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var e = (MemberAccessExpressionSyntax)expr;
-            Assert.NotEqual(default, e.OperatorToken);
-            Assert.Equal(kind, e.OperatorToken.Kind());
-            Assert.NotNull(e.Expression);
-            Assert.NotNull(e.Name);
-            Assert.Equal("(a)", e.Expression.ToString());
-            Assert.Equal("b", e.Name.ToString());
+            e.OperatorToken.Should().NotBe(default);
+            e.OperatorToken.Kind().Should().Be(kind);
+            e.Expression.Should().NotBeNull();
+            e.Name.Should().NotBeNull();
+            e.Expression.ToString().Should().Be("(a)");
+            e.Name.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -730,13 +730,13 @@ class C
             var text = "a.b?.c.d?[1]?.e()?.f";
             var expr = this.ParseExpression(text, options: CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp5));
 
-            Assert.NotNull(expr);
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var e = (ConditionalAccessExpressionSyntax)expr;
-            Assert.Equal("a.b", e.Expression.ToString());
-            Assert.Equal(".c.d?[1]?.e()?.f", e.WhenNotNull.ToString());
+            e.Expression.ToString().Should().Be("a.b");
+            e.WhenNotNull.ToString().Should().Be(".c.d?[1]?.e()?.f");
 
             var testWithStatement = @$"class C {{ void M() {{ var v = {text}; }} }}";
             CreateCompilation(testWithStatement, parseOptions: TestOptions.Regular5).VerifyDiagnostics(
@@ -763,48 +763,48 @@ class C
             var text = "a.b?.c.d?[1]?.e()?.f";
             var expr = this.ParseExpression(text, options: CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp6));
 
-            Assert.NotNull(expr);
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var e = (ConditionalAccessExpressionSyntax)expr;
-            Assert.Equal("a.b", e.Expression.ToString());
+            e.Expression.ToString().Should().Be("a.b");
             var cons = e.WhenNotNull;
-            Assert.Equal(".c.d?[1]?.e()?.f", cons.ToString());
-            Assert.Equal(SyntaxKind.ConditionalAccessExpression, cons.Kind());
+            cons.ToString().Should().Be(".c.d?[1]?.e()?.f");
+            cons.Kind().Should().Be(SyntaxKind.ConditionalAccessExpression);
 
             e = e.WhenNotNull as ConditionalAccessExpressionSyntax;
-            Assert.Equal(".c.d", e.Expression.ToString());
+            e.Expression.ToString().Should().Be(".c.d");
             cons = e.WhenNotNull;
-            Assert.Equal("[1]?.e()?.f", cons.ToString());
-            Assert.Equal(SyntaxKind.ConditionalAccessExpression, cons.Kind());
+            cons.ToString().Should().Be("[1]?.e()?.f");
+            cons.Kind().Should().Be(SyntaxKind.ConditionalAccessExpression);
 
             e = e.WhenNotNull as ConditionalAccessExpressionSyntax;
-            Assert.Equal("[1]", e.Expression.ToString());
+            e.Expression.ToString().Should().Be("[1]");
             cons = e.WhenNotNull;
-            Assert.Equal(".e()?.f", cons.ToString());
-            Assert.Equal(SyntaxKind.ConditionalAccessExpression, cons.Kind());
+            cons.ToString().Should().Be(".e()?.f");
+            cons.Kind().Should().Be(SyntaxKind.ConditionalAccessExpression);
 
             e = e.WhenNotNull as ConditionalAccessExpressionSyntax;
-            Assert.Equal(".e()", e.Expression.ToString());
+            e.Expression.ToString().Should().Be(".e()");
             cons = e.WhenNotNull;
-            Assert.Equal(".f", cons.ToString());
-            Assert.Equal(SyntaxKind.MemberBindingExpression, cons.Kind());
+            cons.ToString().Should().Be(".f");
+            cons.Kind().Should().Be(SyntaxKind.MemberBindingExpression);
         }
 
         private void TestFunctionKeyword(SyntaxKind kind, SyntaxToken keyword)
         {
-            Assert.NotEqual(default, keyword);
-            Assert.Equal(kind, keyword.Kind());
+            keyword.Should().NotBe(default);
+            keyword.Kind().Should().Be(kind);
         }
 
         private void TestParenthesizedArgument(SyntaxToken openParen, CSharpSyntaxNode arg, SyntaxToken closeParen)
         {
-            Assert.NotEqual(default, openParen);
-            Assert.False(openParen.IsMissing);
-            Assert.NotEqual(default, closeParen);
-            Assert.False(closeParen.IsMissing);
-            Assert.Equal("a", arg.ToString());
+            openParen.Should().NotBe(default);
+            openParen.IsMissing.Should().BeFalse();
+            closeParen.Should().NotBe(default);
+            closeParen.IsMissing.Should().BeFalse();
+            arg.ToString().Should().Be("a");
         }
 
         private void TestSingleParamFunctionalOperator(SyntaxKind kind)
@@ -812,11 +812,11 @@ class C
             var text = SyntaxFacts.GetText(kind) + "(a)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
+            expr.Should().NotBeNull();
             var opKind = SyntaxFacts.GetPrimaryFunction(kind);
-            Assert.Equal(opKind, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Kind().Should().Be(opKind);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             switch (opKind)
             {
                 case SyntaxKind.MakeRefExpression:
@@ -876,19 +876,19 @@ class C
             var text = SyntaxFacts.GetText(SyntaxKind.RefValueKeyword) + "(a, b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.RefValueExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.RefValueExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var fs = (RefValueExpressionSyntax)expr;
-            Assert.NotEqual(default, fs.Keyword);
-            Assert.Equal(SyntaxKind.RefValueKeyword, fs.Keyword.Kind());
-            Assert.NotEqual(default, fs.OpenParenToken);
-            Assert.False(fs.OpenParenToken.IsMissing);
-            Assert.NotEqual(default, fs.CloseParenToken);
-            Assert.False(fs.CloseParenToken.IsMissing);
-            Assert.Equal("a", fs.Expression.ToString());
-            Assert.Equal("b", fs.Type.ToString());
+            fs.Keyword.Should().NotBe(default);
+            fs.Keyword.Kind().Should().Be(SyntaxKind.RefValueKeyword);
+            fs.OpenParenToken.Should().NotBe(default);
+            fs.OpenParenToken.IsMissing.Should().BeFalse();
+            fs.CloseParenToken.Should().NotBe(default);
+            fs.CloseParenToken.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("a");
+            fs.Type.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -897,18 +897,18 @@ class C
             var text = "a ? b : c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ConditionalExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ConditionalExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ts = (ConditionalExpressionSyntax)expr;
-            Assert.NotEqual(default, ts.QuestionToken);
-            Assert.NotEqual(default, ts.ColonToken);
-            Assert.Equal(SyntaxKind.QuestionToken, ts.QuestionToken.Kind());
-            Assert.Equal(SyntaxKind.ColonToken, ts.ColonToken.Kind());
-            Assert.Equal("a", ts.Condition.ToString());
-            Assert.Equal("b", ts.WhenTrue.ToString());
-            Assert.Equal("c", ts.WhenFalse.ToString());
+            ts.QuestionToken.Should().NotBe(default);
+            ts.ColonToken.Should().NotBe(default);
+            ts.QuestionToken.Kind().Should().Be(SyntaxKind.QuestionToken);
+            ts.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            ts.Condition.ToString().Should().Be("a");
+            ts.WhenTrue.ToString().Should().Be("b");
+            ts.WhenFalse.ToString().Should().Be("c");
         }
 
         [Fact]
@@ -917,8 +917,8 @@ class C
             // ensure that ?: has lower precedence than assignment.
             var text = "a ? b=c : d=e";
             var expr = this.ParseExpression(text);
-            Assert.Equal(SyntaxKind.ConditionalExpression, expr.Kind());
-            Assert.False(expr.HasErrors);
+            expr.Kind().Should().Be(SyntaxKind.ConditionalExpression);
+            expr.HasErrors.Should().BeFalse();
         }
 
         [Fact]
@@ -927,19 +927,19 @@ class C
             var text = "(a) b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.CastExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.CastExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var cs = (CastExpressionSyntax)expr;
-            Assert.NotEqual(default, cs.OpenParenToken);
-            Assert.NotEqual(default, cs.CloseParenToken);
-            Assert.False(cs.OpenParenToken.IsMissing);
-            Assert.False(cs.CloseParenToken.IsMissing);
-            Assert.NotNull(cs.Type);
-            Assert.NotNull(cs.Expression);
-            Assert.Equal("a", cs.Type.ToString());
-            Assert.Equal("b", cs.Expression.ToString());
+            cs.OpenParenToken.Should().NotBe(default);
+            cs.CloseParenToken.Should().NotBe(default);
+            cs.OpenParenToken.IsMissing.Should().BeFalse();
+            cs.CloseParenToken.IsMissing.Should().BeFalse();
+            cs.Type.Should().NotBeNull();
+            cs.Expression.Should().NotBeNull();
+            cs.Type.ToString().Should().Be("a");
+            cs.Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -948,19 +948,19 @@ class C
             var text = "a(b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.InvocationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var cs = (InvocationExpressionSyntax)expr;
-            Assert.NotEqual(default, cs.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, cs.ArgumentList.CloseParenToken);
-            Assert.False(cs.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(cs.ArgumentList.CloseParenToken.IsMissing);
-            Assert.NotNull(cs.Expression);
-            Assert.Equal(1, cs.ArgumentList.Arguments.Count);
-            Assert.Equal("a", cs.Expression.ToString());
-            Assert.Equal("b", cs.ArgumentList.Arguments[0].ToString());
+            cs.ArgumentList.OpenParenToken.Should().NotBe(default);
+            cs.ArgumentList.CloseParenToken.Should().NotBe(default);
+            cs.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            cs.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            cs.Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments.Count.Should().Be(1);
+            cs.Expression.ToString().Should().Be("a");
+            cs.ArgumentList.Arguments[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -969,23 +969,23 @@ class C
             var text = "a(ref b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.InvocationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var cs = (InvocationExpressionSyntax)expr;
-            Assert.NotEqual(default, cs.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, cs.ArgumentList.CloseParenToken);
-            Assert.False(cs.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(cs.ArgumentList.CloseParenToken.IsMissing);
-            Assert.NotNull(cs.Expression);
-            Assert.Equal(1, cs.ArgumentList.Arguments.Count);
-            Assert.Equal("a", cs.Expression.ToString());
-            Assert.Equal("ref b", cs.ArgumentList.Arguments[0].ToString());
-            Assert.NotEqual(default, cs.ArgumentList.Arguments[0].RefOrOutKeyword);
-            Assert.Equal(SyntaxKind.RefKeyword, cs.ArgumentList.Arguments[0].RefOrOutKeyword.Kind());
-            Assert.NotNull(cs.ArgumentList.Arguments[0].Expression);
-            Assert.Equal("b", cs.ArgumentList.Arguments[0].Expression.ToString());
+            cs.ArgumentList.OpenParenToken.Should().NotBe(default);
+            cs.ArgumentList.CloseParenToken.Should().NotBe(default);
+            cs.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            cs.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            cs.Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments.Count.Should().Be(1);
+            cs.Expression.ToString().Should().Be("a");
+            cs.ArgumentList.Arguments[0].ToString().Should().Be("ref b");
+            cs.ArgumentList.Arguments[0].RefOrOutKeyword.Should().NotBe(default);
+            cs.ArgumentList.Arguments[0].RefOrOutKeyword.Kind().Should().Be(SyntaxKind.RefKeyword);
+            cs.ArgumentList.Arguments[0].Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments[0].Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -994,23 +994,23 @@ class C
             var text = "a(out b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.InvocationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var cs = (InvocationExpressionSyntax)expr;
-            Assert.NotEqual(default, cs.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, cs.ArgumentList.CloseParenToken);
-            Assert.False(cs.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(cs.ArgumentList.CloseParenToken.IsMissing);
-            Assert.NotNull(cs.Expression);
-            Assert.Equal(1, cs.ArgumentList.Arguments.Count);
-            Assert.Equal("a", cs.Expression.ToString());
-            Assert.Equal("out b", cs.ArgumentList.Arguments[0].ToString());
-            Assert.NotEqual(default, cs.ArgumentList.Arguments[0].RefOrOutKeyword);
-            Assert.Equal(SyntaxKind.OutKeyword, cs.ArgumentList.Arguments[0].RefOrOutKeyword.Kind());
-            Assert.NotNull(cs.ArgumentList.Arguments[0].Expression);
-            Assert.Equal("b", cs.ArgumentList.Arguments[0].Expression.ToString());
+            cs.ArgumentList.OpenParenToken.Should().NotBe(default);
+            cs.ArgumentList.CloseParenToken.Should().NotBe(default);
+            cs.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            cs.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            cs.Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments.Count.Should().Be(1);
+            cs.Expression.ToString().Should().Be("a");
+            cs.ArgumentList.Arguments[0].ToString().Should().Be("out b");
+            cs.ArgumentList.Arguments[0].RefOrOutKeyword.Should().NotBe(default);
+            cs.ArgumentList.Arguments[0].RefOrOutKeyword.Kind().Should().Be(SyntaxKind.OutKeyword);
+            cs.ArgumentList.Arguments[0].Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments[0].Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1019,23 +1019,23 @@ class C
             var text = "a(B: b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.InvocationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var cs = (InvocationExpressionSyntax)expr;
-            Assert.NotEqual(default, cs.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, cs.ArgumentList.CloseParenToken);
-            Assert.False(cs.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(cs.ArgumentList.CloseParenToken.IsMissing);
-            Assert.NotNull(cs.Expression);
-            Assert.Equal(1, cs.ArgumentList.Arguments.Count);
-            Assert.Equal("a", cs.Expression.ToString());
-            Assert.Equal("B: b", cs.ArgumentList.Arguments[0].ToString());
-            Assert.NotNull(cs.ArgumentList.Arguments[0].NameColon);
-            Assert.Equal("B", cs.ArgumentList.Arguments[0].NameColon.Name.ToString());
-            Assert.NotEqual(default, cs.ArgumentList.Arguments[0].NameColon.ColonToken);
-            Assert.Equal("b", cs.ArgumentList.Arguments[0].Expression.ToString());
+            cs.ArgumentList.OpenParenToken.Should().NotBe(default);
+            cs.ArgumentList.CloseParenToken.Should().NotBe(default);
+            cs.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            cs.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            cs.Expression.Should().NotBeNull();
+            cs.ArgumentList.Arguments.Count.Should().Be(1);
+            cs.Expression.ToString().Should().Be("a");
+            cs.ArgumentList.Arguments[0].ToString().Should().Be("B: b");
+            cs.ArgumentList.Arguments[0].NameColon.Should().NotBeNull();
+            cs.ArgumentList.Arguments[0].NameColon.Name.ToString().Should().Be("B");
+            cs.ArgumentList.Arguments[0].NameColon.ColonToken.Should().NotBe(default);
+            cs.ArgumentList.Arguments[0].Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1044,19 +1044,19 @@ class C
             var text = "a[b]";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ElementAccessExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ea = (ElementAccessExpressionSyntax)expr;
-            Assert.NotEqual(default, ea.ArgumentList.OpenBracketToken);
-            Assert.NotEqual(default, ea.ArgumentList.CloseBracketToken);
-            Assert.False(ea.ArgumentList.OpenBracketToken.IsMissing);
-            Assert.False(ea.ArgumentList.CloseBracketToken.IsMissing);
-            Assert.NotNull(ea.Expression);
-            Assert.Equal(1, ea.ArgumentList.Arguments.Count);
-            Assert.Equal("a", ea.Expression.ToString());
-            Assert.Equal("b", ea.ArgumentList.Arguments[0].ToString());
+            ea.ArgumentList.OpenBracketToken.Should().NotBe(default);
+            ea.ArgumentList.CloseBracketToken.Should().NotBe(default);
+            ea.ArgumentList.OpenBracketToken.IsMissing.Should().BeFalse();
+            ea.ArgumentList.CloseBracketToken.IsMissing.Should().BeFalse();
+            ea.Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments.Count.Should().Be(1);
+            ea.Expression.ToString().Should().Be("a");
+            ea.ArgumentList.Arguments[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1065,23 +1065,23 @@ class C
             var text = "a[ref b]";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ElementAccessExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ea = (ElementAccessExpressionSyntax)expr;
-            Assert.NotEqual(default, ea.ArgumentList.OpenBracketToken);
-            Assert.NotEqual(default, ea.ArgumentList.CloseBracketToken);
-            Assert.False(ea.ArgumentList.OpenBracketToken.IsMissing);
-            Assert.False(ea.ArgumentList.CloseBracketToken.IsMissing);
-            Assert.NotNull(ea.Expression);
-            Assert.Equal(1, ea.ArgumentList.Arguments.Count);
-            Assert.Equal("a", ea.Expression.ToString());
-            Assert.Equal("ref b", ea.ArgumentList.Arguments[0].ToString());
-            Assert.NotEqual(default, ea.ArgumentList.Arguments[0].RefOrOutKeyword);
-            Assert.Equal(SyntaxKind.RefKeyword, ea.ArgumentList.Arguments[0].RefOrOutKeyword.Kind());
-            Assert.NotNull(ea.ArgumentList.Arguments[0].Expression);
-            Assert.Equal("b", ea.ArgumentList.Arguments[0].Expression.ToString());
+            ea.ArgumentList.OpenBracketToken.Should().NotBe(default);
+            ea.ArgumentList.CloseBracketToken.Should().NotBe(default);
+            ea.ArgumentList.OpenBracketToken.IsMissing.Should().BeFalse();
+            ea.ArgumentList.CloseBracketToken.IsMissing.Should().BeFalse();
+            ea.Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments.Count.Should().Be(1);
+            ea.Expression.ToString().Should().Be("a");
+            ea.ArgumentList.Arguments[0].ToString().Should().Be("ref b");
+            ea.ArgumentList.Arguments[0].RefOrOutKeyword.Should().NotBe(default);
+            ea.ArgumentList.Arguments[0].RefOrOutKeyword.Kind().Should().Be(SyntaxKind.RefKeyword);
+            ea.ArgumentList.Arguments[0].Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments[0].Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1090,23 +1090,23 @@ class C
             var text = "a[out b]";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ElementAccessExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ea = (ElementAccessExpressionSyntax)expr;
-            Assert.NotEqual(default, ea.ArgumentList.OpenBracketToken);
-            Assert.NotEqual(default, ea.ArgumentList.CloseBracketToken);
-            Assert.False(ea.ArgumentList.OpenBracketToken.IsMissing);
-            Assert.False(ea.ArgumentList.CloseBracketToken.IsMissing);
-            Assert.NotNull(ea.Expression);
-            Assert.Equal(1, ea.ArgumentList.Arguments.Count);
-            Assert.Equal("a", ea.Expression.ToString());
-            Assert.Equal("out b", ea.ArgumentList.Arguments[0].ToString());
-            Assert.NotEqual(default, ea.ArgumentList.Arguments[0].RefOrOutKeyword);
-            Assert.Equal(SyntaxKind.OutKeyword, ea.ArgumentList.Arguments[0].RefOrOutKeyword.Kind());
-            Assert.NotNull(ea.ArgumentList.Arguments[0].Expression);
-            Assert.Equal("b", ea.ArgumentList.Arguments[0].Expression.ToString());
+            ea.ArgumentList.OpenBracketToken.Should().NotBe(default);
+            ea.ArgumentList.CloseBracketToken.Should().NotBe(default);
+            ea.ArgumentList.OpenBracketToken.IsMissing.Should().BeFalse();
+            ea.ArgumentList.CloseBracketToken.IsMissing.Should().BeFalse();
+            ea.Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments.Count.Should().Be(1);
+            ea.Expression.ToString().Should().Be("a");
+            ea.ArgumentList.Arguments[0].ToString().Should().Be("out b");
+            ea.ArgumentList.Arguments[0].RefOrOutKeyword.Should().NotBe(default);
+            ea.ArgumentList.Arguments[0].RefOrOutKeyword.Kind().Should().Be(SyntaxKind.OutKeyword);
+            ea.ArgumentList.Arguments[0].Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments[0].Expression.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1115,19 +1115,19 @@ class C
             var text = "a[B: b]";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ElementAccessExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ea = (ElementAccessExpressionSyntax)expr;
-            Assert.NotEqual(default, ea.ArgumentList.OpenBracketToken);
-            Assert.NotEqual(default, ea.ArgumentList.CloseBracketToken);
-            Assert.False(ea.ArgumentList.OpenBracketToken.IsMissing);
-            Assert.False(ea.ArgumentList.CloseBracketToken.IsMissing);
-            Assert.NotNull(ea.Expression);
-            Assert.Equal(1, ea.ArgumentList.Arguments.Count);
-            Assert.Equal("a", ea.Expression.ToString());
-            Assert.Equal("B: b", ea.ArgumentList.Arguments[0].ToString());
+            ea.ArgumentList.OpenBracketToken.Should().NotBe(default);
+            ea.ArgumentList.CloseBracketToken.Should().NotBe(default);
+            ea.ArgumentList.OpenBracketToken.IsMissing.Should().BeFalse();
+            ea.ArgumentList.CloseBracketToken.IsMissing.Should().BeFalse();
+            ea.Expression.Should().NotBeNull();
+            ea.ArgumentList.Arguments.Count.Should().Be(1);
+            ea.Expression.ToString().Should().Be("a");
+            ea.ArgumentList.Arguments[0].ToString().Should().Be("B: b");
         }
 
         [Fact]
@@ -1136,20 +1136,20 @@ class C
             var text = "new a()";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.NotNull(oc.ArgumentList);
-            Assert.NotEqual(default, oc.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, oc.ArgumentList.CloseParenToken);
-            Assert.False(oc.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(oc.ArgumentList.CloseParenToken.IsMissing);
-            Assert.Equal(0, oc.ArgumentList.Arguments.Count);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
-            Assert.Null(oc.Initializer);
+            oc.ArgumentList.Should().NotBeNull();
+            oc.ArgumentList.OpenParenToken.Should().NotBe(default);
+            oc.ArgumentList.CloseParenToken.Should().NotBe(default);
+            oc.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.Arguments.Count.Should().Be(0);
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
+            oc.Initializer.Should().BeNull();
         }
 
         [Fact]
@@ -1158,21 +1158,21 @@ class C
             var text = "new a(b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.NotNull(oc.ArgumentList);
-            Assert.NotEqual(default, oc.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, oc.ArgumentList.CloseParenToken);
-            Assert.False(oc.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(oc.ArgumentList.CloseParenToken.IsMissing);
-            Assert.Equal(1, oc.ArgumentList.Arguments.Count);
-            Assert.Equal("b", oc.ArgumentList.Arguments[0].ToString());
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
-            Assert.Null(oc.Initializer);
+            oc.ArgumentList.Should().NotBeNull();
+            oc.ArgumentList.OpenParenToken.Should().NotBe(default);
+            oc.ArgumentList.CloseParenToken.Should().NotBe(default);
+            oc.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.Arguments.Count.Should().Be(1);
+            oc.ArgumentList.Arguments[0].ToString().Should().Be("b");
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
+            oc.Initializer.Should().BeNull();
         }
 
         [Fact]
@@ -1181,21 +1181,21 @@ class C
             var text = "new a(B: b)";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.NotNull(oc.ArgumentList);
-            Assert.NotEqual(default, oc.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, oc.ArgumentList.CloseParenToken);
-            Assert.False(oc.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(oc.ArgumentList.CloseParenToken.IsMissing);
-            Assert.Equal(1, oc.ArgumentList.Arguments.Count);
-            Assert.Equal("B: b", oc.ArgumentList.Arguments[0].ToString());
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
-            Assert.Null(oc.Initializer);
+            oc.ArgumentList.Should().NotBeNull();
+            oc.ArgumentList.OpenParenToken.Should().NotBe(default);
+            oc.ArgumentList.CloseParenToken.Should().NotBe(default);
+            oc.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.Arguments.Count.Should().Be(1);
+            oc.ArgumentList.Arguments[0].ToString().Should().Be("B: b");
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
+            oc.Initializer.Should().BeNull();
         }
 
         [Fact]
@@ -1204,26 +1204,26 @@ class C
             var text = "new a() { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.NotNull(oc.ArgumentList);
-            Assert.NotEqual(default, oc.ArgumentList.OpenParenToken);
-            Assert.NotEqual(default, oc.ArgumentList.CloseParenToken);
-            Assert.False(oc.ArgumentList.OpenParenToken.IsMissing);
-            Assert.False(oc.ArgumentList.CloseParenToken.IsMissing);
-            Assert.Equal(0, oc.ArgumentList.Arguments.Count);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().NotBeNull();
+            oc.ArgumentList.OpenParenToken.Should().NotBe(default);
+            oc.ArgumentList.CloseParenToken.Should().NotBe(default);
+            oc.ArgumentList.OpenParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.CloseParenToken.IsMissing.Should().BeFalse();
+            oc.ArgumentList.Arguments.Count.Should().Be(0);
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(0, oc.Initializer.Expressions.Count);
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(0);
         }
 
         [Fact]
@@ -1232,21 +1232,21 @@ class C
             var text = "new a { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.Null(oc.ArgumentList);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().BeNull();
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(0, oc.Initializer.Expressions.Count);
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(0);
         }
 
         [Fact]
@@ -1255,22 +1255,22 @@ class C
             var text = "new a { b }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.Null(oc.ArgumentList);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().BeNull();
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, oc.Initializer.Expressions.Count);
-            Assert.Equal("b", oc.Initializer.Expressions[0].ToString());
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(1);
+            oc.Initializer.Expressions[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1279,24 +1279,24 @@ class C
             var text = "new a { b, c, d }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.Null(oc.ArgumentList);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().BeNull();
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(3, oc.Initializer.Expressions.Count);
-            Assert.Equal("b", oc.Initializer.Expressions[0].ToString());
-            Assert.Equal("c", oc.Initializer.Expressions[1].ToString());
-            Assert.Equal("d", oc.Initializer.Expressions[2].ToString());
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(3);
+            oc.Initializer.Expressions[0].ToString().Should().Be("b");
+            oc.Initializer.Expressions[1].ToString().Should().Be("c");
+            oc.Initializer.Expressions[2].ToString().Should().Be("d");
         }
 
         [Fact]
@@ -1305,22 +1305,22 @@ class C
             var text = "new a { B = b }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.Null(oc.ArgumentList);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().BeNull();
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, oc.Initializer.Expressions.Count);
-            Assert.Equal("B = b", oc.Initializer.Expressions[0].ToString());
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(1);
+            oc.Initializer.Expressions[0].ToString().Should().Be("B = b");
         }
 
         [Fact]
@@ -1329,26 +1329,26 @@ class C
             var text = "new a { B = { X = x } }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var oc = (ObjectCreationExpressionSyntax)expr;
-            Assert.Null(oc.ArgumentList);
-            Assert.NotNull(oc.Type);
-            Assert.Equal("a", oc.Type.ToString());
+            oc.ArgumentList.Should().BeNull();
+            oc.Type.Should().NotBeNull();
+            oc.Type.ToString().Should().Be("a");
 
-            Assert.NotNull(oc.Initializer);
-            Assert.NotEqual(default, oc.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, oc.Initializer.CloseBraceToken);
-            Assert.False(oc.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(oc.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, oc.Initializer.Expressions.Count);
-            Assert.Equal("B = { X = x }", oc.Initializer.Expressions[0].ToString());
-            Assert.Equal(SyntaxKind.SimpleAssignmentExpression, oc.Initializer.Expressions[0].Kind());
+            oc.Initializer.Should().NotBeNull();
+            oc.Initializer.OpenBraceToken.Should().NotBe(default);
+            oc.Initializer.CloseBraceToken.Should().NotBe(default);
+            oc.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            oc.Initializer.Expressions.Count.Should().Be(1);
+            oc.Initializer.Expressions[0].ToString().Should().Be("B = { X = x }");
+            oc.Initializer.Expressions[0].Kind().Should().Be(SyntaxKind.SimpleAssignmentExpression);
             var b = (AssignmentExpressionSyntax)oc.Initializer.Expressions[0];
-            Assert.Equal("B", b.Left.ToString());
-            Assert.Equal(SyntaxKind.ObjectInitializerExpression, b.Right.Kind());
+            b.Left.ToString().Should().Be("B");
+            b.Right.Kind().Should().Be(SyntaxKind.ObjectInitializerExpression);
         }
 
         [Fact]
@@ -1357,14 +1357,14 @@ class C
             var text = "new a[1]";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ArrayCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ArrayCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (ArrayCreationExpressionSyntax)expr;
-            Assert.NotNull(ac.Type);
-            Assert.Equal("a[1]", ac.Type.ToString());
-            Assert.Null(ac.Initializer);
+            ac.Type.Should().NotBeNull();
+            ac.Type.ToString().Should().Be("a[1]");
+            ac.Initializer.Should().BeNull();
         }
 
         [Fact]
@@ -1373,20 +1373,20 @@ class C
             var text = "new a[] {b}";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ArrayCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ArrayCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (ArrayCreationExpressionSyntax)expr;
-            Assert.NotNull(ac.Type);
-            Assert.Equal("a[]", ac.Type.ToString());
-            Assert.NotNull(ac.Initializer);
-            Assert.NotEqual(default, ac.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, ac.Initializer.CloseBraceToken);
-            Assert.False(ac.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(ac.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, ac.Initializer.Expressions.Count);
-            Assert.Equal("b", ac.Initializer.Expressions[0].ToString());
+            ac.Type.Should().NotBeNull();
+            ac.Type.ToString().Should().Be("a[]");
+            ac.Initializer.Should().NotBeNull();
+            ac.Initializer.OpenBraceToken.Should().NotBe(default);
+            ac.Initializer.CloseBraceToken.Should().NotBe(default);
+            ac.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.Expressions.Count.Should().Be(1);
+            ac.Initializer.Expressions[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1395,22 +1395,22 @@ class C
             var text = "new a[] {b, c, d}";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ArrayCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ArrayCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (ArrayCreationExpressionSyntax)expr;
-            Assert.NotNull(ac.Type);
-            Assert.Equal("a[]", ac.Type.ToString());
-            Assert.NotNull(ac.Initializer);
-            Assert.NotEqual(default, ac.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, ac.Initializer.CloseBraceToken);
-            Assert.False(ac.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(ac.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(3, ac.Initializer.Expressions.Count);
-            Assert.Equal("b", ac.Initializer.Expressions[0].ToString());
-            Assert.Equal("c", ac.Initializer.Expressions[1].ToString());
-            Assert.Equal("d", ac.Initializer.Expressions[2].ToString());
+            ac.Type.Should().NotBeNull();
+            ac.Type.ToString().Should().Be("a[]");
+            ac.Initializer.Should().NotBeNull();
+            ac.Initializer.OpenBraceToken.Should().NotBe(default);
+            ac.Initializer.CloseBraceToken.Should().NotBe(default);
+            ac.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.Expressions.Count.Should().Be(3);
+            ac.Initializer.Expressions[0].ToString().Should().Be("b");
+            ac.Initializer.Expressions[1].ToString().Should().Be("c");
+            ac.Initializer.Expressions[2].ToString().Should().Be("d");
         }
 
         [Fact]
@@ -1419,20 +1419,20 @@ class C
             var text = "new a[][,][,,] {b}";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ArrayCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ArrayCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (ArrayCreationExpressionSyntax)expr;
-            Assert.NotNull(ac.Type);
-            Assert.Equal("a[][,][,,]", ac.Type.ToString());
-            Assert.NotNull(ac.Initializer);
-            Assert.NotEqual(default, ac.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, ac.Initializer.CloseBraceToken);
-            Assert.False(ac.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(ac.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, ac.Initializer.Expressions.Count);
-            Assert.Equal("b", ac.Initializer.Expressions[0].ToString());
+            ac.Type.Should().NotBeNull();
+            ac.Type.ToString().Should().Be("a[][,][,,]");
+            ac.Initializer.Should().NotBeNull();
+            ac.Initializer.OpenBraceToken.Should().NotBe(default);
+            ac.Initializer.CloseBraceToken.Should().NotBe(default);
+            ac.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.Expressions.Count.Should().Be(1);
+            ac.Initializer.Expressions[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1441,18 +1441,18 @@ class C
             var text = "new [] {b}";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ImplicitArrayCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ImplicitArrayCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (ImplicitArrayCreationExpressionSyntax)expr;
-            Assert.NotNull(ac.Initializer);
-            Assert.NotEqual(default, ac.Initializer.OpenBraceToken);
-            Assert.NotEqual(default, ac.Initializer.CloseBraceToken);
-            Assert.False(ac.Initializer.OpenBraceToken.IsMissing);
-            Assert.False(ac.Initializer.CloseBraceToken.IsMissing);
-            Assert.Equal(1, ac.Initializer.Expressions.Count);
-            Assert.Equal("b", ac.Initializer.Expressions[0].ToString());
+            ac.Initializer.Should().NotBeNull();
+            ac.Initializer.OpenBraceToken.Should().NotBe(default);
+            ac.Initializer.CloseBraceToken.Should().NotBe(default);
+            ac.Initializer.OpenBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.CloseBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializer.Expressions.Count.Should().Be(1);
+            ac.Initializer.Expressions[0].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1461,19 +1461,19 @@ class C
             var text = "new {a, b}";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var ac = (AnonymousObjectCreationExpressionSyntax)expr;
-            Assert.NotEqual(default, ac.NewKeyword);
-            Assert.NotEqual(default, ac.OpenBraceToken);
-            Assert.NotEqual(default, ac.CloseBraceToken);
-            Assert.False(ac.OpenBraceToken.IsMissing);
-            Assert.False(ac.CloseBraceToken.IsMissing);
-            Assert.Equal(2, ac.Initializers.Count);
-            Assert.Equal("a", ac.Initializers[0].ToString());
-            Assert.Equal("b", ac.Initializers[1].ToString());
+            ac.NewKeyword.Should().NotBe(default);
+            ac.OpenBraceToken.Should().NotBe(default);
+            ac.CloseBraceToken.Should().NotBe(default);
+            ac.OpenBraceToken.IsMissing.Should().BeFalse();
+            ac.CloseBraceToken.IsMissing.Should().BeFalse();
+            ac.Initializers.Count.Should().Be(2);
+            ac.Initializers[0].ToString().Should().Be("a");
+            ac.Initializers[1].ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1482,29 +1482,29 @@ class C
             var text = "delegate (int a) { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.AnonymousMethodExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.AnonymousMethodExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var am = (AnonymousMethodExpressionSyntax)expr;
 
-            Assert.NotEqual(default, am.DelegateKeyword);
-            Assert.False(am.DelegateKeyword.IsMissing);
+            am.DelegateKeyword.Should().NotBe(default);
+            am.DelegateKeyword.IsMissing.Should().BeFalse();
 
-            Assert.NotNull(am.ParameterList);
-            Assert.NotEqual(default, am.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, am.ParameterList.CloseParenToken);
-            Assert.False(am.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(am.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(1, am.ParameterList.Parameters.Count);
-            Assert.Equal("int a", am.ParameterList.Parameters[0].ToString());
+            am.ParameterList.Should().NotBeNull();
+            am.ParameterList.OpenParenToken.Should().NotBe(default);
+            am.ParameterList.CloseParenToken.Should().NotBe(default);
+            am.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            am.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            am.ParameterList.Parameters.Count.Should().Be(1);
+            am.ParameterList.Parameters[0].ToString().Should().Be("int a");
 
-            Assert.NotNull(am.Block);
-            Assert.NotEqual(default, am.Block.OpenBraceToken);
-            Assert.NotEqual(default, am.Block.CloseBraceToken);
-            Assert.False(am.Block.OpenBraceToken.IsMissing);
-            Assert.False(am.Block.CloseBraceToken.IsMissing);
-            Assert.Equal(0, am.Block.Statements.Count);
+            am.Block.Should().NotBeNull();
+            am.Block.OpenBraceToken.Should().NotBe(default);
+            am.Block.CloseBraceToken.Should().NotBe(default);
+            am.Block.OpenBraceToken.IsMissing.Should().BeFalse();
+            am.Block.CloseBraceToken.IsMissing.Should().BeFalse();
+            am.Block.Statements.Count.Should().Be(0);
         }
 
         [Fact]
@@ -1513,28 +1513,28 @@ class C
             var text = "delegate () { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.AnonymousMethodExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.AnonymousMethodExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var am = (AnonymousMethodExpressionSyntax)expr;
 
-            Assert.NotEqual(default, am.DelegateKeyword);
-            Assert.False(am.DelegateKeyword.IsMissing);
+            am.DelegateKeyword.Should().NotBe(default);
+            am.DelegateKeyword.IsMissing.Should().BeFalse();
 
-            Assert.NotNull(am.ParameterList);
-            Assert.NotEqual(default, am.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, am.ParameterList.CloseParenToken);
-            Assert.False(am.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(am.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(0, am.ParameterList.Parameters.Count);
+            am.ParameterList.Should().NotBeNull();
+            am.ParameterList.OpenParenToken.Should().NotBe(default);
+            am.ParameterList.CloseParenToken.Should().NotBe(default);
+            am.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            am.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            am.ParameterList.Parameters.Count.Should().Be(0);
 
-            Assert.NotNull(am.Block);
-            Assert.NotEqual(default, am.Block.OpenBraceToken);
-            Assert.NotEqual(default, am.Block.CloseBraceToken);
-            Assert.False(am.Block.OpenBraceToken.IsMissing);
-            Assert.False(am.Block.CloseBraceToken.IsMissing);
-            Assert.Equal(0, am.Block.Statements.Count);
+            am.Block.Should().NotBeNull();
+            am.Block.OpenBraceToken.Should().NotBe(default);
+            am.Block.CloseBraceToken.Should().NotBe(default);
+            am.Block.OpenBraceToken.IsMissing.Should().BeFalse();
+            am.Block.CloseBraceToken.IsMissing.Should().BeFalse();
+            am.Block.Statements.Count.Should().Be(0);
         }
 
         [Fact]
@@ -1543,23 +1543,23 @@ class C
             var text = "delegate { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.AnonymousMethodExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.AnonymousMethodExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var am = (AnonymousMethodExpressionSyntax)expr;
 
-            Assert.NotEqual(default, am.DelegateKeyword);
-            Assert.False(am.DelegateKeyword.IsMissing);
+            am.DelegateKeyword.Should().NotBe(default);
+            am.DelegateKeyword.IsMissing.Should().BeFalse();
 
-            Assert.Null(am.ParameterList);
+            am.ParameterList.Should().BeNull();
 
-            Assert.NotNull(am.Block);
-            Assert.NotEqual(default, am.Block.OpenBraceToken);
-            Assert.NotEqual(default, am.Block.CloseBraceToken);
-            Assert.False(am.Block.OpenBraceToken.IsMissing);
-            Assert.False(am.Block.CloseBraceToken.IsMissing);
-            Assert.Equal(0, am.Block.Statements.Count);
+            am.Block.Should().NotBeNull();
+            am.Block.OpenBraceToken.Should().NotBe(default);
+            am.Block.CloseBraceToken.Should().NotBe(default);
+            am.Block.OpenBraceToken.IsMissing.Should().BeFalse();
+            am.Block.CloseBraceToken.IsMissing.Should().BeFalse();
+            am.Block.Statements.Count.Should().Be(0);
         }
 
         [Fact]
@@ -1568,16 +1568,16 @@ class C
             var text = "a => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.SimpleLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.SimpleLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (SimpleLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.Parameter.Identifier);
-            Assert.False(lambda.Parameter.Identifier.IsMissing);
-            Assert.Equal("a", lambda.Parameter.Identifier.ToString());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            lambda.Parameter.Identifier.Should().NotBe(default);
+            lambda.Parameter.Identifier.IsMissing.Should().BeFalse();
+            lambda.Parameter.Identifier.ToString().Should().Be("a");
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1586,16 +1586,16 @@ class C
             var text = "a => ref b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.SimpleLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.SimpleLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (SimpleLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.Parameter.Identifier);
-            Assert.False(lambda.Parameter.Identifier.IsMissing);
-            Assert.Equal("a", lambda.Parameter.Identifier.ToString());
-            Assert.Equal(SyntaxKind.RefExpression, lambda.Body.Kind());
-            Assert.Equal("ref b", lambda.Body.ToString());
+            lambda.Parameter.Identifier.Should().NotBe(default);
+            lambda.Parameter.Identifier.IsMissing.Should().BeFalse();
+            lambda.Parameter.Identifier.ToString().Should().Be("a");
+            lambda.Body.Kind().Should().Be(SyntaxKind.RefExpression);
+            lambda.Body.ToString().Should().Be("ref b");
         }
 
         [Fact]
@@ -1604,18 +1604,18 @@ class C
             var text = "a => { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.SimpleLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.SimpleLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (SimpleLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.Parameter.Identifier);
-            Assert.False(lambda.Parameter.Identifier.IsMissing);
-            Assert.Equal("a", lambda.Parameter.Identifier.ToString());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal(SyntaxKind.Block, lambda.Body.Kind());
+            lambda.Parameter.Identifier.Should().NotBe(default);
+            lambda.Parameter.Identifier.IsMissing.Should().BeFalse();
+            lambda.Parameter.Identifier.ToString().Should().Be("a");
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.Kind().Should().Be(SyntaxKind.Block);
             var b = (BlockSyntax)lambda.Body;
-            Assert.Equal("{ }", lambda.Body.ToString());
+            lambda.Body.ToString().Should().Be("{ }");
         }
 
         [Fact]
@@ -1624,18 +1624,18 @@ class C
             var text = "() => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(0, lambda.ParameterList.Parameters.Count);
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(0);
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1644,18 +1644,18 @@ class C
             var text = "() => ref b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(0, lambda.ParameterList.Parameters.Count);
-            Assert.Equal(SyntaxKind.RefExpression, lambda.Body.Kind());
-            Assert.Equal("ref b", lambda.Body.ToString());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(0);
+            lambda.Body.Kind().Should().Be(SyntaxKind.RefExpression);
+            lambda.Body.ToString().Should().Be("ref b");
         }
 
         [Fact]
@@ -1664,20 +1664,20 @@ class C
             var text = "() => { }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(0, lambda.ParameterList.Parameters.Count);
-            Assert.NotNull(lambda.Body);
-            Assert.Equal(SyntaxKind.Block, lambda.Body.Kind());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(0);
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.Kind().Should().Be(SyntaxKind.Block);
             var b = (BlockSyntax)lambda.Body;
-            Assert.Equal("{ }", lambda.Body.ToString());
+            lambda.Body.ToString().Should().Be("{ }");
         }
 
         [Fact]
@@ -1686,22 +1686,22 @@ class C
             var text = "(a) => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(1, lambda.ParameterList.Parameters.Count);
-            Assert.Equal(SyntaxKind.Parameter, lambda.ParameterList.Parameters[0].Kind());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(1);
+            lambda.ParameterList.Parameters[0].Kind().Should().Be(SyntaxKind.Parameter);
             var ps = (ParameterSyntax)lambda.ParameterList.Parameters[0];
-            Assert.Null(ps.Type);
-            Assert.Equal("a", ps.Identifier.ToString());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            ps.Type.Should().BeNull();
+            ps.Identifier.ToString().Should().Be("a");
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1710,25 +1710,25 @@ class C
             var text = "(a, a2) => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(2, lambda.ParameterList.Parameters.Count);
-            Assert.Equal(SyntaxKind.Parameter, lambda.ParameterList.Parameters[0].Kind());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(2);
+            lambda.ParameterList.Parameters[0].Kind().Should().Be(SyntaxKind.Parameter);
             var ps = (ParameterSyntax)lambda.ParameterList.Parameters[0];
-            Assert.Null(ps.Type);
-            Assert.Equal("a", ps.Identifier.ToString());
+            ps.Type.Should().BeNull();
+            ps.Identifier.ToString().Should().Be("a");
             var ps2 = (ParameterSyntax)lambda.ParameterList.Parameters[1];
-            Assert.Null(ps2.Type);
-            Assert.Equal("a2", ps2.Identifier.ToString());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            ps2.Type.Should().BeNull();
+            ps2.Identifier.ToString().Should().Be("a2");
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1737,23 +1737,23 @@ class C
             var text = "(T a) => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(1, lambda.ParameterList.Parameters.Count);
-            Assert.Equal(SyntaxKind.Parameter, lambda.ParameterList.Parameters[0].Kind());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(1);
+            lambda.ParameterList.Parameters[0].Kind().Should().Be(SyntaxKind.Parameter);
             var ps = (ParameterSyntax)lambda.ParameterList.Parameters[0];
-            Assert.NotNull(ps.Type);
-            Assert.Equal("T", ps.Type.ToString());
-            Assert.Equal("a", ps.Identifier.ToString());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            ps.Type.Should().NotBeNull();
+            ps.Type.ToString().Should().Be("T");
+            ps.Identifier.ToString().Should().Be("a");
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1762,25 +1762,25 @@ class C
             var text = "(ref T a) => b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var lambda = (ParenthesizedLambdaExpressionSyntax)expr;
-            Assert.NotEqual(default, lambda.ParameterList.OpenParenToken);
-            Assert.NotEqual(default, lambda.ParameterList.CloseParenToken);
-            Assert.False(lambda.ParameterList.OpenParenToken.IsMissing);
-            Assert.False(lambda.ParameterList.CloseParenToken.IsMissing);
-            Assert.Equal(1, lambda.ParameterList.Parameters.Count);
-            Assert.Equal(SyntaxKind.Parameter, lambda.ParameterList.Parameters[0].Kind());
+            lambda.ParameterList.OpenParenToken.Should().NotBe(default);
+            lambda.ParameterList.CloseParenToken.Should().NotBe(default);
+            lambda.ParameterList.OpenParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.CloseParenToken.IsMissing.Should().BeFalse();
+            lambda.ParameterList.Parameters.Count.Should().Be(1);
+            lambda.ParameterList.Parameters[0].Kind().Should().Be(SyntaxKind.Parameter);
             var ps = (ParameterSyntax)lambda.ParameterList.Parameters[0];
-            Assert.NotNull(ps.Type);
-            Assert.Equal("T", ps.Type.ToString());
-            Assert.Equal("a", ps.Identifier.ToString());
-            Assert.Equal(1, ps.Modifiers.Count);
-            Assert.Equal(SyntaxKind.RefKeyword, ps.Modifiers[0].Kind());
-            Assert.NotNull(lambda.Body);
-            Assert.Equal("b", lambda.Body.ToString());
+            ps.Type.Should().NotBeNull();
+            ps.Type.ToString().Should().Be("T");
+            ps.Identifier.ToString().Should().Be("a");
+            ps.Modifiers.Count.Should().Be(1);
+            ps.Modifiers[0].Kind().Should().Be(SyntaxKind.RefKeyword);
+            lambda.Body.Should().NotBeNull();
+            lambda.Body.ToString().Should().Be("b");
         }
 
         [Fact]
@@ -1789,18 +1789,18 @@ class C
             var text = "(a, a2)";
             var expr = this.ParseExpression(text, options: TestOptions.Regular);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.TupleExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.TupleExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var tuple = (TupleExpressionSyntax)expr;
-            Assert.NotEqual(default, tuple.OpenParenToken);
-            Assert.NotEqual(default, tuple.CloseParenToken);
-            Assert.False(tuple.OpenParenToken.IsMissing);
-            Assert.False(tuple.CloseParenToken.IsMissing);
-            Assert.Equal(2, tuple.Arguments.Count);
-            Assert.Equal(SyntaxKind.IdentifierName, tuple.Arguments[0].Expression.Kind());
-            Assert.Null(tuple.Arguments[1].NameColon);
+            tuple.OpenParenToken.Should().NotBe(default);
+            tuple.CloseParenToken.Should().NotBe(default);
+            tuple.OpenParenToken.IsMissing.Should().BeFalse();
+            tuple.CloseParenToken.IsMissing.Should().BeFalse();
+            tuple.Arguments.Count.Should().Be(2);
+            tuple.Arguments[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
+            tuple.Arguments[1].NameColon.Should().BeNull();
         }
 
         [Fact]
@@ -1809,19 +1809,19 @@ class C
             var text = "(arg1: (a, a2), arg2: a2)";
             var expr = this.ParseExpression(text, options: TestOptions.Regular);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.TupleExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.TupleExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
             var tuple = (TupleExpressionSyntax)expr;
-            Assert.NotEqual(default, tuple.OpenParenToken);
-            Assert.NotEqual(default, tuple.CloseParenToken);
-            Assert.False(tuple.OpenParenToken.IsMissing);
-            Assert.False(tuple.CloseParenToken.IsMissing);
-            Assert.Equal(2, tuple.Arguments.Count);
-            Assert.Equal(SyntaxKind.TupleExpression, tuple.Arguments[0].Expression.Kind());
-            Assert.NotNull(tuple.Arguments[0].NameColon.Name);
-            Assert.Equal("arg2", tuple.Arguments[1].NameColon.Name.ToString());
+            tuple.OpenParenToken.Should().NotBe(default);
+            tuple.CloseParenToken.Should().NotBe(default);
+            tuple.OpenParenToken.IsMissing.Should().BeFalse();
+            tuple.CloseParenToken.IsMissing.Should().BeFalse();
+            tuple.Arguments.Count.Should().Be(2);
+            tuple.Arguments[0].Expression.Kind().Should().Be(SyntaxKind.TupleExpression);
+            tuple.Arguments[0].NameColon.Name.Should().NotBeNull();
+            tuple.Arguments[1].NameColon.Name.ToString().Should().Be("arg2");
         }
 
         [Fact]
@@ -1830,31 +1830,31 @@ class C
             var text = "from a in A select b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(0, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(0);
 
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.Equal(SyntaxKind.FromKeyword, fs.FromKeyword.Kind());
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.Kind().Should().Be(SyntaxKind.FromKeyword);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.Equal(SyntaxKind.SelectKeyword, ss.SelectKeyword.Kind());
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("b", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.Kind().Should().Be(SyntaxKind.SelectKeyword);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("b");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -1863,31 +1863,31 @@ class C
             var text = "from T a in A select b";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(0, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(0);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.NotNull(fs.Type);
-            Assert.Equal("T", fs.Type.ToString());
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().NotBeNull();
+            fs.Type.ToString().Should().Be("T");
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("b", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("b");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -1896,49 +1896,49 @@ class C
             var text = "from a in A select b into c select d";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(0, qs.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.Clauses.Count.Should().Be(0);
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("b", ss.Expression.ToString());
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("b");
 
-            Assert.NotNull(qs.Body.Continuation);
-            Assert.Equal(SyntaxKind.QueryContinuation, qs.Body.Continuation.Kind());
-            Assert.NotEqual(default, qs.Body.Continuation.IntoKeyword);
-            Assert.Equal(SyntaxKind.IntoKeyword, qs.Body.Continuation.IntoKeyword.Kind());
-            Assert.False(qs.Body.Continuation.IntoKeyword.IsMissing);
-            Assert.Equal("c", qs.Body.Continuation.Identifier.ToString());
+            qs.Body.Continuation.Should().NotBeNull();
+            qs.Body.Continuation.Kind().Should().Be(SyntaxKind.QueryContinuation);
+            qs.Body.Continuation.IntoKeyword.Should().NotBe(default);
+            qs.Body.Continuation.IntoKeyword.Kind().Should().Be(SyntaxKind.IntoKeyword);
+            qs.Body.Continuation.IntoKeyword.IsMissing.Should().BeFalse();
+            qs.Body.Continuation.Identifier.ToString().Should().Be("c");
 
-            Assert.NotNull(qs.Body.Continuation.Body);
-            Assert.Equal(0, qs.Body.Continuation.Body.Clauses.Count);
-            Assert.NotNull(qs.Body.Continuation.Body.SelectOrGroup);
+            qs.Body.Continuation.Body.Should().NotBeNull();
+            qs.Body.Continuation.Body.Clauses.Count.Should().Be(0);
+            qs.Body.Continuation.Body.SelectOrGroup.Should().NotBeNull();
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.Continuation.Body.SelectOrGroup.Kind());
+            qs.Body.Continuation.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             ss = (SelectClauseSyntax)qs.Body.Continuation.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("d", ss.Expression.ToString());
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("d");
 
-            Assert.Null(qs.Body.Continuation.Body.Continuation);
+            qs.Body.Continuation.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -1947,38 +1947,38 @@ class C
             var text = "from a in A where b select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.WhereClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.WhereClause);
             var ws = (WhereClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, ws.WhereKeyword);
-            Assert.Equal(SyntaxKind.WhereKeyword, ws.WhereKeyword.Kind());
-            Assert.False(ws.WhereKeyword.IsMissing);
-            Assert.NotNull(ws.Condition);
-            Assert.Equal("b", ws.Condition.ToString());
+            ws.WhereKeyword.Should().NotBe(default);
+            ws.WhereKeyword.Kind().Should().Be(SyntaxKind.WhereKeyword);
+            ws.WhereKeyword.IsMissing.Should().BeFalse();
+            ws.Condition.Should().NotBeNull();
+            ws.Condition.ToString().Should().Be("b");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -1987,41 +1987,41 @@ class C
             var text = "from a in A from b in B select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.FromClause);
             fs = (FromClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("b", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("B", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("b");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("B");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2030,43 +2030,43 @@ class C
             var text = "from a in A let b = B select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.LetClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.LetClause);
             var ls = (LetClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, ls.LetKeyword);
-            Assert.Equal(SyntaxKind.LetKeyword, ls.LetKeyword.Kind());
-            Assert.False(ls.LetKeyword.IsMissing);
-            Assert.NotEqual(default, ls.Identifier);
-            Assert.Equal("b", ls.Identifier.ToString());
-            Assert.NotEqual(default, ls.EqualsToken);
-            Assert.False(ls.EqualsToken.IsMissing);
-            Assert.NotNull(ls.Expression);
-            Assert.Equal("B", ls.Expression.ToString());
+            ls.LetKeyword.Should().NotBe(default);
+            ls.LetKeyword.Kind().Should().Be(SyntaxKind.LetKeyword);
+            ls.LetKeyword.IsMissing.Should().BeFalse();
+            ls.Identifier.Should().NotBe(default);
+            ls.Identifier.ToString().Should().Be("b");
+            ls.EqualsToken.Should().NotBe(default);
+            ls.EqualsToken.IsMissing.Should().BeFalse();
+            ls.Expression.Should().NotBeNull();
+            ls.Expression.ToString().Should().Be("B");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2075,43 +2075,43 @@ class C
             var text = "from a in A orderby b select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.OrderByClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var obs = (OrderByClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, obs.OrderByKeyword);
-            Assert.Equal(SyntaxKind.OrderByKeyword, obs.OrderByKeyword.Kind());
-            Assert.False(obs.OrderByKeyword.IsMissing);
-            Assert.Equal(1, obs.Orderings.Count);
+            obs.OrderByKeyword.Should().NotBe(default);
+            obs.OrderByKeyword.Kind().Should().Be(SyntaxKind.OrderByKeyword);
+            obs.OrderByKeyword.IsMissing.Should().BeFalse();
+            obs.Orderings.Count.Should().Be(1);
 
             var os = (OrderingSyntax)obs.Orderings[0];
-            Assert.Equal(SyntaxKind.None, os.AscendingOrDescendingKeyword.Kind());
-            Assert.NotNull(os.Expression);
-            Assert.Equal("b", os.Expression.ToString());
+            os.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.None);
+            os.Expression.Should().NotBeNull();
+            os.Expression.ToString().Should().Be("b");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2120,47 +2120,47 @@ class C
             var text = "from a in A orderby b, b2 select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.OrderByClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var obs = (OrderByClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, obs.OrderByKeyword);
-            Assert.False(obs.OrderByKeyword.IsMissing);
-            Assert.Equal(2, obs.Orderings.Count);
+            obs.OrderByKeyword.Should().NotBe(default);
+            obs.OrderByKeyword.IsMissing.Should().BeFalse();
+            obs.Orderings.Count.Should().Be(2);
 
             var os = (OrderingSyntax)obs.Orderings[0];
-            Assert.Equal(SyntaxKind.None, os.AscendingOrDescendingKeyword.Kind());
-            Assert.NotNull(os.Expression);
-            Assert.Equal("b", os.Expression.ToString());
+            os.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.None);
+            os.Expression.Should().NotBeNull();
+            os.Expression.ToString().Should().Be("b");
 
             os = (OrderingSyntax)obs.Orderings[1];
-            Assert.Equal(SyntaxKind.None, os.AscendingOrDescendingKeyword.Kind());
-            Assert.NotNull(os.Expression);
-            Assert.Equal("b2", os.Expression.ToString());
+            os.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.None);
+            os.Expression.Should().NotBeNull();
+            os.Expression.ToString().Should().Be("b2");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2169,46 +2169,46 @@ class C
             var text = "from a in A orderby b ascending select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.OrderByClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var obs = (OrderByClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, obs.OrderByKeyword);
-            Assert.False(obs.OrderByKeyword.IsMissing);
-            Assert.Equal(1, obs.Orderings.Count);
+            obs.OrderByKeyword.Should().NotBe(default);
+            obs.OrderByKeyword.IsMissing.Should().BeFalse();
+            obs.Orderings.Count.Should().Be(1);
 
             var os = (OrderingSyntax)obs.Orderings[0];
-            Assert.NotEqual(default, os.AscendingOrDescendingKeyword);
-            Assert.Equal(SyntaxKind.AscendingKeyword, os.AscendingOrDescendingKeyword.Kind());
-            Assert.False(os.AscendingOrDescendingKeyword.IsMissing);
-            Assert.Equal(SyntaxKind.AscendingKeyword, os.AscendingOrDescendingKeyword.ContextualKind());
+            os.AscendingOrDescendingKeyword.Should().NotBe(default);
+            os.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.AscendingKeyword);
+            os.AscendingOrDescendingKeyword.IsMissing.Should().BeFalse();
+            os.AscendingOrDescendingKeyword.ContextualKind().Should().Be(SyntaxKind.AscendingKeyword);
 
-            Assert.NotNull(os.Expression);
-            Assert.Equal("b", os.Expression.ToString());
+            os.Expression.Should().NotBeNull();
+            os.Expression.ToString().Should().Be("b");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2217,46 +2217,46 @@ class C
             var text = "from a in A orderby b descending select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
 
-            Assert.Equal(SyntaxKind.OrderByClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var obs = (OrderByClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, obs.OrderByKeyword);
-            Assert.False(obs.OrderByKeyword.IsMissing);
-            Assert.Equal(1, obs.Orderings.Count);
+            obs.OrderByKeyword.Should().NotBe(default);
+            obs.OrderByKeyword.IsMissing.Should().BeFalse();
+            obs.Orderings.Count.Should().Be(1);
 
             var os = (OrderingSyntax)obs.Orderings[0];
-            Assert.NotEqual(default, os.AscendingOrDescendingKeyword);
-            Assert.Equal(SyntaxKind.DescendingKeyword, os.AscendingOrDescendingKeyword.Kind());
-            Assert.False(os.AscendingOrDescendingKeyword.IsMissing);
-            Assert.Equal(SyntaxKind.DescendingKeyword, os.AscendingOrDescendingKeyword.ContextualKind());
+            os.AscendingOrDescendingKeyword.Should().NotBe(default);
+            os.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.DescendingKeyword);
+            os.AscendingOrDescendingKeyword.IsMissing.Should().BeFalse();
+            os.AscendingOrDescendingKeyword.ContextualKind().Should().Be(SyntaxKind.DescendingKeyword);
 
-            Assert.NotNull(os.Expression);
-            Assert.Equal("b", os.Expression.ToString());
+            os.Expression.Should().NotBeNull();
+            os.Expression.ToString().Should().Be("b");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2265,37 +2265,37 @@ class C
             var text = "from a in A group b by c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(0, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(0);
 
             var fs = qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.GroupClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.GroupClause);
             var gbs = (GroupClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, gbs.GroupKeyword);
-            Assert.Equal(SyntaxKind.GroupKeyword, gbs.GroupKeyword.Kind());
-            Assert.False(gbs.GroupKeyword.IsMissing);
-            Assert.NotNull(gbs.GroupExpression);
-            Assert.Equal("b", gbs.GroupExpression.ToString());
-            Assert.NotEqual(default, gbs.ByKeyword);
-            Assert.Equal(SyntaxKind.ByKeyword, gbs.ByKeyword.Kind());
-            Assert.False(gbs.ByKeyword.IsMissing);
-            Assert.NotNull(gbs.ByExpression);
-            Assert.Equal("c", gbs.ByExpression.ToString());
+            gbs.GroupKeyword.Should().NotBe(default);
+            gbs.GroupKeyword.Kind().Should().Be(SyntaxKind.GroupKeyword);
+            gbs.GroupKeyword.IsMissing.Should().BeFalse();
+            gbs.GroupExpression.Should().NotBeNull();
+            gbs.GroupExpression.ToString().Should().Be("b");
+            gbs.ByKeyword.Should().NotBe(default);
+            gbs.ByKeyword.Kind().Should().Be(SyntaxKind.ByKeyword);
+            gbs.ByKeyword.IsMissing.Should().BeFalse();
+            gbs.ByExpression.Should().NotBeNull();
+            gbs.ByExpression.ToString().Should().Be("c");
 
-            Assert.Null(qs.Body.Continuation);
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2304,51 +2304,51 @@ class C
             var text = "from a in A group b by c into d select e";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(0, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(0);
 
             var fs = qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.GroupClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.GroupClause);
             var gbs = (GroupClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, gbs.GroupKeyword);
-            Assert.False(gbs.GroupKeyword.IsMissing);
-            Assert.NotNull(gbs.GroupExpression);
-            Assert.Equal("b", gbs.GroupExpression.ToString());
-            Assert.NotEqual(default, gbs.ByKeyword);
-            Assert.False(gbs.ByKeyword.IsMissing);
-            Assert.NotNull(gbs.ByExpression);
-            Assert.Equal("c", gbs.ByExpression.ToString());
+            gbs.GroupKeyword.Should().NotBe(default);
+            gbs.GroupKeyword.IsMissing.Should().BeFalse();
+            gbs.GroupExpression.Should().NotBeNull();
+            gbs.GroupExpression.ToString().Should().Be("b");
+            gbs.ByKeyword.Should().NotBe(default);
+            gbs.ByKeyword.IsMissing.Should().BeFalse();
+            gbs.ByExpression.Should().NotBeNull();
+            gbs.ByExpression.ToString().Should().Be("c");
 
-            Assert.NotNull(qs.Body.Continuation);
-            Assert.Equal(SyntaxKind.QueryContinuation, qs.Body.Continuation.Kind());
-            Assert.NotEqual(default, qs.Body.Continuation.IntoKeyword);
-            Assert.False(qs.Body.Continuation.IntoKeyword.IsMissing);
-            Assert.Equal("d", qs.Body.Continuation.Identifier.ToString());
+            qs.Body.Continuation.Should().NotBeNull();
+            qs.Body.Continuation.Kind().Should().Be(SyntaxKind.QueryContinuation);
+            qs.Body.Continuation.IntoKeyword.Should().NotBe(default);
+            qs.Body.Continuation.IntoKeyword.IsMissing.Should().BeFalse();
+            qs.Body.Continuation.Identifier.ToString().Should().Be("d");
 
-            Assert.NotNull(qs.Body.Continuation);
-            Assert.Equal(0, qs.Body.Continuation.Body.Clauses.Count);
-            Assert.NotNull(qs.Body.Continuation.Body.SelectOrGroup);
+            qs.Body.Continuation.Should().NotBeNull();
+            qs.Body.Continuation.Body.Clauses.Count.Should().Be(0);
+            qs.Body.Continuation.Body.SelectOrGroup.Should().NotBeNull();
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.Continuation.Body.SelectOrGroup.Kind());
+            qs.Body.Continuation.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.Continuation.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("e", ss.Expression.ToString());
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("e");
 
-            Assert.Null(qs.Body.Continuation.Body.Continuation);
+            qs.Body.Continuation.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2357,54 +2357,54 @@ class C
             var text = "from a in A join b in B on a equals b select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.JoinClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.JoinClause);
             var js = (JoinClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, js.JoinKeyword);
-            Assert.Equal(SyntaxKind.JoinKeyword, js.JoinKeyword.Kind());
-            Assert.False(js.JoinKeyword.IsMissing);
-            Assert.Null(js.Type);
-            Assert.NotEqual(default, js.Identifier);
-            Assert.Equal("b", js.Identifier.ToString());
-            Assert.NotEqual(default, js.InKeyword);
-            Assert.False(js.InKeyword.IsMissing);
-            Assert.NotNull(js.InExpression);
-            Assert.Equal("B", js.InExpression.ToString());
-            Assert.NotEqual(default, js.OnKeyword);
-            Assert.Equal(SyntaxKind.OnKeyword, js.OnKeyword.Kind());
-            Assert.False(js.OnKeyword.IsMissing);
-            Assert.NotNull(js.LeftExpression);
-            Assert.Equal("a", js.LeftExpression.ToString());
-            Assert.NotEqual(default, js.EqualsKeyword);
-            Assert.Equal(SyntaxKind.EqualsKeyword, js.EqualsKeyword.Kind());
-            Assert.False(js.EqualsKeyword.IsMissing);
-            Assert.NotNull(js.RightExpression);
-            Assert.Equal("b", js.RightExpression.ToString());
-            Assert.Null(js.Into);
+            js.JoinKeyword.Should().NotBe(default);
+            js.JoinKeyword.Kind().Should().Be(SyntaxKind.JoinKeyword);
+            js.JoinKeyword.IsMissing.Should().BeFalse();
+            js.Type.Should().BeNull();
+            js.Identifier.Should().NotBe(default);
+            js.Identifier.ToString().Should().Be("b");
+            js.InKeyword.Should().NotBe(default);
+            js.InKeyword.IsMissing.Should().BeFalse();
+            js.InExpression.Should().NotBeNull();
+            js.InExpression.ToString().Should().Be("B");
+            js.OnKeyword.Should().NotBe(default);
+            js.OnKeyword.Kind().Should().Be(SyntaxKind.OnKeyword);
+            js.OnKeyword.IsMissing.Should().BeFalse();
+            js.LeftExpression.Should().NotBeNull();
+            js.LeftExpression.ToString().Should().Be("a");
+            js.EqualsKeyword.Should().NotBe(default);
+            js.EqualsKeyword.Kind().Should().Be(SyntaxKind.EqualsKeyword);
+            js.EqualsKeyword.IsMissing.Should().BeFalse();
+            js.RightExpression.Should().NotBeNull();
+            js.RightExpression.ToString().Should().Be("b");
+            js.Into.Should().BeNull();
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2413,53 +2413,53 @@ class C
             var text = "from Ta a in A join Tb b in B on a equals b select c";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.NotNull(fs.Type);
-            Assert.Equal("Ta", fs.Type.ToString());
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().NotBeNull();
+            fs.Type.ToString().Should().Be("Ta");
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.JoinClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.JoinClause);
             var js = (JoinClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, js.JoinKeyword);
-            Assert.False(js.JoinKeyword.IsMissing);
-            Assert.NotNull(js.Type);
-            Assert.Equal("Tb", js.Type.ToString());
-            Assert.NotEqual(default, js.Identifier);
-            Assert.Equal("b", js.Identifier.ToString());
-            Assert.NotEqual(default, js.InKeyword);
-            Assert.False(js.InKeyword.IsMissing);
-            Assert.NotNull(js.InExpression);
-            Assert.Equal("B", js.InExpression.ToString());
-            Assert.NotEqual(default, js.OnKeyword);
-            Assert.False(js.OnKeyword.IsMissing);
-            Assert.NotNull(js.LeftExpression);
-            Assert.Equal("a", js.LeftExpression.ToString());
-            Assert.NotEqual(default, js.EqualsKeyword);
-            Assert.False(js.EqualsKeyword.IsMissing);
-            Assert.NotNull(js.RightExpression);
-            Assert.Equal("b", js.RightExpression.ToString());
-            Assert.Null(js.Into);
+            js.JoinKeyword.Should().NotBe(default);
+            js.JoinKeyword.IsMissing.Should().BeFalse();
+            js.Type.Should().NotBeNull();
+            js.Type.ToString().Should().Be("Tb");
+            js.Identifier.Should().NotBe(default);
+            js.Identifier.ToString().Should().Be("b");
+            js.InKeyword.Should().NotBe(default);
+            js.InKeyword.IsMissing.Should().BeFalse();
+            js.InExpression.Should().NotBeNull();
+            js.InExpression.ToString().Should().Be("B");
+            js.OnKeyword.Should().NotBe(default);
+            js.OnKeyword.IsMissing.Should().BeFalse();
+            js.LeftExpression.Should().NotBeNull();
+            js.LeftExpression.ToString().Should().Be("a");
+            js.EqualsKeyword.Should().NotBe(default);
+            js.EqualsKeyword.IsMissing.Should().BeFalse();
+            js.RightExpression.Should().NotBeNull();
+            js.RightExpression.ToString().Should().Be("b");
+            js.Into.Should().BeNull();
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("c", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("c");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2468,55 +2468,55 @@ class C
             var text = "from a in A join b in B on a equals b into c select d";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.Equal(1, qs.Body.Clauses.Count);
+            qs.Body.Clauses.Count.Should().Be(1);
 
-            Assert.Equal(SyntaxKind.FromClause, qs.FromClause.Kind());
+            qs.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
             var fs = (FromClauseSyntax)qs.FromClause;
-            Assert.NotEqual(default, fs.FromKeyword);
-            Assert.False(fs.FromKeyword.IsMissing);
-            Assert.Null(fs.Type);
-            Assert.Equal("a", fs.Identifier.ToString());
-            Assert.NotEqual(default, fs.InKeyword);
-            Assert.False(fs.InKeyword.IsMissing);
-            Assert.Equal("A", fs.Expression.ToString());
+            fs.FromKeyword.Should().NotBe(default);
+            fs.FromKeyword.IsMissing.Should().BeFalse();
+            fs.Type.Should().BeNull();
+            fs.Identifier.ToString().Should().Be("a");
+            fs.InKeyword.Should().NotBe(default);
+            fs.InKeyword.IsMissing.Should().BeFalse();
+            fs.Expression.ToString().Should().Be("A");
 
-            Assert.Equal(SyntaxKind.JoinClause, qs.Body.Clauses[0].Kind());
+            qs.Body.Clauses[0].Kind().Should().Be(SyntaxKind.JoinClause);
             var js = (JoinClauseSyntax)qs.Body.Clauses[0];
-            Assert.NotEqual(default, js.JoinKeyword);
-            Assert.False(js.JoinKeyword.IsMissing);
-            Assert.Null(js.Type);
-            Assert.NotEqual(default, js.Identifier);
-            Assert.Equal("b", js.Identifier.ToString());
-            Assert.NotEqual(default, js.InKeyword);
-            Assert.False(js.InKeyword.IsMissing);
-            Assert.NotNull(js.InExpression);
-            Assert.Equal("B", js.InExpression.ToString());
-            Assert.NotEqual(default, js.OnKeyword);
-            Assert.False(js.OnKeyword.IsMissing);
-            Assert.NotNull(js.LeftExpression);
-            Assert.Equal("a", js.LeftExpression.ToString());
-            Assert.NotEqual(default, js.EqualsKeyword);
-            Assert.False(js.EqualsKeyword.IsMissing);
-            Assert.NotNull(js.RightExpression);
-            Assert.Equal("b", js.RightExpression.ToString());
-            Assert.NotNull(js.Into);
-            Assert.NotEqual(default, js.Into.IntoKeyword);
-            Assert.False(js.Into.IntoKeyword.IsMissing);
-            Assert.NotEqual(default, js.Into.Identifier);
-            Assert.Equal("c", js.Into.Identifier.ToString());
+            js.JoinKeyword.Should().NotBe(default);
+            js.JoinKeyword.IsMissing.Should().BeFalse();
+            js.Type.Should().BeNull();
+            js.Identifier.Should().NotBe(default);
+            js.Identifier.ToString().Should().Be("b");
+            js.InKeyword.Should().NotBe(default);
+            js.InKeyword.IsMissing.Should().BeFalse();
+            js.InExpression.Should().NotBeNull();
+            js.InExpression.ToString().Should().Be("B");
+            js.OnKeyword.Should().NotBe(default);
+            js.OnKeyword.IsMissing.Should().BeFalse();
+            js.LeftExpression.Should().NotBeNull();
+            js.LeftExpression.ToString().Should().Be("a");
+            js.EqualsKeyword.Should().NotBe(default);
+            js.EqualsKeyword.IsMissing.Should().BeFalse();
+            js.RightExpression.Should().NotBeNull();
+            js.RightExpression.ToString().Should().Be("b");
+            js.Into.Should().NotBeNull();
+            js.Into.IntoKeyword.Should().NotBe(default);
+            js.Into.IntoKeyword.IsMissing.Should().BeFalse();
+            js.Into.Identifier.Should().NotBe(default);
+            js.Into.Identifier.ToString().Should().Be("c");
 
-            Assert.Equal(SyntaxKind.SelectClause, qs.Body.SelectOrGroup.Kind());
+            qs.Body.SelectOrGroup.Kind().Should().Be(SyntaxKind.SelectClause);
             var ss = (SelectClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotEqual(default, ss.SelectKeyword);
-            Assert.False(ss.SelectKeyword.IsMissing);
-            Assert.Equal("d", ss.Expression.ToString());
-            Assert.Null(qs.Body.Continuation);
+            ss.SelectKeyword.Should().NotBe(default);
+            ss.SelectKeyword.IsMissing.Should().BeFalse();
+            ss.Expression.ToString().Should().Be("d");
+            qs.Body.Continuation.Should().BeNull();
         }
 
         [Fact]
@@ -2525,19 +2525,19 @@ class C
             var text = "from it in goo group x by y";
             var expr = SyntaxFactory.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
 
             var qs = (QueryExpressionSyntax)expr;
-            Assert.NotNull(qs.Body.SelectOrGroup);
-            Assert.IsType<GroupClauseSyntax>(qs.Body.SelectOrGroup);
+            qs.Body.SelectOrGroup.Should().NotBeNull();
+            qs.Body.SelectOrGroup.Should().BeOfType<GroupClauseSyntax>();
 
             var gs = (GroupClauseSyntax)qs.Body.SelectOrGroup;
-            Assert.NotNull(gs.GroupExpression);
-            Assert.Equal("x", gs.GroupExpression.ToString());
-            Assert.Equal("y", gs.ByExpression.ToString());
+            gs.GroupExpression.Should().NotBeNull();
+            gs.GroupExpression.ToString().Should().Be("x");
+            gs.ByExpression.ToString().Should().Be("y");
         }
 
         [WorkItem(543075, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543075")]
@@ -2547,11 +2547,11 @@ class C
             var text = "new int[";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ArrayCreationExpression, expr.Kind());
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ArrayCreationExpression);
 
             var arrayCreation = (ArrayCreationExpressionSyntax)expr;
-            Assert.Equal(1, arrayCreation.Type.RankSpecifiers.Single().Rank);
+            arrayCreation.Type.RankSpecifiers.Single().Rank.Should().Be(1);
         }
 
         [WorkItem(543075, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543075")]
@@ -2561,11 +2561,11 @@ class C
             var text = "new C<";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, expr.Kind());
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
 
             var objectCreation = (ObjectCreationExpressionSyntax)expr;
-            Assert.Equal(1, ((NameSyntax)objectCreation.Type).Arity);
+            ((NameSyntax)objectCreation.Type).Arity.Should().Be(1);
         }
 
         [WorkItem(675602, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/675602")]
@@ -2576,10 +2576,10 @@ class C
             var text = "from elem in aRay select new Result { A = on = true }";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.QueryExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.NotEqual(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.QueryExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -2588,11 +2588,11 @@ class C
             var text = "(aRay[i,j])";
             var expr = this.ParseExpression(text);
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, expr.Kind());
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
 
             var parenExp = (ParenthesizedExpressionSyntax)expr;
-            Assert.Equal(SyntaxKind.ElementAccessExpression, parenExp.Expression.Kind());
+            parenExp.Expression.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
         }
 
         [WorkItem(543993, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543993")]
@@ -2658,6 +2658,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AwesomeAssertions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
@@ -2672,8 +2673,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 ";
             var root = SyntaxFactory.ParseSyntaxTree(text).GetRoot();
 
-            Assert.NotNull(root);
-            Assert.Equal(SyntaxKind.CompilationUnit, root.Kind());
+            root.Should().NotBeNull();
+            root.Kind().Should().Be(SyntaxKind.CompilationUnit);
         }
 
         [Fact, WorkItem(15885, "https://github.com/dotnet/roslyn/pull/15885")]
@@ -4298,10 +4299,10 @@ class C
             var text = "default";
             var expr = this.ParseExpression(text, TestOptions.Regular.WithLanguageVersion(LanguageVersion.CSharp7_1));
 
-            Assert.NotNull(expr);
-            Assert.Equal(SyntaxKind.DefaultLiteralExpression, expr.Kind());
-            Assert.Equal(text, expr.ToString());
-            Assert.Equal(0, expr.Errors().Length);
+            expr.Should().NotBeNull();
+            expr.Kind().Should().Be(SyntaxKind.DefaultLiteralExpression);
+            expr.ToString().Should().Be(text);
+            expr.Errors().Length.Should().Be(0);
         }
 
         [Fact, WorkItem(17683, "https://github.com/dotnet/roslyn/issues/17683")]

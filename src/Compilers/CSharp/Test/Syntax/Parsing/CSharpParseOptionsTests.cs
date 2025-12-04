@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Roslyn.Test.Utilities;
 using Roslyn.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
 {
@@ -23,8 +24,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             var newOpt1 = factory(oldOpt1, validValue);
             var newOpt2 = factory(newOpt1, validValue);
 
-            Assert.Equal(validValue, getter(newOpt1));
-            Assert.Same(newOpt2, newOpt1);
+            getter(newOpt1).Should().Be(validValue);
+            newOpt1.Should().BeSameAs(newOpt2);
         }
 
         [Fact]
@@ -33,9 +34,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
         {
             var kvp = new KeyValuePair<string, string>("IOperation", "true");
             var po = new CSharpParseOptions().WithFeatures(new[] { kvp });
-            Assert.Equal(po.Features.AsSingleton(), kvp);
+            kvp.Should().Be(po.Features.AsSingleton());
             var po2 = po.WithDocumentationMode(DocumentationMode.Diagnose);
-            Assert.Equal(po2.Features.AsSingleton(), kvp);
+            kvp.Should().Be(po2.Features.AsSingleton());
         }
 
         [Fact]
@@ -46,9 +47,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             TestProperty((old, value) => old.WithDocumentationMode(value), opt => opt.DocumentationMode, DocumentationMode.None);
             TestProperty((old, value) => old.WithPreprocessorSymbols(value), opt => opt.PreprocessorSymbols, ImmutableArray.Create<string>("A", "B", "C"));
 
-            Assert.Equal(0, CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols(default(ImmutableArray<string>)).PreprocessorSymbols.Length);
-            Assert.Equal(0, CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols((IEnumerable<string>)null).PreprocessorSymbols.Length);
-            Assert.Equal(0, CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols((string[])null).PreprocessorSymbols.Length);
+            CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols(default(ImmutableArray<string>)).PreprocessorSymbols.Length.Should().Be(0);
+            CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols((IEnumerable<string>)null).PreprocessorSymbols.Length.Should().Be(0);
+            CSharpParseOptions.Default.WithPreprocessorSymbols(ImmutableArray.Create<string>("A", "B")).WithPreprocessorSymbols((string[])null).PreprocessorSymbols.Length.Should().Be(0);
         }
 
         /// <summary>
@@ -74,27 +75,27 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
         public void SpecifiedKindIsMappedCorrectly()
         {
             var options = new CSharpParseOptions();
-            Assert.Equal(SourceCodeKind.Regular, options.Kind);
-            Assert.Equal(SourceCodeKind.Regular, options.SpecifiedKind);
+            options.Kind.Should().Be(SourceCodeKind.Regular);
+            options.SpecifiedKind.Should().Be(SourceCodeKind.Regular);
 
             options.Errors.Verify();
 
             options = new CSharpParseOptions(kind: SourceCodeKind.Regular);
-            Assert.Equal(SourceCodeKind.Regular, options.Kind);
-            Assert.Equal(SourceCodeKind.Regular, options.SpecifiedKind);
+            options.Kind.Should().Be(SourceCodeKind.Regular);
+            options.SpecifiedKind.Should().Be(SourceCodeKind.Regular);
 
             options.Errors.Verify();
 
             options = new CSharpParseOptions(kind: SourceCodeKind.Script);
-            Assert.Equal(SourceCodeKind.Script, options.Kind);
-            Assert.Equal(SourceCodeKind.Script, options.SpecifiedKind);
+            options.Kind.Should().Be(SourceCodeKind.Script);
+            options.SpecifiedKind.Should().Be(SourceCodeKind.Script);
 
             options.Errors.Verify();
 
 #pragma warning disable CS0618 // SourceCodeKind.Interactive is obsolete
             options = new CSharpParseOptions(kind: SourceCodeKind.Interactive);
-            Assert.Equal(SourceCodeKind.Script, options.Kind);
-            Assert.Equal(SourceCodeKind.Interactive, options.SpecifiedKind);
+            options.Kind.Should().Be(SourceCodeKind.Script);
+            options.SpecifiedKind.Should().Be(SourceCodeKind.Interactive);
 #pragma warning restore CS0618 // SourceCodeKind.Interactive is obsolete
 
             options.Errors.Verify(
@@ -102,8 +103,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
                 Diagnostic(ErrorCode.ERR_BadSourceCodeKind).WithArguments("Interactive").WithLocation(1, 1));
 
             options = new CSharpParseOptions(kind: (SourceCodeKind)int.MinValue);
-            Assert.Equal(SourceCodeKind.Regular, options.Kind);
-            Assert.Equal((SourceCodeKind)int.MinValue, options.SpecifiedKind);
+            options.Kind.Should().Be(SourceCodeKind.Regular);
+            options.SpecifiedKind.Should().Be((SourceCodeKind)int.MinValue);
 
             options.Errors.Verify(
                 // warning CS8190: Provided source code kind is unsupported or invalid: '-2147483648'
@@ -116,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             var options1 = new CSharpParseOptions(kind: SourceCodeKind.Script);
             var options2 = new CSharpParseOptions(kind: SourceCodeKind.Script);
 
-            Assert.Equal(options1.GetHashCode(), options2.GetHashCode());
+            options2.GetHashCode().Should().Be(options1.GetHashCode());
 
             // They both map internally to SourceCodeKind.Script
 #pragma warning disable CS0618 // SourceCodeKind.Interactive is obsolete
@@ -124,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             options2 = new CSharpParseOptions(kind: SourceCodeKind.Interactive);
 #pragma warning restore CS0618 // SourceCodeKind.Interactive is obsolete
 
-            Assert.NotEqual(options1.GetHashCode(), options2.GetHashCode());
+            options2.GetHashCode().Should().NotBe(options1.GetHashCode());
         }
 
         [Fact]
@@ -133,7 +134,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             var options1 = new CSharpParseOptions(kind: SourceCodeKind.Script);
             var options2 = new CSharpParseOptions(kind: SourceCodeKind.Script);
 
-            Assert.True(options1.Equals(options2));
+            options1.Equals(options2).Should().BeTrue();
 
             // They both map internally to SourceCodeKind.Script
 #pragma warning disable CS0618 // SourceCodeKind.Interactive is obsolete
@@ -141,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
             options2 = new CSharpParseOptions(kind: SourceCodeKind.Interactive);
 #pragma warning restore CS0618 // SourceCodeKind.Interactive is obsolete
 
-            Assert.False(options1.Equals(options2));
+            options1.Equals(options2).Should().BeFalse();
         }
 
         [Fact]

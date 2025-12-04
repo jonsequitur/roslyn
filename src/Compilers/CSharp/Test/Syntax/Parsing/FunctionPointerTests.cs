@@ -5,6 +5,7 @@
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
 {
@@ -4062,9 +4063,9 @@ void C()
         [Fact]
         public void SyntaxFacts()
         {
-            Assert.True(CSharp.SyntaxFacts.IsTypeSyntax(SyntaxKind.FunctionPointerType));
-            Assert.True(CSharp.SyntaxFacts.IsContextualKeyword(SyntaxKind.ManagedKeyword));
-            Assert.True(CSharp.SyntaxFacts.IsContextualKeyword(SyntaxKind.UnmanagedKeyword));
+            CSharp.SyntaxFacts.IsTypeSyntax(SyntaxKind.FunctionPointerType).Should().BeTrue();
+            CSharp.SyntaxFacts.IsContextualKeyword(SyntaxKind.ManagedKeyword).Should().BeTrue();
+            CSharp.SyntaxFacts.IsContextualKeyword(SyntaxKind.UnmanagedKeyword).Should().BeTrue();
         }
 
         [Fact]

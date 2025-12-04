@@ -2643,8 +2643,8 @@ public class Test
             var test = "public class Test\r\n{\r\n# error \u0444\u0430\u0439\u043B\r\n}";
             var parsedTree = ParseWithRoundTripCheck(test);
             var error = parsedTree.GetDiagnostics().Single();
-            Assert.Equal((int)ErrorCode.ERR_ErrorDirective, error.Code);
-            Assert.Equal("error CS1029: #error: '\u0444\u0430\u0439\u043B'", CSharpDiagnosticFormatter.Instance.Format(error.WithLocation(Location.None), EnsureEnglishUICulture.PreferredOrNull));
+            error.Code.Should().Be((int)ErrorCode.ERR_ErrorDirective);
+            CSharpDiagnosticFormatter.Instance.Format(error.WithLocation(Location.None), EnsureEnglishUICulture.PreferredOrNull).Should().Be("error CS1029: #error: '\u0444\u0430\u0439\u043B'");
         }
 
         [Fact(), WorkItem(526991, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/526991")]
@@ -3857,25 +3857,25 @@ public class Test
             tree.GetDiagnostics().Verify();
 
             var methodDeclaration = (MethodDeclarationSyntax)tree.GetRoot().DescendantNodes().Single(node => node is MethodDeclarationSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, methodDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            methodDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var delegateDeclaration = (DelegateDeclarationSyntax)tree.GetRoot().DescendantNodes().Single(node => node is DelegateDeclarationSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, delegateDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            delegateDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var localFunctionStatement = (LocalFunctionStatementSyntax)tree.GetRoot().DescendantNodes().Single(node => node is LocalFunctionStatementSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, localFunctionStatement.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            localFunctionStatement.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var lambdaExpression = (ParenthesizedLambdaExpressionSyntax)tree.GetRoot().DescendantNodes().Single(node => node is ParenthesizedLambdaExpressionSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, lambdaExpression.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            lambdaExpression.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var anonymousMethodExpression = (AnonymousMethodExpressionSyntax)tree.GetRoot().DescendantNodes().Single(node => node is AnonymousMethodExpressionSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, anonymousMethodExpression.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            anonymousMethodExpression.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var indexerDeclaration = (IndexerDeclarationSyntax)tree.GetRoot().DescendantNodes().Single(node => node is IndexerDeclarationSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, indexerDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            indexerDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
 
             var operatorDeclaration = (OperatorDeclarationSyntax)tree.GetRoot().DescendantNodes().Single(node => node is OperatorDeclarationSyntax);
-            Assert.Equal(SyntaxKind.InKeyword, operatorDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind());
+            operatorDeclaration.ParameterList.Parameters.Single().Modifiers.Single().Kind().Should().Be(SyntaxKind.InKeyword);
         }
 
         [Fact]
@@ -5515,6 +5515,7 @@ public class Test
             var text = @"
 using System;
 using System.Linq;
+using AwesomeAssertions;
 
 public class QueryExpressionTest
 {
@@ -6691,8 +6692,8 @@ class Test
 
             var parsedTree = Parse(builder.ToString());
             var actualErrors = parsedTree.GetDiagnostics().ToArray();
-            Assert.Equal(1, actualErrors.Length);
-            Assert.Equal((int)ErrorCode.ERR_InsufficientStack, actualErrors[0].Code);
+            actualErrors.Length.Should().Be(1);
+            actualErrors[0].Code.Should().Be((int)ErrorCode.ERR_InsufficientStack);
         }
 
         [ClrOnlyFact]
@@ -6724,8 +6725,8 @@ class Program
 
             var parsedTree = Parse(builder.ToString());
             var actualErrors = parsedTree.GetDiagnostics().ToArray();
-            Assert.Equal(1, actualErrors.Length);
-            Assert.Equal((int)ErrorCode.ERR_InsufficientStack, actualErrors[0].Code);
+            actualErrors.Length.Should().Be(1);
+            actualErrors[0].Code.Should().Be((int)ErrorCode.ERR_InsufficientStack);
         }
 
         [ClrOnlyFact]
@@ -6751,8 +6752,8 @@ class Program
 
             var expr = SyntaxFactory.ParseExpression(builder.ToString());
             var actualErrors = expr.GetDiagnostics().ToArray();
-            Assert.Equal(1, actualErrors.Length);
-            Assert.Equal((int)ErrorCode.ERR_InsufficientStack, actualErrors[0].Code);
+            actualErrors.Length.Should().Be(1);
+            actualErrors[0].Code.Should().Be((int)ErrorCode.ERR_InsufficientStack);
         }
 
         [ClrOnlyFact]
@@ -6778,8 +6779,8 @@ class Program
 
             var stmt = SyntaxFactory.ParseStatement(builder.ToString());
             var actualErrors = stmt.GetDiagnostics().ToArray();
-            Assert.Equal(1, actualErrors.Length);
-            Assert.Equal((int)ErrorCode.ERR_InsufficientStack, actualErrors[0].Code);
+            actualErrors.Length.Should().Be(1);
+            actualErrors[0].Code.Should().Be((int)ErrorCode.ERR_InsufficientStack);
         }
 
         [Fact]

@@ -15,6 +15,7 @@ using Roslyn.Test.Utilities;
 using Xunit;
 using System;
 using System.Threading;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -73,18 +74,18 @@ public class C
         {
             var text = "/// <goo />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.LeadingTrivia;
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
         }
 
         [WorkItem(537500, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537500")]
@@ -93,13 +94,13 @@ public class C
         {
             var text = "//// <goo />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.LeadingTrivia;
-            Assert.Equal(1, leading.Count);
-            Assert.Equal(SyntaxKind.SingleLineCommentTrivia, leading[0].Kind());
-            Assert.Equal(text, leading[0].ToFullString());
+            leading.Count.Should().Be(1);
+            leading[0].Kind().Should().Be(SyntaxKind.SingleLineCommentTrivia);
+            leading[0].ToFullString().Should().Be(text);
         }
 
         [WorkItem(537500, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537500")]
@@ -110,13 +111,13 @@ public class C
 //// </goo>
 ";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.LeadingTrivia;
-            Assert.Equal(3, leading.Count);
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, leading[0].Kind());
-            Assert.Equal(SyntaxKind.SingleLineCommentTrivia, leading[1].Kind());
+            leading.Count.Should().Be(3);
+            leading[0].Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            leading[1].Kind().Should().Be(SyntaxKind.SingleLineCommentTrivia);
         }
 
         [WorkItem(537500, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537500")]
@@ -125,13 +126,13 @@ public class C
         {
             var text = "/*** <goo /> */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.LeadingTrivia;
-            Assert.Equal(1, leading.Count);
-            Assert.Equal(SyntaxKind.MultiLineCommentTrivia, leading[0].Kind());
-            Assert.Equal(text, leading[0].ToFullString());
+            leading.Count.Should().Be(1);
+            leading[0].Kind().Should().Be(SyntaxKind.MultiLineCommentTrivia);
+            leading[0].ToFullString().Should().Be(text);
         }
 
         [Fact]
@@ -141,21 +142,21 @@ public class C
 @"/// <goo />
 class C { }";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
-            Assert.Equal(SyntaxKind.ClassDeclaration, tree.GetCompilationUnitRoot().Members[0].Kind());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
+            tree.GetCompilationUnitRoot().Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal($"/// <goo />{Environment.NewLine}", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be($"/// <goo />{Environment.NewLine}");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -163,20 +164,20 @@ class C { }";
         {
             var text = "/** <goo /> */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.LeadingTrivia;
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -187,21 +188,21 @@ class C { }";
 class C { }";
 
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
-            Assert.Equal(SyntaxKind.ClassDeclaration, tree.GetCompilationUnitRoot().Members[0].Kind());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
+            tree.GetCompilationUnitRoot().Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(2, leading.Count); // a new line follows the comment
+            leading.Count.Should().Be(2); // a new line follows the comment
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal("/** <goo /> */", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be("/** <goo /> */");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -210,21 +211,21 @@ class C { }";
             var text =
 @"/// <goo a=""xyz""/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -233,21 +234,21 @@ class C { }";
             var text =
 @"/// <goo a='xyz'/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -256,25 +257,25 @@ class C { }";
             var text =
 @"/// <goo a=""x'y'z""/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlTextAttribute, element.Attributes[0].Kind());
+            element.Attributes.Count.Should().Be(1);
+            element.Attributes[0].Kind().Should().Be(SyntaxKind.XmlTextAttribute);
             var attr = (XmlTextAttributeSyntax)element.Attributes[0];
-            Assert.Equal(1, attr.TextTokens.Count);
-            Assert.Equal("x'y'z", attr.TextTokens[0].ToString());
+            attr.TextTokens.Count.Should().Be(1);
+            attr.TextTokens[0].ToString().Should().Be("x'y'z");
         }
 
         [Fact]
@@ -283,25 +284,25 @@ class C { }";
             var text =
 @"/// <goo a='x""y""z'/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlTextAttribute, element.Attributes[0].Kind());
+            element.Attributes.Count.Should().Be(1);
+            element.Attributes[0].Kind().Should().Be(SyntaxKind.XmlTextAttribute);
             var attr = (XmlTextAttributeSyntax)element.Attributes[0];
-            Assert.Equal(1, attr.TextTokens.Count);
-            Assert.Equal("x\"y\"z", attr.TextTokens[0].ToString());
+            attr.TextTokens.Count.Should().Be(1);
+            attr.TextTokens[0].ToString().Should().Be("x\"y\"z");
         }
 
         [Fact]
@@ -311,20 +312,20 @@ class C { }";
 @"/// <goo 
 /// />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal($"<goo {Environment.NewLine}/// />", doc.Content[1].ToFullString());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[1].ToFullString().Should().Be($"<goo {Environment.NewLine}/// />");
         }
 
         [Fact]
@@ -335,21 +336,21 @@ class C { }";
 /// />
 class C { }";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal($"/// <goo {Environment.NewLine}/// />{Environment.NewLine}", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be($"/// <goo {Environment.NewLine}/// />{Environment.NewLine}");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal($"<goo {Environment.NewLine}/// />", doc.Content[1].ToFullString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[1].ToFullString().Should().Be($"<goo {Environment.NewLine}/// />");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -360,21 +361,21 @@ class C { }";
   * />
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal($"<goo {Environment.NewLine}  * />", doc.Content[1].ToFullString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[1].ToFullString().Should().Be($"<goo {Environment.NewLine}  * />");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [ClrOnlyFact]
@@ -386,21 +387,21 @@ class C { }";
   */
 class C { }";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(2, leading.Count);
+            leading.Count.Should().Be(2);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal($"/** <goo {Environment.NewLine}  * />{Environment.NewLine}  */", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be($"/** <goo {Environment.NewLine}  * />{Environment.NewLine}  */");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
-            Assert.Equal($"<goo {Environment.NewLine}  * />", doc.Content[1].ToFullString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
+            doc.Content[1].ToFullString().Should().Be($"<goo {Environment.NewLine}  * />");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -413,21 +414,21 @@ class C { }";
 /// ""xyz""
 /// />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -440,21 +441,21 @@ class C { }";
 /// 'xyz'
 /// />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -468,22 +469,22 @@ class C { }";
   * />
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            element.Attributes.Count.Should().Be(1);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -497,22 +498,22 @@ class C { }";
   * />
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            element.Attributes.Count.Should().Be(1);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -527,21 +528,21 @@ class C { }";
 /// '
 /// />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -556,21 +557,21 @@ class C { }";
 /// ""
 /// />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
         }
 
         [Fact]
@@ -586,22 +587,22 @@ class C { }";
   * />
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            element.Attributes.Count.Should().Be(1);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -617,22 +618,22 @@ class C { }";
   * />
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            element.Attributes.Count.Should().Be(1);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -640,21 +641,21 @@ class C { }";
         {
             var text = "/// <goo.bar />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal("goo.bar", element.Name.ToString());
+            element.Name.ToString().Should().Be("goo.bar");
         }
 
         [Fact]
@@ -662,21 +663,21 @@ class C { }";
         {
             var text = "/// <goo:bar />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal("goo:bar", element.Name.ToString());
+            element.Name.ToString().Should().Be("goo:bar");
         }
 
         [Fact]
@@ -684,21 +685,21 @@ class C { }";
         {
             var text = "/// <abc-def />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal("abc-def", element.Name.ToString());
+            element.Name.ToString().Should().Be("abc-def");
         }
 
         [Fact]
@@ -706,21 +707,21 @@ class C { }";
         {
             var text = "/// <goo123 />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal("goo123", element.Name.ToString());
+            element.Name.ToString().Should().Be("goo123");
         }
 
         [Fact]
@@ -728,16 +729,16 @@ class C { }";
         {
             var text = "/// <123 />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.NotEqual(0, doc.ErrorsAndWarnings().Length);
+            doc.ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -748,29 +749,29 @@ class C { }";
 /// bar
 /// </goo>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlElement);
             var element = (XmlElementSyntax)doc.Content[1];
-            Assert.Equal("goo", element.StartTag.Name.ToString());
-            Assert.Equal("goo", element.EndTag.Name.ToString());
-            Assert.Equal(1, element.Content.Count);
+            element.StartTag.Name.ToString().Should().Be("goo");
+            element.EndTag.Name.ToString().Should().Be("goo");
+            element.Content.Count.Should().Be(1);
             var textsyntax = (XmlTextSyntax)element.Content[0];
-            Assert.Equal(4, textsyntax.ChildNodesAndTokens().Count);
-            Assert.Equal(Environment.NewLine, textsyntax.ChildNodesAndTokens()[0].ToString());
-            Assert.Equal(" bar", textsyntax.ChildNodesAndTokens()[1].ToString());
-            Assert.Equal(Environment.NewLine, textsyntax.ChildNodesAndTokens()[2].ToString());
-            Assert.Equal(" ", textsyntax.ChildNodesAndTokens()[3].ToString());
+            textsyntax.ChildNodesAndTokens().Count.Should().Be(4);
+            textsyntax.ChildNodesAndTokens()[0].ToString().Should().Be(Environment.NewLine);
+            textsyntax.ChildNodesAndTokens()[1].ToString().Should().Be(" bar");
+            textsyntax.ChildNodesAndTokens()[2].ToString().Should().Be(Environment.NewLine);
+            textsyntax.ChildNodesAndTokens()[3].ToString().Should().Be(" ");
         }
 
         [Fact]
@@ -782,29 +783,29 @@ class C { }";
   * </goo>
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlElement);
             var element = (XmlElementSyntax)doc.Content[1];
-            Assert.Equal("goo", element.StartTag.Name.ToString());
-            Assert.Equal("goo", element.EndTag.Name.ToString());
-            Assert.Equal(1, element.Content.Count);
+            element.StartTag.Name.ToString().Should().Be("goo");
+            element.EndTag.Name.ToString().Should().Be("goo");
+            element.Content.Count.Should().Be(1);
             var textsyntax = (XmlTextSyntax)element.Content[0];
-            Assert.Equal(4, textsyntax.ChildNodesAndTokens().Count);
-            Assert.Equal(Environment.NewLine, textsyntax.ChildNodesAndTokens()[0].ToString());
-            Assert.Equal(" bar", textsyntax.ChildNodesAndTokens()[1].ToString());
-            Assert.Equal(Environment.NewLine, textsyntax.ChildNodesAndTokens()[2].ToString());
-            Assert.Equal(" ", textsyntax.ChildNodesAndTokens()[3].ToString());
+            textsyntax.ChildNodesAndTokens().Count.Should().Be(4);
+            textsyntax.ChildNodesAndTokens()[0].ToString().Should().Be(Environment.NewLine);
+            textsyntax.ChildNodesAndTokens()[1].ToString().Should().Be(" bar");
+            textsyntax.ChildNodesAndTokens()[2].ToString().Should().Be(Environment.NewLine);
+            textsyntax.ChildNodesAndTokens()[3].ToString().Should().Be(" ");
         }
 
         [Fact]
@@ -815,26 +816,26 @@ class C { }";
 /// of &some; cdata /// */ /**
 /// ""']]<>/></text]]>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(5, cdata.TextTokens.Count);
-            Assert.Equal(" this is a test", cdata.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, cdata.TextTokens[1].ToString());
-            Assert.Equal(" of &some; cdata /// */ /**", cdata.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, cdata.TextTokens[3].ToString());
-            Assert.Equal(" \"']]<>/></text", cdata.TextTokens[4].ToString());
+            cdata.TextTokens.Count.Should().Be(5);
+            cdata.TextTokens[0].ToString().Should().Be(" this is a test");
+            cdata.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            cdata.TextTokens[2].ToString().Should().Be(" of &some; cdata /// */ /**");
+            cdata.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            cdata.TextTokens[4].ToString().Should().Be(" \"']]<>/></text");
         }
 
         [Fact]
@@ -846,27 +847,27 @@ class C { }";
   * ""']]<>/></text]]>
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(5, cdata.TextTokens.Count);
-            Assert.Equal(" this is a test", cdata.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, cdata.TextTokens[1].ToString());
-            Assert.Equal(" of &some; cdata", cdata.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, cdata.TextTokens[3].ToString());
-            Assert.Equal(" \"']]<>/></text", cdata.TextTokens[4].ToString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            cdata.TextTokens.Count.Should().Be(5);
+            cdata.TextTokens[0].ToString().Should().Be(" this is a test");
+            cdata.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            cdata.TextTokens[2].ToString().Should().Be(" of &some; cdata");
+            cdata.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            cdata.TextTokens[4].ToString().Should().Be(" \"']]<>/></text");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -874,23 +875,23 @@ class C { }";
         {
             var text = "/// <![CDATA[ incomplete"; // end of file
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(1, cdata.ErrorsAndWarnings().Length);
-            Assert.Equal(1, cdata.TextTokens.Count);
-            Assert.Equal(" incomplete", cdata.TextTokens[0].ToString());
+            cdata.ErrorsAndWarnings().Length.Should().Be(1);
+            cdata.TextTokens.Count.Should().Be(1);
+            cdata.TextTokens[0].ToString().Should().Be(" incomplete");
         }
 
         [Fact]
@@ -899,50 +900,50 @@ class C { }";
             var text = @"/// <![CDATA[ incomplete
 class C { }"; // end of line/comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal($"/// <![CDATA[ incomplete{Environment.NewLine}", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be($"/// <![CDATA[ incomplete{Environment.NewLine}");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(1, cdata.ErrorsAndWarnings().Length);
-            Assert.Equal(2, cdata.TextTokens.Count);
-            Assert.Equal(" incomplete", cdata.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, cdata.TextTokens[1].ToString());
+            cdata.ErrorsAndWarnings().Length.Should().Be(1);
+            cdata.TextTokens.Count.Should().Be(2);
+            cdata.TextTokens[0].ToString().Should().Be(" incomplete");
+            cdata.TextTokens[1].ToString().Should().Be(Environment.NewLine);
         }
 
         [Fact]
         public void TestIncompleteEOLCDataSection_OtherNewline()
         {
-            Assert.True(SyntaxFacts.IsNewLine('\u0085'));
+            SyntaxFacts.IsNewLine('\u0085').Should().BeTrue();
             var text = "/// <![CDATA[ incomplete\u0085class C { }"; // end of line/comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal("/// <![CDATA[ incomplete\u0085", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be("/// <![CDATA[ incomplete\u0085");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(1, cdata.ErrorsAndWarnings().Length);
-            Assert.Equal(2, cdata.TextTokens.Count);
-            Assert.Equal(" incomplete", cdata.TextTokens[0].ToString());
-            Assert.Equal("\u0085", cdata.TextTokens[1].ToString());
+            cdata.ErrorsAndWarnings().Length.Should().Be(1);
+            cdata.TextTokens.Count.Should().Be(2);
+            cdata.TextTokens[0].ToString().Should().Be(" incomplete");
+            cdata.TextTokens[1].ToString().Should().Be("\u0085");
         }
 
         [Fact]
@@ -950,23 +951,23 @@ class C { }"; // end of line/comment
         {
             var text = "/** <![CDATA[ incomplete*/"; // end of comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlCDataSection, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlCDataSection);
             var cdata = (XmlCDataSectionSyntax)doc.Content[1];
-            Assert.Equal(1, cdata.ErrorsAndWarnings().Length);
-            Assert.Equal(1, cdata.TextTokens.Count);
-            Assert.Equal(" incomplete", cdata.TextTokens[0].ToString());
+            cdata.ErrorsAndWarnings().Length.Should().Be(1);
+            cdata.TextTokens.Count.Should().Be(1);
+            cdata.TextTokens[0].ToString().Should().Be(" incomplete");
         }
 
         [Fact]
@@ -977,26 +978,26 @@ class C { }"; // end of line/comment
 /// of &some; comment
 /// ""']]<>/></text-->";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlComment, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlComment);
             var comment = (XmlCommentSyntax)doc.Content[1];
-            Assert.Equal(5, comment.TextTokens.Count);
-            Assert.Equal(" this is a test", comment.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, comment.TextTokens[1].ToString());
-            Assert.Equal(" of &some; comment", comment.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, comment.TextTokens[3].ToString());
-            Assert.Equal(" \"']]<>/></text", comment.TextTokens[4].ToString());
+            comment.TextTokens.Count.Should().Be(5);
+            comment.TextTokens[0].ToString().Should().Be(" this is a test");
+            comment.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            comment.TextTokens[2].ToString().Should().Be(" of &some; comment");
+            comment.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            comment.TextTokens[4].ToString().Should().Be(" \"']]<>/></text");
         }
 
         [Fact]
@@ -1008,27 +1009,27 @@ class C { }"; // end of line/comment
   * ""']]<>/></text-->
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlComment, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlComment);
             var comment = (XmlCommentSyntax)doc.Content[1];
-            Assert.Equal(5, comment.TextTokens.Count);
-            Assert.Equal(" this is a test", comment.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, comment.TextTokens[1].ToString());
-            Assert.Equal(" of &some; comment", comment.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, comment.TextTokens[3].ToString());
-            Assert.Equal(" \"']]<>/></text", comment.TextTokens[4].ToString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            comment.TextTokens.Count.Should().Be(5);
+            comment.TextTokens[0].ToString().Should().Be(" this is a test");
+            comment.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            comment.TextTokens[2].ToString().Should().Be(" of &some; comment");
+            comment.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            comment.TextTokens[4].ToString().Should().Be(" \"']]<>/></text");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -1036,23 +1037,23 @@ class C { }"; // end of line/comment
         {
             var text = "/// <!-- incomplete"; // end of file
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlComment, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlComment);
             var comment = (XmlCommentSyntax)doc.Content[1];
-            Assert.Equal(1, comment.ErrorsAndWarnings().Length);
-            Assert.Equal(1, comment.TextTokens.Count);
-            Assert.Equal(" incomplete", comment.TextTokens[0].ToString());
+            comment.ErrorsAndWarnings().Length.Should().Be(1);
+            comment.TextTokens.Count.Should().Be(1);
+            comment.TextTokens[0].ToString().Should().Be(" incomplete");
         }
 
         [Fact]
@@ -1061,24 +1062,24 @@ class C { }"; // end of line/comment
             var text = @"/// <!-- incomplete
 class C { }"; // end of line/comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal($"/// <!-- incomplete{Environment.NewLine}", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be($"/// <!-- incomplete{Environment.NewLine}");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlComment, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlComment);
             var comment = (XmlCommentSyntax)doc.Content[1];
-            Assert.Equal(1, comment.ErrorsAndWarnings().Length);
-            Assert.Equal(2, comment.TextTokens.Count);
-            Assert.Equal(" incomplete", comment.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, comment.TextTokens[1].ToString());
+            comment.ErrorsAndWarnings().Length.Should().Be(1);
+            comment.TextTokens.Count.Should().Be(2);
+            comment.TextTokens[0].ToString().Should().Be(" incomplete");
+            comment.TextTokens[1].ToString().Should().Be(Environment.NewLine);
         }
 
         [Fact]
@@ -1086,23 +1087,23 @@ class C { }"; // end of line/comment
         {
             var text = "/** <!-- incomplete*/"; // end of comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlComment, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlComment);
             var comment = (XmlCommentSyntax)doc.Content[1];
-            Assert.Equal(1, comment.ErrorsAndWarnings().Length);
-            Assert.Equal(1, comment.TextTokens.Count);
-            Assert.Equal(" incomplete", comment.TextTokens[0].ToString());
+            comment.ErrorsAndWarnings().Length.Should().Be(1);
+            comment.TextTokens.Count.Should().Be(1);
+            comment.TextTokens[0].ToString().Should().Be(" incomplete");
         }
 
         [Fact]
@@ -1113,28 +1114,28 @@ class C { }"; // end of line/comment
 /// of &a; ProcessingInstruction /// */ /**
 /// ""']]>/>?</text?>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlProcessingInstruction, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlProcessingInstruction);
             var ProcessingInstruction = (XmlProcessingInstructionSyntax)doc.Content[1];
-            Assert.Null(ProcessingInstruction.Name.Prefix);
-            Assert.Equal("ProcessingInstruction", ProcessingInstruction.Name.LocalName.Text);
-            Assert.Equal(5, ProcessingInstruction.TextTokens.Count);
-            Assert.Equal(" this is a test", ProcessingInstruction.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, ProcessingInstruction.TextTokens[1].ToString());
-            Assert.Equal(" of &a; ProcessingInstruction /// */ /**", ProcessingInstruction.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, ProcessingInstruction.TextTokens[3].ToString());
-            Assert.Equal(" \"']]>/>?</text", ProcessingInstruction.TextTokens[4].ToString());
+            ProcessingInstruction.Name.Prefix.Should().BeNull();
+            ProcessingInstruction.Name.LocalName.Text.Should().Be("ProcessingInstruction");
+            ProcessingInstruction.TextTokens.Count.Should().Be(5);
+            ProcessingInstruction.TextTokens[0].ToString().Should().Be(" this is a test");
+            ProcessingInstruction.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            ProcessingInstruction.TextTokens[2].ToString().Should().Be(" of &a; ProcessingInstruction /// */ /**");
+            ProcessingInstruction.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            ProcessingInstruction.TextTokens[4].ToString().Should().Be(" \"']]>/>?</text");
         }
 
         [Fact]
@@ -1146,30 +1147,30 @@ class C { }"; // end of line/comment
   * ""']]>/></text>]]>?>
   */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlProcessingInstruction, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlProcessingInstruction);
             var ProcessingInstruction = (XmlProcessingInstructionSyntax)doc.Content[1];
-            Assert.Equal("prefix", ProcessingInstruction.Name.Prefix.Prefix.Text);
-            Assert.Equal(":", ProcessingInstruction.Name.Prefix.ColonToken.Text);
-            Assert.Equal("localname", ProcessingInstruction.Name.LocalName.Text);
-            Assert.Equal(5, ProcessingInstruction.TextTokens.Count);
-            Assert.Equal(" this is a test <!--", ProcessingInstruction.TextTokens[0].ToString());
-            Assert.Equal(Environment.NewLine, ProcessingInstruction.TextTokens[1].ToString());
-            Assert.Equal(" of &a; ProcessingInstruction", ProcessingInstruction.TextTokens[2].ToString());
-            Assert.Equal(Environment.NewLine, ProcessingInstruction.TextTokens[3].ToString());
-            Assert.Equal(" \"']]>/></text>]]>", ProcessingInstruction.TextTokens[4].ToString());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            ProcessingInstruction.Name.Prefix.Prefix.Text.Should().Be("prefix");
+            ProcessingInstruction.Name.Prefix.ColonToken.Text.Should().Be(":");
+            ProcessingInstruction.Name.LocalName.Text.Should().Be("localname");
+            ProcessingInstruction.TextTokens.Count.Should().Be(5);
+            ProcessingInstruction.TextTokens[0].ToString().Should().Be(" this is a test <!--");
+            ProcessingInstruction.TextTokens[1].ToString().Should().Be(Environment.NewLine);
+            ProcessingInstruction.TextTokens[2].ToString().Should().Be(" of &a; ProcessingInstruction");
+            ProcessingInstruction.TextTokens[3].ToString().Should().Be(Environment.NewLine);
+            ProcessingInstruction.TextTokens[4].ToString().Should().Be(" \"']]>/></text>]]>");
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [Fact]
@@ -1177,52 +1178,52 @@ class C { }"; // end of line/comment
         {
             var text = "/// <?incomplete"; // end of file
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlProcessingInstruction, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlProcessingInstruction);
             var ProcessingInstruction = (XmlProcessingInstructionSyntax)doc.Content[1];
-            Assert.Null(ProcessingInstruction.Name.Prefix);
-            Assert.Equal("incomplete", ProcessingInstruction.Name.LocalName.Text);
-            Assert.Equal(1, ProcessingInstruction.ErrorsAndWarnings().Length);
-            Assert.Equal(0, ProcessingInstruction.TextTokens.Count);
+            ProcessingInstruction.Name.Prefix.Should().BeNull();
+            ProcessingInstruction.Name.LocalName.Text.Should().Be("incomplete");
+            ProcessingInstruction.ErrorsAndWarnings().Length.Should().Be(1);
+            ProcessingInstruction.TextTokens.Count.Should().Be(0);
         }
 
         [Fact]
         public void TestIncompleteEOLProcessingInstruction_OtherNewline()
         {
-            Assert.True(SyntaxFacts.IsNewLine('\u0085'));
+            SyntaxFacts.IsNewLine('\u0085').Should().BeTrue();
             var text = "/// <?name incomplete\u0085class C { }"; // end of line/comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal("/// <?name incomplete\u0085", node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be("/// <?name incomplete\u0085");
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlProcessingInstruction, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlProcessingInstruction);
             var ProcessingInstruction = (XmlProcessingInstructionSyntax)doc.Content[1];
-            Assert.Null(ProcessingInstruction.Name.Prefix);
-            Assert.Equal("name", ProcessingInstruction.Name.LocalName.Text);
-            Assert.Equal(1, ProcessingInstruction.ErrorsAndWarnings().Length);
-            Assert.Equal(2, ProcessingInstruction.TextTokens.Count);
-            Assert.Equal(" incomplete", ProcessingInstruction.TextTokens[0].ToString());
-            Assert.Equal("\u0085", ProcessingInstruction.TextTokens[1].ToString());
+            ProcessingInstruction.Name.Prefix.Should().BeNull();
+            ProcessingInstruction.Name.LocalName.Text.Should().Be("name");
+            ProcessingInstruction.ErrorsAndWarnings().Length.Should().Be(1);
+            ProcessingInstruction.TextTokens.Count.Should().Be(2);
+            ProcessingInstruction.TextTokens[0].ToString().Should().Be(" incomplete");
+            ProcessingInstruction.TextTokens[1].ToString().Should().Be("\u0085");
         }
 
         [Fact]
@@ -1230,25 +1231,25 @@ class C { }"; // end of line/comment
         {
             var text = "/** <?name incomplete*/"; // end of comment
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlProcessingInstruction, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlProcessingInstruction);
             var ProcessingInstruction = (XmlProcessingInstructionSyntax)doc.Content[1];
-            Assert.Null(ProcessingInstruction.Name.Prefix);
-            Assert.Equal("name", ProcessingInstruction.Name.LocalName.Text);
-            Assert.Equal(1, ProcessingInstruction.ErrorsAndWarnings().Length);
-            Assert.Equal(1, ProcessingInstruction.TextTokens.Count);
-            Assert.Equal(" incomplete", ProcessingInstruction.TextTokens[0].ToString());
+            ProcessingInstruction.Name.Prefix.Should().BeNull();
+            ProcessingInstruction.Name.LocalName.Text.Should().Be("name");
+            ProcessingInstruction.ErrorsAndWarnings().Length.Should().Be(1);
+            ProcessingInstruction.TextTokens.Count.Should().Be(1);
+            ProcessingInstruction.TextTokens[0].ToString().Should().Be(" incomplete");
         }
 
         [WorkItem(899122, "DevDiv/Personal")]
@@ -1258,18 +1259,18 @@ class C { }"; // end of line/comment
             var text = "/**\n"; // end of comment
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(1);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
         }
 
         [Fact]
@@ -1283,18 +1284,18 @@ class C { }"; // end of line/comment
 ///
 class C { }";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(2, tree.GetCompilationUnitRoot().ChildNodesAndTokens().Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0].Kind());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ChildNodesAndTokens().Count.Should().Be(2);
+            tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var classdecl = (TypeDeclarationSyntax)tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0].AsNode();
-            Assert.Equal("class C { }", classdecl.ToString());
-            Assert.True(classdecl.HasLeadingTrivia);
+            classdecl.ToString().Should().Be("class C { }");
+            classdecl.HasLeadingTrivia.Should().BeTrue();
             var leading = classdecl.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.NotEqual(0, node.ErrorsAndWarnings().Length);
-            Assert.Equal(SyntaxKind.EndOfFileToken, tree.GetCompilationUnitRoot().ChildNodesAndTokens()[1].Kind());
+            node.ErrorsAndWarnings().Length.Should().NotBe(0);
+            tree.GetCompilationUnitRoot().ChildNodesAndTokens()[1].Kind().Should().Be(SyntaxKind.EndOfFileToken);
         }
 
         [Fact]
@@ -1303,22 +1304,22 @@ class C { }";
             var text =
 @"/// &lt;";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(2, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("<", xmltext.TextTokens[1].Value);
+            xmltext.TextTokens.Count.Should().Be(2);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("<");
         }
 
         [Fact]
@@ -1327,23 +1328,23 @@ class C { }";
             var text =
 @"/** &lt; */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(3, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("<", xmltext.TextTokens[1].Value);
-            Assert.Equal(" ", xmltext.TextTokens[2].Value);
+            xmltext.TextTokens.Count.Should().Be(3);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("<");
+            xmltext.TextTokens[2].Value.Should().Be(" ");
         }
 
         [Fact]
@@ -1352,22 +1353,22 @@ class C { }";
             var text =
 @"/// &#x41;";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(2, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("A", xmltext.TextTokens[1].Value);
+            xmltext.TextTokens.Count.Should().Be(2);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("A");
         }
 
         [Fact]
@@ -1376,23 +1377,23 @@ class C { }";
             var text =
 @"/** &#x41; */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(3, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("A", xmltext.TextTokens[1].Value);
-            Assert.Equal(" ", xmltext.TextTokens[2].Value);
+            xmltext.TextTokens.Count.Should().Be(3);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("A");
+            xmltext.TextTokens[2].Value.Should().Be(" ");
         }
 
         [Fact]
@@ -1401,22 +1402,22 @@ class C { }";
             var text =
 @"/// &#65;";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(2, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("A", xmltext.TextTokens[1].Value);
+            xmltext.TextTokens.Count.Should().Be(2);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("A");
         }
 
         [Fact]
@@ -1425,23 +1426,23 @@ class C { }";
             var text =
 @"/** &#65; */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(3, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("A", xmltext.TextTokens[1].Value);
-            Assert.Equal(" ", xmltext.TextTokens[2].Value);
+            xmltext.TextTokens.Count.Should().Be(3);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("A");
+            xmltext.TextTokens[2].Value.Should().Be(" ");
         }
 
         [Fact]
@@ -1450,22 +1451,22 @@ class C { }";
             var text =
 @"/// &#x1d11e;";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(2, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("\U0001D11E", xmltext.TextTokens[1].Value);
+            xmltext.TextTokens.Count.Should().Be(2);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("\U0001D11E");
         }
 
         [Fact]
@@ -1474,23 +1475,23 @@ class C { }";
             var text =
 @"/** &#x1D11E; */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(3, xmltext.TextTokens.Count);
-            Assert.Equal(" ", xmltext.TextTokens[0].Value);
-            Assert.Equal("\U0001D11E", xmltext.TextTokens[1].Value);
-            Assert.Equal(" ", xmltext.TextTokens[2].Value);
+            xmltext.TextTokens.Count.Should().Be(3);
+            xmltext.TextTokens[0].Value.Should().Be(" ");
+            xmltext.TextTokens[1].Value.Should().Be("\U0001D11E");
+            xmltext.TextTokens[2].Value.Should().Be(" ");
         }
 
         [Fact]
@@ -1499,9 +1500,9 @@ class C { }";
             var text =
 @"///&#abcdef;";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -1510,9 +1511,9 @@ class C { }";
             var text =
 @"///<goo attr=""less<than"" />";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -1521,9 +1522,9 @@ class C { }";
             var text =
 @"///<!-- A Comment with -- -->";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -1532,9 +1533,9 @@ class C { }";
             var text =
 @"///< goo > </ bar >";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -1543,9 +1544,9 @@ class C { }";
             var text =
 @"///< goo x = ""bar"" x = ""baz"" ";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [Fact]
@@ -1554,26 +1555,26 @@ class C { }";
             var text =
 @"/// <goo a="" &lt; ""/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
             var attribute = (XmlTextAttributeSyntax)element.Attributes[0];
-            Assert.Equal(3, attribute.TextTokens.Count);
-            Assert.Equal(" ", attribute.TextTokens[0].Value);
-            Assert.Equal("<", attribute.TextTokens[1].Value);
-            Assert.Equal(" ", attribute.TextTokens[2].Value);
+            attribute.TextTokens.Count.Should().Be(3);
+            attribute.TextTokens[0].Value.Should().Be(" ");
+            attribute.TextTokens[1].Value.Should().Be("<");
+            attribute.TextTokens[2].Value.Should().Be(" ");
         }
 
         [Fact]
@@ -1582,26 +1583,26 @@ class C { }";
             var text =
 @"/** <goo a="" &lt; ""/>*/";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.True(doc.Content[0].HasLeadingTrivia);
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[0].HasLeadingTrivia.Should().BeTrue();
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
+            element.Attributes.Count.Should().Be(1);
             var attribute = (XmlTextAttributeSyntax)element.Attributes[0];
-            Assert.Equal(3, attribute.TextTokens.Count);
-            Assert.Equal(" ", attribute.TextTokens[0].Value);
-            Assert.Equal("<", attribute.TextTokens[1].Value);
-            Assert.Equal(" ", attribute.TextTokens[2].Value);
+            attribute.TextTokens.Count.Should().Be(3);
+            attribute.TextTokens[0].Value.Should().Be(" ");
+            attribute.TextTokens[1].Value.Should().Be("<");
+            attribute.TextTokens[2].Value.Should().Be(" ");
         }
 
         [WorkItem(899590, "DevDiv/Personal")]
@@ -1610,21 +1611,21 @@ class C { }";
         {
             var text = @"/// <goo a = '<>'/>";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(2, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.Equal(SyntaxKind.XmlEmptyElement, doc.Content[1].Kind());
+            doc.Content.Count.Should().Be(2);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlEmptyElement);
             var element = (XmlEmptyElementSyntax)doc.Content[1];
-            Assert.Equal(1, element.Attributes.Count);
-            Assert.NotEqual(0, element.Attributes[0].ErrorsAndWarnings().Length);
+            element.Attributes.Count.Should().Be(1);
+            element.Attributes[0].ErrorsAndWarnings().Length.Should().NotBe(0);
         }
 
         [WorkItem(899559, "DevDiv/Personal")]
@@ -1636,28 +1637,28 @@ class C { }";
 x
 */";
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
             var leading = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
-            Assert.Equal(1, leading.Count);
+            leading.Count.Should().Be(1);
             var node = leading[0];
-            Assert.Equal(SyntaxKind.MultiLineDocumentationCommentTrivia, node.Kind());
-            Assert.Equal(text, node.ToFullString());
+            node.Kind().Should().Be(SyntaxKind.MultiLineDocumentationCommentTrivia);
+            node.ToFullString().Should().Be(text);
             var doc = (DocumentationCommentTriviaSyntax)node.GetStructure();
-            Assert.Equal(1, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
+            doc.Content.Count.Should().Be(1);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
             var xmltext = (XmlTextSyntax)doc.Content[0];
-            Assert.Equal(3, xmltext.ChildNodesAndTokens().Count);
-            Assert.Equal(SyntaxKind.XmlTextLiteralNewLineToken, xmltext.ChildNodesAndTokens()[0].Kind());
-            Assert.True(xmltext.ChildNodesAndTokens()[0].HasLeadingTrivia);
-            Assert.Equal(Environment.NewLine, xmltext.ChildNodesAndTokens()[0].ToString());
-            Assert.Equal(SyntaxKind.XmlTextLiteralToken, xmltext.ChildNodesAndTokens()[1].Kind());
-            Assert.False(xmltext.ChildNodesAndTokens()[1].HasLeadingTrivia);
-            Assert.Equal("x", xmltext.ChildNodesAndTokens()[1].ToString());
-            Assert.Equal(SyntaxKind.XmlTextLiteralNewLineToken, xmltext.ChildNodesAndTokens()[2].Kind());
-            Assert.False(xmltext.ChildNodesAndTokens()[2].HasLeadingTrivia);
-            Assert.Equal(Environment.NewLine, xmltext.ChildNodesAndTokens()[2].ToString());
+            xmltext.ChildNodesAndTokens().Count.Should().Be(3);
+            xmltext.ChildNodesAndTokens()[0].Kind().Should().Be(SyntaxKind.XmlTextLiteralNewLineToken);
+            xmltext.ChildNodesAndTokens()[0].HasLeadingTrivia.Should().BeTrue();
+            xmltext.ChildNodesAndTokens()[0].ToString().Should().Be(Environment.NewLine);
+            xmltext.ChildNodesAndTokens()[1].Kind().Should().Be(SyntaxKind.XmlTextLiteralToken);
+            xmltext.ChildNodesAndTokens()[1].HasLeadingTrivia.Should().BeFalse();
+            xmltext.ChildNodesAndTokens()[1].ToString().Should().Be("x");
+            xmltext.ChildNodesAndTokens()[2].Kind().Should().Be(SyntaxKind.XmlTextLiteralNewLineToken);
+            xmltext.ChildNodesAndTokens()[2].HasLeadingTrivia.Should().BeFalse();
+            xmltext.ChildNodesAndTokens()[2].ToString().Should().Be(Environment.NewLine);
         }
 
         [WorkItem(906364, "DevDiv/Personal")]
@@ -1667,11 +1668,11 @@ x
             var text = @"/// <goo a""as""> </goo>";
 
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get a warning about the = token missing
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
 
             // we expect one warning
             VerifyDiagnostics(tree.GetCompilationUnitRoot(), new List<TestError>() { new TestError(1570, true) });
@@ -1684,11 +1685,11 @@ x
             var text = @"/// <goo a=""as""b=""as""> </goo>";
 
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get a warning about the = token missing
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
 
             // we expect one warning
             VerifyDiagnostics(tree.GetCompilationUnitRoot(), new List<TestError>() { new TestError(1570, true) });
@@ -1703,23 +1704,23 @@ x
 ";
 
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // grab the trivia off the EOF token
             var trivias = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
 
             // we should have 5 trivias
-            Assert.Equal(5, trivias.Count);
+            trivias.Count.Should().Be(5);
 
             // we verify that the regular comments are also there
-            Assert.False(trivias[0].HasStructure);
-            Assert.False(trivias[4].HasStructure);
+            trivias[0].HasStructure.Should().BeFalse();
+            trivias[4].HasStructure.Should().BeFalse();
 
             // the 3rd one should be XmlDocComment
-            Assert.True(trivias[2].HasStructure);
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[2].GetStructure().GetType());
+            trivias[2].HasStructure.Should().BeTrue();
+            trivias[2].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
             var doc = trivias[2].GetStructure() as DocumentationCommentTriviaSyntax;
 
             // we validate the xml comment
@@ -1742,19 +1743,19 @@ x
 ";
 
             var tree = Parse(text);
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // grab the trivia off the EOF token
             var trivias = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
 
             // we should have 4 trivias
-            Assert.Equal(4, trivias.Count);
+            trivias.Count.Should().Be(4);
 
             // we should also have two xml comments
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[3].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
+            trivias[3].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1782,21 +1783,21 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we expect 1 warning
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
 
             // grab the trivia off the EOF token
             var trivias = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia();
 
             // we should have 4 trivias
-            Assert.Equal(4, trivias.Count);
+            trivias.Count.Should().Be(4);
 
             // we should also have two xml comments
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[3].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
+            trivias[3].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1823,22 +1824,22 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the void keyword
-            Assert.Equal(typeof(MethodDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(MethodDeclarationSyntax));
 
             var keyword = ((tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as MethodDeclarationSyntax).ReturnType;
 
             var trivias = keyword.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(2, trivias.Count);
+            trivias.Count.Should().Be(2);
 
             // we should also have one comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1858,22 +1859,22 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the void keyword
-            Assert.Equal(typeof(MethodDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(MethodDeclarationSyntax));
 
             var keyword = ((tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as MethodDeclarationSyntax).ReturnType;
 
             var trivias = keyword.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(2, trivias.Count);
+            trivias.Count.Should().Be(2);
 
             // we should also have one comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1893,22 +1894,22 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the void keyword
-            Assert.Equal(typeof(PropertyDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(PropertyDeclarationSyntax));
 
             var keyword = ((tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as PropertyDeclarationSyntax).Type;
 
             var trivias = keyword.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(2, trivias.Count);
+            trivias.Count.Should().Be(2);
 
             // we should also have one comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1928,22 +1929,22 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the void keyword
-            Assert.Equal(typeof(IndexerDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(IndexerDeclarationSyntax));
 
             var keyword = ((tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as IndexerDeclarationSyntax).Type;
 
             var trivias = keyword.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(2, trivias.Count);
+            trivias.Count.Should().Be(2);
 
             // we should also have one comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1963,12 +1964,12 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // do we parsed a method?
-            Assert.Equal(typeof(MethodDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(MethodDeclarationSyntax));
 
             // we grab the open bracket for the Goo method decl
             var method = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as MethodDeclarationSyntax;
@@ -1977,10 +1978,10 @@ x
             var trivias = typeParameter.GetLeadingTrivia();
 
             // we should have 1 trivia
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             // we should also have one XML comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -1989,7 +1990,7 @@ x
             VerifyXmlElement(firstComment.Content[0] as XmlElementSyntax, "goo", "test");
 
             // we don't have any attributes
-            Assert.Equal(0, (firstComment.Content[0] as XmlElementSyntax).StartTag.Attributes.Count);
+            (firstComment.Content[0] as XmlElementSyntax).StartTag.Attributes.Count.Should().Be(0);
         }
 
         [WorkItem(906381, "DevDiv/Personal")]
@@ -2000,12 +2001,12 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // do we parsed a method?
-            Assert.Equal(typeof(ClassDeclarationSyntax), tree.GetCompilationUnitRoot().Members[0].GetType());
+            tree.GetCompilationUnitRoot().Members[0].GetType().Should().Be(typeof(ClassDeclarationSyntax));
 
             // we grab the open bracket for the Goo method decl
             var typeParameter = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).TypeParameterList.Parameters.Single();
@@ -2013,10 +2014,10 @@ x
             var trivias = typeParameter.GetLeadingTrivia();
 
             // we should have 1 trivia
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             // we should also have one XML comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2025,7 +2026,7 @@ x
             VerifyXmlElement(firstComment.Content[0] as XmlElementSyntax, "goo", "test");
 
             // we don't have any attributes
-            Assert.Equal(0, (firstComment.Content[0] as XmlElementSyntax).StartTag.Attributes.Count);
+            (firstComment.Content[0] as XmlElementSyntax).StartTag.Attributes.Count.Should().Be(0);
         }
 
         [Fact]
@@ -2038,23 +2039,23 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Errors().Length); // 4 errors because of the incomplete class decl
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(1); // 4 errors because of the incomplete class decl
 
             // we grab the void keyword
-            Assert.Equal(typeof(MethodDeclarationSyntax), (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType());
+            (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0].GetType().Should().Be(typeof(MethodDeclarationSyntax));
 
             var keyword = ((tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Members[0] as MethodDeclarationSyntax).ReturnType;
 
             var trivias = keyword.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(2, trivias.Count);
+            trivias.Count.Should().Be(2);
 
             // we should also have one comment
-            Assert.Equal(0, trivias[0].Errors().Length);
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].Errors().Length.Should().Be(0);
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2074,19 +2075,19 @@ x
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             var bracket = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).CloseBraceToken;
 
             var trivias = bracket.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             // we should also have one comment
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2105,9 +2106,9 @@ x
 }";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Errors().Length); // error because of the incomplete class decl
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(1); // error because of the incomplete class decl
 
             // we grab the close bracket for the class
             var classDecl = (TypeDeclarationSyntax)tree.GetCompilationUnitRoot().Members[0];
@@ -2116,11 +2117,11 @@ x
             var trivias = bracket.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             // we should also have one comment
-            Assert.Equal(0, trivias[0].Errors().Length);
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].Errors().Length.Should().Be(0);
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2138,9 +2139,9 @@ x
 # endif";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length); // 4 errors because of the incomplete class decl
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0); // 4 errors because of the incomplete class decl
 
             // we grab the close bracket from the OEF token
             var bracket = tree.GetCompilationUnitRoot().EndOfFileToken;
@@ -2148,10 +2149,10 @@ x
             var trivias = bracket.GetLeadingTrivia();
 
             // we should have 3 trivias
-            Assert.Equal(3, trivias.Count);
+            trivias.Count.Should().Be(3);
 
-            Assert.Equal(0, trivias[0].Errors().Length);
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].Errors().Length.Should().Be(0);
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2168,9 +2169,9 @@ x
 ///<goo></goo>";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length); // 4 errors because of the incomplete class decl
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0); // 4 errors because of the incomplete class decl
 
             // we grab the close bracket from the OEF token
             var bracket = tree.GetCompilationUnitRoot().EndOfFileToken;
@@ -2178,10 +2179,10 @@ x
             var trivias = bracket.GetLeadingTrivia();
 
             // we should have 3 trivias
-            Assert.Equal(3, trivias.Count);
+            trivias.Count.Should().Be(3);
 
-            Assert.Equal(0, trivias[0].Errors().Length);
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[2].GetStructure().GetType());
+            trivias[0].Errors().Length.Should().Be(0);
+            trivias[2].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var firstComment = trivias[2].GetStructure() as DocumentationCommentTriviaSyntax;
@@ -2199,9 +2200,9 @@ x
 */";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the close bracket from the OEF token
             var bracket = tree.GetCompilationUnitRoot().EndOfFileToken;
@@ -2209,11 +2210,11 @@ x
             var trivias = bracket.GetLeadingTrivia();
 
             // we should have 2 trivias
-            Assert.Equal(1, trivias.Count);
-            Assert.Equal(0, trivias[0].Errors().Length);
+            trivias.Count.Should().Be(1);
+            trivias[0].Errors().Length.Should().Be(0);
 
             // make sure that the external node exists
-            Assert.Equal(typeof(DocumentationCommentTriviaSyntax), trivias[0].GetStructure().GetType());
+            trivias[0].GetStructure().GetType().Should().Be(typeof(DocumentationCommentTriviaSyntax));
 
             // we grab the xml comments
             var outerComment = (trivias[0].GetStructure() as DocumentationCommentTriviaSyntax).Content[1] as XmlElementSyntax;
@@ -2234,11 +2235,11 @@ x
             var text = @"/** <goo/>";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we expect one warning
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(1);
             VerifyDiagnostics(tree.GetCompilationUnitRoot(), new List<TestError>() { new TestError(1035, false) });
         }
 
@@ -2249,15 +2250,15 @@ x
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
             var trivias = classKeyword.GetLeadingTrivia();
 
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             // we verify that we parsed a correct XML element
             VerifyXmlElement((trivias[0].GetStructure() as DocumentationCommentTriviaSyntax).Content[0] as XmlElementSyntax, "goo", " ");
@@ -2277,15 +2278,15 @@ class C{}";
 ///</goo>";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             // we grab the top trivia.
             var eofToken = tree.GetCompilationUnitRoot().EndOfFileToken;
 
             var topTrivias = eofToken.GetLeadingTrivia();
-            Assert.Equal(1, topTrivias.Count);
+            topTrivias.Count.Should().Be(1);
 
             var doc = topTrivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
 
@@ -2319,9 +2320,9 @@ class C{}";
 */";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
 
             var eofToken = tree.GetCompilationUnitRoot().EndOfFileToken;
 
@@ -2341,8 +2342,8 @@ class C{}";
             // verify the CDATA content
             var cdata = secondLevel.Content[1];
             var actual = (cdata as XmlCDataSectionSyntax).TextTokens.ToFullString();
-            Assert.Equal(@" Some text
-", actual);
+            actual.Should().Be(@" Some text
+");
         }
 
         [Fact]
@@ -2351,18 +2352,18 @@ class C{}";
             var text = @"///<goo> </Goo>";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get a warning
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
 
             // we get to the xml trivia
             var eofToken = tree.GetCompilationUnitRoot().EndOfFileToken;
             var trivias = eofToken.GetLeadingTrivia();
 
             // we got a trivia
-            Assert.Equal(1, trivias.Count);
+            trivias.Count.Should().Be(1);
 
             VerifyDiagnostics(trivias[0], new List<TestError>() { new TestError(1570, true) });
         }
@@ -2375,9 +2376,9 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
 
             // we get to the xml trivia
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
@@ -2392,9 +2393,9 @@ class C{}";
             VerifyDiagnostics(xmlText, new List<TestError>() { new TestError(1570, true) });
 
             // we should get just 2 nodes
-            Assert.Equal(2, xmlText.TextTokens.Count);
+            xmlText.TextTokens.Count.Should().Be(2);
 
-            Assert.Equal($"///</Goo>{Environment.NewLine}", xmlText.TextTokens.ToFullString());
+            xmlText.TextTokens.ToFullString().Should().Be($"///</Goo>{Environment.NewLine}");
         }
 
         [WorkItem(906719, "DevDiv/Personal")]
@@ -2405,9 +2406,9 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(1);
 
             // we get to the xml trivia
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
@@ -2422,9 +2423,9 @@ class C{}";
             VerifyDiagnostics(xmlText, new List<TestError>() { new TestError(1570, true) });
 
             // we should get just 2 nodes
-            Assert.Equal(1, xmlText.TextTokens.Count);
+            xmlText.TextTokens.Count.Should().Be(1);
 
-            Assert.Equal("/**</Goo>", xmlText.TextTokens.ToFullString());
+            xmlText.TextTokens.ToFullString().Should().Be("/**</Goo>");
         }
 
         [Fact]
@@ -2434,8 +2435,8 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2457,11 +2458,11 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 1 warning
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2484,11 +2485,11 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 2 warnings
-            Assert.Equal(2, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(2);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2509,11 +2510,11 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 2 warnings
-            Assert.Equal(2, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(2);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2534,8 +2535,8 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2560,8 +2561,8 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
@@ -2586,11 +2587,11 @@ class C{}";
 */";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 2 warnings
-            Assert.Equal(2, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(2);
         }
 
         [Fact]
@@ -2601,11 +2602,11 @@ class C{}";
 */";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 2 warnings
-            Assert.Equal(1, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(1);
         }
 
         [Fact]
@@ -2615,11 +2616,11 @@ class C{}";
 */";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // we should get 2 warnings
-            Assert.Equal(2, tree.GetCompilationUnitRoot().Warnings().Length);
+            tree.GetCompilationUnitRoot().Warnings().Length.Should().Be(2);
         }
 
         [WorkItem(906814, "DevDiv/Personal")]
@@ -2630,14 +2631,14 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
             var doc = classKeyword.GetLeadingTrivia()[0].GetStructure() as DocumentationCommentTriviaSyntax;
 
-            Assert.Equal(typeof(XmlElementSyntax), doc.Content[0].GetType());
+            doc.Content[0].GetType().Should().Be(typeof(XmlElementSyntax));
         }
 
         [WorkItem(537113, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537113")]
@@ -2648,15 +2649,15 @@ class C{}";
 class C{}";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
 
             var doc = classKeyword.GetLeadingTrivia()[0].GetStructure() as DocumentationCommentTriviaSyntax;
 
             // we should still get an XmlElement
-            Assert.IsType<XmlElementSyntax>(doc.Content[0]);
+            doc.Content[0].Should().BeOfType<XmlElementSyntax>();
         }
 
         [WorkItem(926873, "DevDiv/Personal")]
@@ -2671,9 +2672,9 @@ class A {}";
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(0, tree.GetCompilationUnitRoot().Errors().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().Errors().Length.Should().Be(0);
         }
 
         [WorkItem(926683, "DevDiv/Personal")]
@@ -2689,9 +2690,9 @@ class A {}
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(4, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(4);
             VerifyDiagnostics(tree.GetCompilationUnitRoot(), new List<TestError>
             {
                     new TestError(1570, true),
@@ -2715,9 +2716,9 @@ class A {}
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
-            Assert.Equal(4, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
+            tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(4);
             VerifyDiagnostics(tree.GetCompilationUnitRoot(), new List<TestError>
             {
                     new TestError(1570, true),
@@ -2738,14 +2739,14 @@ class A {}";
 
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
             var trivias = classKeyword.GetLeadingTrivia();
             var doc = trivias[0].GetStructure() as DocumentationCommentTriviaSyntax;
 
-            Assert.Equal(2, doc.ErrorsAndWarnings().Length);
+            doc.ErrorsAndWarnings().Length.Should().Be(2);
             VerifyDiagnostics(doc, new List<TestError>() { new TestError(1570, true), new TestError(1570, true) });
         }
 
@@ -2762,17 +2763,17 @@ class A
 ";
             var tree = Parse(text);
 
-            Assert.NotNull(tree);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.Should().NotBeNull();
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var classKeyword = (tree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax).Keyword;
             var trivias = classKeyword.GetLeadingTrivia();
             var doc = trivias[1].GetStructure() as DocumentationCommentTriviaSyntax;
 
-            Assert.Equal(3, doc.Content.Count);
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[0].Kind());
-            Assert.Equal(SyntaxKind.XmlElement, doc.Content[1].Kind());
-            Assert.Equal(SyntaxKind.XmlText, doc.Content[2].Kind());
+            doc.Content.Count.Should().Be(3);
+            doc.Content[0].Kind().Should().Be(SyntaxKind.XmlText);
+            doc.Content[1].Kind().Should().Be(SyntaxKind.XmlElement);
+            doc.Content[2].Kind().Should().Be(SyntaxKind.XmlText);
         }
 
         [WorkItem(546989, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/546989")]
@@ -2959,7 +2960,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -2979,7 +2980,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3005,7 +3006,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3036,7 +3037,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3062,7 +3063,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3089,7 +3090,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3118,7 +3119,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3143,7 +3144,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3168,7 +3169,7 @@ public class Program
 
             var actual = documentationComment.ToFullString();
 
-            Assert.Equal<string>(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -3290,7 +3291,7 @@ public class Program
 
         private void VerifyDiagnostics(IEnumerable<DiagnosticInfo> actual, List<TestError> expected)
         {
-            Assert.Equal(actual.Count(), expected.Count);
+            expected.Count.Should().Be(actual.Count());
 
             var actualErrors = (from e in actual
                                 orderby e.Code
@@ -3301,8 +3302,8 @@ public class Program
 
             for (int i = 0; i < expected.Count; i++)
             {
-                Assert.Equal(expectedErrors[i].ErrorCode, actualErrors[i].ErrorCode);
-                Assert.Equal(expectedErrors[i].IsWarning, actualErrors[i].IsWarning);
+                actualErrors[i].ErrorCode.Should().Be(expectedErrors[i].ErrorCode);
+                actualErrors[i].IsWarning.Should().Be(expectedErrors[i].IsWarning);
             }
         }
 
@@ -3318,16 +3319,16 @@ public class Program
             // if the innerText is empty, then the content has no nodes.
             if (innerText == string.Empty)
             {
-                Assert.Equal(0, xmlElement.Content.Count);
+                xmlElement.Content.Count.Should().Be(0);
             }
             else
             {
                 var elementInnerText = GetXmlElementText(xmlElement);
-                Assert.Equal(innerText, elementInnerText);
+                elementInnerText.Should().Be(innerText);
             }
 
-            Assert.Equal(tagName, xmlElement.StartTag.Name.LocalName.Value);
-            Assert.Equal(tagName, xmlElement.EndTag.Name.LocalName.Value);
+            xmlElement.StartTag.Name.LocalName.Value.Should().Be(tagName);
+            xmlElement.EndTag.Name.LocalName.Value.Should().Be(tagName);
         }
 
         /// <summary>
@@ -3367,7 +3368,7 @@ public class Program
         /// <param name="tagName">The name of the tag the XML element should have</param>
         private void VerifyXmlElement(XmlEmptyElementSyntax xmlElement, string tagName)
         {
-            Assert.Equal(tagName, xmlElement.Name.LocalName.Value);
+            xmlElement.Name.LocalName.Value.Should().Be(tagName);
         }
 
         /// <summary>
@@ -3378,14 +3379,14 @@ public class Program
         private void VerifyXmlAttributes(SyntaxList<XmlAttributeSyntax> xmlAttributes, Dictionary<string, string> attributes)
         {
             // we have the same number of attributes
-            Assert.Equal(attributes.Keys.Count, xmlAttributes.Count);
+            xmlAttributes.Count.Should().Be(attributes.Keys.Count);
             foreach (XmlTextAttributeSyntax attribute in xmlAttributes)
             {
                 // we make sure we have that attribute
-                Assert.True(attributes.ContainsKey(attribute.Name.LocalName.Value as string));
+                attributes.ContainsKey(attribute.Name.LocalName.Value as string).Should().BeTrue();
 
                 // we make sure that the value for the attribute is the right one.
-                Assert.Equal(attributes[attribute.Name.LocalName.Value as string], attribute.TextTokens.ToString());
+                attribute.TextTokens.ToString().Should().Be(attributes[attribute.Name.LocalName.Value as string]);
             }
         }
 

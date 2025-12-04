@@ -23,10 +23,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             var trivia1 = SyntaxFactory.Trivia(SyntaxFactory.IfDirectiveTrivia(SyntaxFactory.IdentifierName(conditionName), false, false, false));
             var structuredTrivia = trivia1.GetStructure() as IfDirectiveTriviaSyntax;
-            Assert.NotNull(structuredTrivia);
-            Assert.Equal(conditionName, ((IdentifierNameSyntax)structuredTrivia.Condition).Identifier.ValueText);
+            structuredTrivia.Should().NotBeNull();
+            ((IdentifierNameSyntax)structuredTrivia.Condition).Identifier.ValueText.Should().Be(conditionName);
             var trivia2 = structuredTrivia.ParentTrivia;
-            Assert.Equal(trivia1, trivia2);
+            trivia2.Should().Be(trivia1);
         }
 
         [Fact]
@@ -50,48 +50,48 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 SyntaxFactory.Token(default(SyntaxTriviaList), SyntaxKind.GreaterThanToken, spaceTrivia));
 
             var xmlElement = SyntaxFactory.XmlElement(xmlStartElement, default(SyntaxList<XmlNodeSyntax>), xmlEndElement);
-            Assert.Equal(" <goo> </goo> ", xmlElement.ToFullString());
-            Assert.Equal("<goo> </goo>", xmlElement.ToString());
+            xmlElement.ToFullString().Should().Be(" <goo> </goo> ");
+            xmlElement.ToString().Should().Be("<goo> </goo>");
 
             var docComment = SyntaxFactory.DocumentationCommentTrivia(SyntaxKind.SingleLineDocumentationCommentTrivia).WithContent(new SyntaxList<XmlNodeSyntax>(xmlElement));
-            Assert.Equal(" <goo> </goo> ", docComment.ToFullString());
-            // Assert.Equal("<goo> </goo>", docComment.GetText());
+            docComment.ToFullString().Should().Be(" <goo> </goo> ");
+            // docComment.GetText().Should().Be("<goo> </goo>");
             var child = (XmlElementSyntax)docComment.ChildNodesAndTokens()[0];
-            Assert.Equal(" <goo> </goo> ", child.ToFullString());
-            Assert.Equal("<goo> </goo>", child.ToString());
-            Assert.Equal(" <goo> ", child.StartTag.ToFullString());
-            Assert.Equal("<goo>", child.StartTag.ToString());
+            child.ToFullString().Should().Be(" <goo> </goo> ");
+            child.ToString().Should().Be("<goo> </goo>");
+            child.StartTag.ToFullString().Should().Be(" <goo> ");
+            child.StartTag.ToString().Should().Be("<goo>");
 
             var sTrivia = SyntaxFactory.Trivia(docComment);
-            Assert.NotEqual(default(SyntaxTrivia), sTrivia);
+            sTrivia.Should().NotBe(default(SyntaxTrivia));
             var ident = SyntaxFactory.Identifier(SyntaxTriviaList.Create(sTrivia), "banana", spaceTrivia);
 
-            Assert.Equal(" <goo> </goo> banana ", ident.ToFullString());
-            Assert.Equal("banana", ident.ToString());
-            Assert.Equal(" <goo> </goo> ", ident.LeadingTrivia[0].ToFullString());
-            // Assert.Equal("<goo> </goo>", ident.LeadingTrivia[0].GetText());
+            ident.ToFullString().Should().Be(" <goo> </goo> banana ");
+            ident.ToString().Should().Be("banana");
+            ident.LeadingTrivia[0].ToFullString().Should().Be(" <goo> </goo> ");
+            // ident.LeadingTrivia[0].GetText().Should().Be("<goo> </goo>");
 
             var identExpr = SyntaxFactory.IdentifierName(ident);
 
             // make sure FindLeaf digs into the structured trivia.
             var result = identExpr.FindToken(3, true);
-            Assert.Equal(SyntaxKind.IdentifierToken, result.Kind());
-            Assert.Equal("goo", result.ToString());
+            result.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            result.ToString().Should().Be("goo");
 
             var trResult = identExpr.FindTrivia(6, SyntaxTrivia.Any);
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, trResult.Kind());
-            Assert.Equal(" ", trResult.ToString());
+            trResult.Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
+            trResult.ToString().Should().Be(" ");
 
             var foundDocComment = result.Parent.Parent.Parent.Parent;
-            Assert.Null(foundDocComment.Parent);
+            foundDocComment.Parent.Should().BeNull();
 
             var identTrivia = identExpr.GetLeadingTrivia()[0];
             var foundTrivia = ((DocumentationCommentTriviaSyntax)foundDocComment).ParentTrivia;
-            Assert.Equal(identTrivia, foundTrivia);
+            foundTrivia.Should().Be(identTrivia);
 
             // make sure FindLeafNodesOverlappingWithSpan does not dig into the structured trivia.
             var resultList = identExpr.DescendantTokens(t => t.FullSpan.OverlapsWith(new TextSpan(3, 18)));
-            Assert.Equal(1, resultList.Count());
+            resultList.Count().Should().Be(1);
         }
 
         [Fact]
@@ -103,14 +103,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 #r ""ref1""
 #r ""ref2""
 using Blah;
+using AwesomeAssertions;
 #r ""ref3""
 ");
             var compilationUnit = tree.GetCompilationUnitRoot();
             var directives = compilationUnit.GetReferenceDirectives();
-            Assert.Equal(3, directives.Count);
-            Assert.Equal("ref0", directives[0].File.Value);
-            Assert.Equal("ref1", directives[1].File.Value);
-            Assert.Equal("ref2", directives[2].File.Value);
+            directives.Count.Should().Be(3);
+            directives[0].File.Value.Should().Be("ref0");
+            directives[1].File.Value.Should().Be("ref1");
+            directives[2].File.Value.Should().Be("ref2");
         }
 
         [Fact]
@@ -121,8 +122,8 @@ using Blah;
 ");
             var compilationUnit = tree.GetCompilationUnitRoot();
             var directives = compilationUnit.GetReferenceDirectives();
-            Assert.Equal(1, directives.Count);
-            Assert.Equal("ref0", directives[0].File.Value);
+            directives.Count.Should().Be(1);
+            directives[0].File.Value.Should().Be("ref0");
         }
 
         [Fact]
@@ -132,7 +133,7 @@ using Blah;
 ");
             var compilationUnit = tree.GetCompilationUnitRoot();
             var directives = compilationUnit.GetReferenceDirectives();
-            Assert.Equal(0, directives.Count);
+            directives.Count.Should().Be(0);
         }
 
         [Fact]
@@ -145,11 +146,11 @@ using Blah;
 ");
             var compilationUnit = tree.GetCompilationUnitRoot();
             var directives = compilationUnit.GetReferenceDirectives();
-            Assert.Equal(3, directives.Count);
-            Assert.True(directives[0].File.IsMissing);
-            Assert.False(directives[1].File.IsMissing);
-            Assert.Equal("", directives[1].File.Value);
-            Assert.Equal("a", directives[2].File.Value);
+            directives.Count.Should().Be(3);
+            directives[0].File.IsMissing.Should().BeTrue();
+            directives[1].File.IsMissing.Should().BeFalse();
+            directives[1].File.Value.Should().Be("");
+            directives[2].File.Value.Should().Be("a");
         }
 
         [WorkItem(546207, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/546207")]
@@ -165,7 +166,7 @@ class Program
 ");
 
             var trivia = tree.GetCompilationUnitRoot().DescendantTrivia().Single(t => t.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia);
-            Assert.Equal(SyntaxKind.StaticKeyword, trivia.Token.Kind());
+            trivia.Token.Kind().Should().Be(SyntaxKind.StaticKeyword);
         }
 
         [WorkItem(546207, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/546207")]
@@ -181,7 +182,7 @@ class Program
 ");
 
             var trivia = tree.GetCompilationUnitRoot().DescendantTrivia().Single(t => t.Kind() == SyntaxKind.MultiLineDocumentationCommentTrivia);
-            Assert.Equal(SyntaxKind.StaticKeyword, trivia.Token.Kind());
+            trivia.Token.Kind().Should().Be(SyntaxKind.StaticKeyword);
         }
 
         [Fact]
@@ -191,7 +192,7 @@ class Program
 
             var trivia = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia();
             var t1 = trivia[0];
-            Assert.Equal(1, trivia.Count);
+            trivia.Count.Should().Be(1);
 
             // Bounds checking exceptions
             Assert.Throws<System.ArgumentOutOfRangeException>(delegate

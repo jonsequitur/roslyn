@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -16,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
     {
         public static void ShouldBe<T>(this T actual, T expected)
         {
-            Assert.Equal(expected, actual);
+            actual.Should().Be(expected);
         }
 
         public static SourceText WithReplace(this SourceText text, int offset, int length, string newText)

@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 _ => throw ExceptionUtilities.UnexpectedValue(factoryKind)
             };
 
-            Assert.Equal("#define U | #undef U | #define Y", ((CSharpSyntaxTree)tree).GetDirectives().GetDebuggerDisplay());
+            ((CSharpSyntaxTree)tree).GetDirectives().GetDebuggerDisplay().Should().Be("#define U | #undef U | #define Y");
 
             var compilation = CSharpCompilation.Create("test", new[] { tree }, TargetFrameworkUtil.GetReferences(TargetFramework.Standard), TestOptions.DebugDll);
 
@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var root = SyntaxFactory.ParseCompilationUnit("");
 
             var tree = CSharpSyntaxTree.Create(root);
-            Assert.Equal(SourceHashAlgorithm.Sha1, tree.GetText().ChecksumAlgorithm);
+            tree.GetText().ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         // Diagnostic options on syntax trees are now obsolete
@@ -130,8 +130,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var options = CreateImmutableDictionary(("CS0078", ReportDiagnostic.Suppress));
             var tree = CSharpSyntaxTree.Create(SyntaxFactory.ParseCompilationUnit(""), options: null, path: null, encoding: null, diagnosticOptions: options);
 
-            Assert.Same(options, tree.DiagnosticOptions);
-            Assert.Equal(SourceHashAlgorithm.Sha1, tree.GetText().ChecksumAlgorithm);
+            tree.DiagnosticOptions.Should().BeSameAs(options);
+            tree.GetText().ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         [Fact]
@@ -145,9 +145,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 diagnosticOptions: options,
                 isGeneratedCode: null,
                 cancellationToken: default);
-            Assert.Same(options, tree.DiagnosticOptions);
+            tree.DiagnosticOptions.Should().BeSameAs(options);
             var newTree = tree.WithChangedText(SourceText.From("class C { }"));
-            Assert.Same(options, newTree.DiagnosticOptions);
+            newTree.DiagnosticOptions.Should().BeSameAs(options);
         }
 
         [Fact]
@@ -160,10 +160,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 diagnosticOptions: null,
                 isGeneratedCode: null,
                 cancellationToken: default);
-            Assert.NotNull(tree.DiagnosticOptions);
-            Assert.True(tree.DiagnosticOptions.IsEmpty);
+            tree.DiagnosticOptions.Should().NotBeNull();
+            tree.DiagnosticOptions.IsEmpty.Should().BeTrue();
             // The default options are case insensitive but the default empty ImmutableDictionary is not
-            Assert.NotSame(ImmutableDictionary<string, ReportDiagnostic>.Empty, tree.DiagnosticOptions);
+            tree.DiagnosticOptions.Should().NotBeSameAs(ImmutableDictionary<string, ReportDiagnostic>.Empty);
         }
 
         [Fact]
@@ -176,9 +176,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 diagnosticOptions: ImmutableDictionary<string, ReportDiagnostic>.Empty,
                 isGeneratedCode: null,
                 cancellationToken: default);
-            Assert.NotNull(tree.DiagnosticOptions);
-            Assert.True(tree.DiagnosticOptions.IsEmpty);
-            Assert.Same(ImmutableDictionary<string, ReportDiagnostic>.Empty, tree.DiagnosticOptions);
+            tree.DiagnosticOptions.Should().NotBeNull();
+            tree.DiagnosticOptions.IsEmpty.Should().BeTrue();
+            tree.DiagnosticOptions.Should().BeSameAs(ImmutableDictionary<string, ReportDiagnostic>.Empty);
         }
 
         [Fact]
@@ -192,15 +192,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 diagnosticOptions: options,
                 isGeneratedCode: null,
                 cancellationToken: default);
-            Assert.Same(options, tree.DiagnosticOptions);
+            tree.DiagnosticOptions.Should().BeSameAs(options);
         }
 
         [Fact]
         public void DefaultTreeDiagnosticOptions()
         {
             var tree = SyntaxFactory.SyntaxTree(SyntaxFactory.CompilationUnit());
-            Assert.NotNull(tree.DiagnosticOptions);
-            Assert.True(tree.DiagnosticOptions.IsEmpty);
+            tree.DiagnosticOptions.Should().NotBeNull();
+            tree.DiagnosticOptions.IsEmpty.Should().BeTrue();
         }
 
         [Fact]
@@ -208,9 +208,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var tree = SyntaxFactory.SyntaxTree(SyntaxFactory.CompilationUnit());
             var newTree = tree.WithDiagnosticOptions(null);
-            Assert.NotNull(newTree.DiagnosticOptions);
-            Assert.True(newTree.DiagnosticOptions.IsEmpty);
-            Assert.Same(tree, newTree);
+            newTree.DiagnosticOptions.Should().NotBeNull();
+            newTree.DiagnosticOptions.IsEmpty.Should().BeTrue();
+            newTree.Should().BeSameAs(tree);
         }
 
         [Fact]
@@ -218,10 +218,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var tree = SyntaxFactory.SyntaxTree(SyntaxFactory.CompilationUnit());
             var newTree = tree.WithDiagnosticOptions(ImmutableDictionary<string, ReportDiagnostic>.Empty);
-            Assert.NotNull(tree.DiagnosticOptions);
-            Assert.True(newTree.DiagnosticOptions.IsEmpty);
+            tree.DiagnosticOptions.Should().NotBeNull();
+            newTree.DiagnosticOptions.IsEmpty.Should().BeTrue();
             // Default empty immutable dictionary is case sensitive
-            Assert.NotSame(tree.DiagnosticOptions, newTree.DiagnosticOptions);
+            newTree.DiagnosticOptions.Should().NotBeSameAs(tree.DiagnosticOptions);
         }
 
         [Fact]
@@ -231,9 +231,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var map = ImmutableDictionary.CreateRange(
                 new[] { KeyValuePair.Create("CS00778", ReportDiagnostic.Suppress) });
             var newTree = tree.WithDiagnosticOptions(map);
-            Assert.NotNull(newTree.DiagnosticOptions);
-            Assert.Same(map, newTree.DiagnosticOptions);
-            Assert.NotEqual(tree, newTree);
+            newTree.DiagnosticOptions.Should().NotBeNull();
+            newTree.DiagnosticOptions.Should().BeSameAs(map);
+            newTree.Should().NotBe(tree);
         }
 #pragma warning restore CS0618
 
@@ -246,11 +246,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithRootAndOptions(newRoot, newOptions);
             var newText = newTree.GetText();
 
-            Assert.Equal(newRoot.ToString(), newTree.GetRoot().ToString());
-            Assert.Same(newOptions, newTree.Options);
+            newTree.GetRoot().ToString().Should().Be(newRoot.ToString());
+            newTree.Options.Should().BeSameAs(newOptions);
 
-            Assert.Null(newText.Encoding);
-            Assert.Equal(SourceHashAlgorithm.Sha1, newText.ChecksumAlgorithm);
+            newText.Encoding.Should().BeNull();
+            newText.ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         [Fact]
@@ -264,10 +264,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithRootAndOptions(newRoot, newOptions);
             var newText = newTree.GetText();
 
-            Assert.Equal(newRoot.ToString(), newTree.GetRoot().ToString());
-            Assert.Same(newOptions, newTree.Options);
-            Assert.Same(Encoding.Unicode, newText.Encoding);
-            Assert.Equal(SourceHashAlgorithms.Default, newText.ChecksumAlgorithm);
+            newTree.GetRoot().ToString().Should().Be(newRoot.ToString());
+            newTree.Options.Should().BeSameAs(newOptions);
+            newText.Encoding.Should().BeSameAs(Encoding.Unicode);
+            newText.ChecksumAlgorithm.Should().Be(SourceHashAlgorithms.Default);
         }
 
         [Fact]
@@ -277,8 +277,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newRoot = SyntaxFactory.ParseCompilationUnit("class C {}");
             var newOptions = new CSharpParseOptions();
             var newTree = dummy.WithRootAndOptions(newRoot, newOptions);
-            Assert.Equal(newRoot.ToString(), newTree.GetRoot().ToString());
-            Assert.Same(newOptions, newTree.Options);
+            newTree.GetRoot().ToString().Should().Be(newRoot.ToString());
+            newTree.Options.Should().BeSameAs(newOptions);
         }
 
         [Fact]
@@ -288,11 +288,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithFilePath("new.cs");
             var newText = newTree.GetText();
 
-            Assert.Equal("new.cs", newTree.FilePath);
-            Assert.Equal(oldTree.ToString(), newTree.ToString());
+            newTree.FilePath.Should().Be("new.cs");
+            newTree.ToString().Should().Be(oldTree.ToString());
 
-            Assert.Null(newText.Encoding);
-            Assert.Equal(SourceHashAlgorithm.Sha1, newText.ChecksumAlgorithm);
+            newText.Encoding.Should().BeNull();
+            newText.ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         [Fact]
@@ -304,11 +304,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithFilePath("new.cs");
             var newText = newTree.GetText();
 
-            Assert.Equal("new.cs", newTree.FilePath);
-            Assert.Equal(oldTree.ToString(), newTree.ToString());
+            newTree.FilePath.Should().Be("new.cs");
+            newTree.ToString().Should().Be(oldTree.ToString());
 
-            Assert.Same(Encoding.Unicode, newText.Encoding);
-            Assert.Equal(SourceHashAlgorithms.Default, newText.ChecksumAlgorithm);
+            newText.Encoding.Should().BeSameAs(Encoding.Unicode);
+            newText.ChecksumAlgorithm.Should().Be(SourceHashAlgorithms.Default);
         }
 
         [Fact]
@@ -317,19 +317,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var oldTree = new CSharpSyntaxTree.DummySyntaxTree();
             var newTree = oldTree.WithFilePath("new.cs");
 
-            Assert.Equal("new.cs", newTree.FilePath);
-            Assert.Equal(oldTree.ToString(), newTree.ToString());
+            newTree.FilePath.Should().Be("new.cs");
+            newTree.ToString().Should().Be(oldTree.ToString());
         }
 
         [Fact, WorkItem(12638, "https://github.com/dotnet/roslyn/issues/12638")]
         public void WithFilePath_Null()
         {
             SyntaxTree oldTree = new CSharpSyntaxTree.DummySyntaxTree();
-            Assert.Equal(string.Empty, oldTree.WithFilePath(null).FilePath);
+            oldTree.WithFilePath(null).FilePath.Should().Be(string.Empty);
             oldTree = SyntaxFactory.ParseSyntaxTree("", path: "old.cs");
-            Assert.Equal(string.Empty, oldTree.WithFilePath(null).FilePath);
-            Assert.Equal(string.Empty, SyntaxFactory.ParseSyntaxTree("", path: null).FilePath);
-            Assert.Equal(string.Empty, CSharpSyntaxTree.Create((CSharpSyntaxNode)oldTree.GetRoot()).FilePath);
+            oldTree.WithFilePath(null).FilePath.Should().Be(string.Empty);
+            SyntaxFactory.ParseSyntaxTree("", path: null).FilePath.Should().Be(string.Empty);
+            CSharpSyntaxTree.Create((CSharpSyntaxNode)oldTree.GetRoot()).FilePath.Should().Be(string.Empty);
         }
 
         [Fact]
@@ -1243,6 +1243,7 @@ M();
             var test = @"
 global using static ns1;
 using static ns2;
+using AwesomeAssertions;
 M();
 ";
 

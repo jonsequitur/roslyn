@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Test.Utilities;
 using Roslyn.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -49,14 +50,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         [WorkItem(367, "https://github.com/dotnet/roslyn/issues/367")]
         public void ParseEmpty()
         {
-            Assert.Null(ParseDeclaration(""));
+            ParseDeclaration("").Should().BeNull();
         }
 
         [Fact]
         [WorkItem(367, "https://github.com/dotnet/roslyn/issues/367")]
         public void ParseTrash()
         {
-            Assert.Null(ParseDeclaration("+-!@#$%^&*()"));
+            ParseDeclaration("+-!@#$%^&*()").Should().BeNull();
         }
 
         [ConditionalFact(typeof(WindowsOnly))]
@@ -142,7 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             foreach (var options in new[] { TestOptions.Script, TestOptions.Regular })
             {
                 var d = SyntaxFactory.ParseMemberDeclaration("namespace ns {}", options: options);
-                Assert.Null(d);
+                d.Should().BeNull();
             }
         }
 

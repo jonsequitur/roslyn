@@ -23,15 +23,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             // it should be all new
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(newTree.GetCompilationUnitRoot().FullSpan, spans[0]);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(newTree.GetCompilationUnitRoot().FullSpan);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(0, 0), changes[0].Span);
-            Assert.Equal("class C { }", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(0, 0));
+            changes[0].NewText.Should().Be("class C { }");
         }
 
         [Fact]
@@ -42,16 +42,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             // since most tokens are automatically interned we should see only the name tokens change
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
             var decl = (TypeDeclarationSyntax)(newTree.GetCompilationUnitRoot()).Members[0];
-            Assert.Equal(decl.Identifier.Span, spans[0]);
+            spans[0].Should().Be(decl.Identifier.Span);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(6, 1), changes[0].Span);
-            Assert.Equal("B", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(6, 1));
+            changes[0].NewText.Should().Be("B");
         }
 
         [Fact]
@@ -62,20 +62,20 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             // since most tokens are automatically interned we should see only the name tokens change
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(2, spans.Count);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(2);
             var decl1 = (TypeDeclarationSyntax)(newTree.GetCompilationUnitRoot()).Members[0];
-            Assert.Equal(decl1.Identifier.Span, spans[0]);
+            spans[0].Should().Be(decl1.Identifier.Span);
             var decl2 = (TypeDeclarationSyntax)(newTree.GetCompilationUnitRoot()).Members[1];
-            Assert.Equal(decl2.Identifier.Span, spans[1]);
+            spans[1].Should().Be(decl2.Identifier.Span);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(2, changes.Count);
-            Assert.Equal(new TextSpan(6, 1), changes[0].Span);
-            Assert.Equal("C", changes[0].NewText);
-            Assert.Equal(new TextSpan(18, 1), changes[1].Span);
-            Assert.Equal("D", changes[1].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(2);
+            changes[0].Span.Should().Be(new TextSpan(6, 1));
+            changes[0].NewText.Should().Be("C");
+            changes[1].Span.Should().Be(new TextSpan(18, 1));
+            changes[1].NewText.Should().Be("D");
         }
 
         [Fact]
@@ -85,15 +85,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithInsertAt(0, "class ");
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(0, 6), spans[0]);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(0, 6));
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(0, 0), changes[0].Span);
-            Assert.Equal("class ", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(0, 0));
+            changes[0].NewText.Should().Be("class ");
         }
 
         [Fact]
@@ -103,15 +103,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithInsertAt(0, "class A ");
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(0, 8), spans[0]);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(0, 8));
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(0, 0), changes[0].Span);
-            Assert.Equal("class A ", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(0, 0));
+            changes[0].NewText.Should().Be("class A ");
         }
 
         [Fact]
@@ -122,15 +122,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             // new tree appears to have two duplicate (similar) copies of the same declarations (indistinguishable)
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(11, 11), spans[0]); // its going to pick one of the two spans.
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(11, 11)); // its going to pick one of the two spans.
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(11, 0), changes[0].Span);
-            Assert.Equal("class A { }", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(11, 0));
+            changes[0].NewText.Should().Be("class A { }");
         }
 
         [Fact]
@@ -142,15 +142,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             // new tree appears to have two almost duplicate (similar) copies of the same declarations, except the
             // second (original) one is a closer match
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(10, 12), spans[0]);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(10, 12));
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(10, 0), changes[0].Span);
-            Assert.Equal("} class A { ", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(10, 0));
+            changes[0].NewText.Should().Be("} class A { ");
         }
 
         [Fact]
@@ -160,15 +160,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithInsertAt(0, "namespace N { ");
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(0, 14), spans[0]);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(0, 14));
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(0, 0), changes[0].Span);
-            Assert.Equal("namespace N { ", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(0, 0));
+            changes[0].NewText.Should().Be("namespace N { ");
         }
 
         [Fact]
@@ -178,15 +178,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithInsertAt(10, "int X; ");
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(10, 7), spans[0]); // int X;
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(10, 7)); // int X;
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(10, 0), changes[0].Span);
-            Assert.Equal("int X; ", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(10, 0));
+            changes[0].NewText.Should().Be("int X; ");
         }
 
         [Fact]
@@ -196,14 +196,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithRemoveAt(10, 7);
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(0, spans.Count);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(0);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(10, 7), changes[0].Span);
-            Assert.Equal("", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(10, 7));
+            changes[0].NewText.Should().Be("");
         }
 
         [Fact]
@@ -213,14 +213,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithRemoveAt(24, 7);
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(0, spans.Count);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(0);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(24, 7), changes[0].Span);
-            Assert.Equal("", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(24, 7));
+            changes[0].NewText.Should().Be("");
         }
 
         [Fact]
@@ -230,14 +230,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithRemoveAt(14, 1);
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(0, spans.Count);
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(0);
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(14, 1), changes[0].Span);
-            Assert.Equal("", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(14, 1));
+            changes[0].NewText.Should().Be("");
         }
 
         [Fact]
@@ -247,15 +247,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newTree = oldTree.WithReplaceFirst("class", "struct");
 
             var spans = newTree.GetChangedSpans(oldTree);
-            Assert.NotNull(spans);
-            Assert.Equal(1, spans.Count);
-            Assert.Equal(new TextSpan(14, 6), spans[0]); // 'struct'
+            spans.Should().NotBeNull();
+            spans.Count.Should().Be(1);
+            spans[0].Should().Be(new TextSpan(14, 6)); // 'struct'
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal(new TextSpan(14, 5), changes[0].Span);
-            Assert.Equal("struct", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].Span.Should().Be(new TextSpan(14, 5));
+            changes[0].NewText.Should().Be("struct");
         }
 
         [Fact, WorkItem(463, "https://github.com/dotnet/roslyn/issues/463")]
@@ -306,8 +306,8 @@ class C
 
             var span = new TextSpan(index, 4);
             var node = root.FindNode(span, getInnermostNodeForTie: true) as SimpleNameSyntax;
-            Assert.NotNull(node);
-            Assert.Equal("Sign", node.Identifier.ValueText);
+            node.Should().NotBeNull();
+            node.Identifier.ValueText.Should().Be("Sign");
 
             var leadingTrivia = node.GetLeadingTrivia();
             var newNode = SyntaxFactory.MemberAccessExpression(
@@ -320,9 +320,9 @@ class C
             var newTree = newRoot.SyntaxTree;
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal("this.", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].NewText.Should().Be("this.");
         }
 
         [Fact, WorkItem(463, "https://github.com/dotnet/roslyn/issues/463")]
@@ -331,6 +331,7 @@ class C
             var original = @"
 using System;
 using System.Collections.Generic;
+using AwesomeAssertions;
 
 public class TestClass
 {
@@ -371,8 +372,8 @@ public class TestClass
 
             var span = new TextSpan(index, 6);
             var node = root.FindNode(span, getInnermostNodeForTie: true) as SimpleNameSyntax;
-            Assert.NotNull(node);
-            Assert.Equal("Object", node.Identifier.ValueText);
+            node.Should().NotBeNull();
+            node.Identifier.ValueText.Should().Be("Object");
 
             var leadingTrivia = node.GetLeadingTrivia();
             var newNode = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.ObjectKeyword))
@@ -382,9 +383,9 @@ public class TestClass
             var newTree = newRoot.SyntaxTree;
 
             var changes = newTree.GetChanges(oldTree);
-            Assert.NotNull(changes);
-            Assert.Equal(1, changes.Count);
-            Assert.Equal("o", changes[0].NewText);
+            changes.Should().NotBeNull();
+            changes.Count.Should().Be(1);
+            changes[0].NewText.Should().Be("o");
         }
     }
 }

@@ -46,28 +46,28 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var mappedSpan = syntaxTree.GetMappedLineSpan(span);
             var actualDisplayPath = syntaxTree.GetDisplayPath(span, s_resolver);
 
-            Assert.Equal(hasMappedPath, mappedSpan.HasMappedPath);
-            Assert.Equal(expectedPath, mappedSpan.Path);
+            mappedSpan.HasMappedPath.Should().Be(hasMappedPath);
+            mappedSpan.Path.Should().Be(expectedPath);
             if (expectedPath == "")
             {
-                Assert.Equal("", actualDisplayPath);
+                actualDisplayPath.Should().Be("");
             }
             else
             {
-                Assert.Equal(string.Format("[{0};{1}]", expectedPath, hasMappedPath ? syntaxTree.FilePath : null), actualDisplayPath);
+                actualDisplayPath.Should().Be(string.Format("[{0};{1}]", expectedPath, hasMappedPath ? syntaxTree.FilePath : null));
             }
 
-            Assert.Equal(expectedStartLine, mappedSpan.StartLinePosition.Line);
-            Assert.Equal(expectedStartOffset, mappedSpan.StartLinePosition.Character);
-            Assert.Equal(expectedEndLine, mappedSpan.EndLinePosition.Line);
-            Assert.Equal(expectedEndOffset, mappedSpan.EndLinePosition.Character);
+            mappedSpan.StartLinePosition.Line.Should().Be(expectedStartLine);
+            mappedSpan.StartLinePosition.Character.Should().Be(expectedStartOffset);
+            mappedSpan.EndLinePosition.Line.Should().Be(expectedEndLine);
+            mappedSpan.EndLinePosition.Character.Should().Be(expectedEndOffset);
         }
 
         private TextSpan GetSpanIn(SyntaxTree syntaxTree, string textToFind)
         {
             string s = syntaxTree.GetText().ToString();
             int index = s.IndexOf(textToFind, StringComparison.Ordinal);
-            Assert.True(index >= 0, "textToFind not found in the tree");
+            index >= 0, "textToFind not found in the tree".Should().BeTrue();
             return new TextSpan(index, textToFind.Length);
         }
 
@@ -92,32 +92,32 @@ int x;
             Location locXToCloseBrace = new SourceLocation(syntaxTree, xToCloseBraceSpan);
 
             FileLinePositionSpan flpsX = locX.GetLineSpan();
-            Assert.Equal("c:\\goo.cs", flpsX.Path);
-            Assert.Equal(2, flpsX.StartLinePosition.Line);
-            Assert.Equal(4, flpsX.StartLinePosition.Character);
-            Assert.Equal(2, flpsX.EndLinePosition.Line);
-            Assert.Equal(6, flpsX.EndLinePosition.Character);
+            flpsX.Path.Should().Be("c:\\goo.cs");
+            flpsX.StartLinePosition.Line.Should().Be(2);
+            flpsX.StartLinePosition.Character.Should().Be(4);
+            flpsX.EndLinePosition.Line.Should().Be(2);
+            flpsX.EndLinePosition.Character.Should().Be(6);
 
             flpsX = locX.GetMappedLineSpan();
-            Assert.Equal("d:\\banana.cs", flpsX.Path);
-            Assert.Equal(19, flpsX.StartLinePosition.Line);
-            Assert.Equal(4, flpsX.StartLinePosition.Character);
-            Assert.Equal(19, flpsX.EndLinePosition.Line);
-            Assert.Equal(6, flpsX.EndLinePosition.Character);
+            flpsX.Path.Should().Be("d:\\banana.cs");
+            flpsX.StartLinePosition.Line.Should().Be(19);
+            flpsX.StartLinePosition.Character.Should().Be(4);
+            flpsX.EndLinePosition.Line.Should().Be(19);
+            flpsX.EndLinePosition.Character.Should().Be(6);
 
             FileLinePositionSpan flpsXToCloseBrace = locXToCloseBrace.GetLineSpan();
-            Assert.Equal("c:\\goo.cs", flpsXToCloseBrace.Path);
-            Assert.Equal(2, flpsXToCloseBrace.StartLinePosition.Line);
-            Assert.Equal(4, flpsXToCloseBrace.StartLinePosition.Character);
-            Assert.Equal(3, flpsXToCloseBrace.EndLinePosition.Line);
-            Assert.Equal(1, flpsXToCloseBrace.EndLinePosition.Character);
+            flpsXToCloseBrace.Path.Should().Be("c:\\goo.cs");
+            flpsXToCloseBrace.StartLinePosition.Line.Should().Be(2);
+            flpsXToCloseBrace.StartLinePosition.Character.Should().Be(4);
+            flpsXToCloseBrace.EndLinePosition.Line.Should().Be(3);
+            flpsXToCloseBrace.EndLinePosition.Character.Should().Be(1);
 
             flpsXToCloseBrace = locXToCloseBrace.GetMappedLineSpan();
-            Assert.Equal("d:\\banana.cs", flpsXToCloseBrace.Path);
-            Assert.Equal(19, flpsXToCloseBrace.StartLinePosition.Line);
-            Assert.Equal(4, flpsXToCloseBrace.StartLinePosition.Character);
-            Assert.Equal(20, flpsXToCloseBrace.EndLinePosition.Line);
-            Assert.Equal(1, flpsXToCloseBrace.EndLinePosition.Character);
+            flpsXToCloseBrace.Path.Should().Be("d:\\banana.cs");
+            flpsXToCloseBrace.StartLinePosition.Line.Should().Be(19);
+            flpsXToCloseBrace.StartLinePosition.Character.Should().Be(4);
+            flpsXToCloseBrace.EndLinePosition.Line.Should().Be(20);
+            flpsXToCloseBrace.EndLinePosition.Character.Should().Be(1);
         }
 
         [ClrOnlyFact]
@@ -239,7 +239,7 @@ int x;
             AssertMappedSpanEqual(syntaxTree, $"System;{Environment.NewLine}class X", "c:\\goo.cs", 0, 6, 1, 7, hasMappedPath: false);
             AssertMappedSpanEqual(syntaxTree, "x;", "c:\\goo.cs", 2, 4, 2, 6, hasMappedPath: false);
 
-            Assert.Empty(InspectLineMapping(syntaxTree));
+            InspectLineMapping(syntaxTree).Should().BeEmpty();
         }
 
         [Fact]
@@ -309,11 +309,11 @@ class Program
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sampleProgram, path: "c:\\goo.cs");
             // verify missing semicolon diagnostic is on the same line
             var diags = syntaxTree.GetDiagnostics();
-            Assert.Equal(1, diags.Count());
+            diags.Count().Should().Be(1);
             var diag = diags.First();
             FileLinePositionSpan flps = diag.Location.GetLineSpan();
             // verify the diagnostic is positioned at the end of the line "int x" and has zero width
-            Assert.Equal(flps, new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)));
+            new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)).Should().Be(flps);
 
             sampleProgram = @"using System;
 using System.Collections.Generic;
@@ -331,7 +331,7 @@ class Program
             diag = diags.First();
             flps = diag.Location.GetLineSpan();
             // verify missing semicolon diagnostic is on the same line and before the comment
-            Assert.Equal(flps, new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)));
+            new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)).Should().Be(flps);
 
             sampleProgram = @"using System;
 using System.Collections.Generic;
@@ -351,7 +351,7 @@ comment*/
             diag = diags.First();
             flps = diag.Location.GetLineSpan();
             // verify missing semicolon diagnostic is on the same line and before the comment
-            Assert.Equal(flps, new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)));
+            new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 13), new LinePosition(8, 13)).Should().Be(flps);
         }
 
         [WorkItem(537537, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537537")]
@@ -372,11 +372,11 @@ class Program
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sampleProgram, path: "c:\\goo.cs");
             var diags = syntaxTree.GetDiagnostics();
             // verify missing identifier diagnostic has the correct span
-            Assert.NotEmpty(diags);
+            diags.Should().NotBeEmpty();
             var diag = diags.First();
             FileLinePositionSpan flps = diag.Location.GetLineSpan();
             // verify the diagnostic width spans the entire token "2131"
-            Assert.Equal(flps, new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 15), new LinePosition(8, 19)));
+            new FileLinePositionSpan("c:\\goo.cs", new LinePosition(8, 15), new LinePosition(8, 19)).Should().Be(flps);
         }
 
         [WorkItem(540077, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/540077")]
@@ -386,6 +386,7 @@ class Program
             string sampleProgram = @"using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 
 class C
 {
@@ -393,11 +394,11 @@ class C
 }";
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(sampleProgram, path: "c:\\goo.cs");
             var diags = syntaxTree.GetDiagnostics();
-            Assert.NotEmpty(diags);
+            diags.Should().NotBeEmpty();
             foreach (var diag in diags)
             {
                 // verify the diagnostic span doesn't go past the text span
-                Assert.InRange(diag.Location.SourceSpan.End, diag.Location.SourceSpan.Start, syntaxTree.GetText().Length);
+                diag.Location.SourceSpan.End.Should().BeInRange(diag.Location.SourceSpan.Start, syntaxTree.GetText().Length);
             }
         }
 
@@ -416,7 +417,7 @@ end class";
 
             // This line throws ArgumentOutOfRangeException.
             var span = syntaxTree.GetDiagnostics().ElementAt(3).Location.GetLineSpan();
-            Assert.Equal(span, new FileLinePositionSpan("", new LinePosition(1, 9), new LinePosition(1, 9)));
+            new FileLinePositionSpan("", new LinePosition(1, 9), new LinePosition(1, 9)).Should().Be(span);
         }
 
         [Fact]
@@ -430,10 +431,10 @@ end class";
             SourceLocation loc2 = new SourceLocation(syntaxTree, new TextSpan(3, 4));
             SourceLocation loc3 = new SourceLocation(syntaxTree, new TextSpan(3, 7));
             SourceLocation loc4 = new SourceLocation(tree2, new TextSpan(3, 4));
-            Assert.Equal(loc1, loc2);
-            Assert.Equal(loc1.GetHashCode(), loc2.GetHashCode());
-            Assert.NotEqual(loc1, loc3);
-            Assert.NotEqual(loc3, loc4);
+            loc2.Should().Be(loc1);
+            loc2.GetHashCode().Should().Be(loc1.GetHashCode());
+            loc3.Should().NotBe(loc1);
+            loc4.Should().NotBe(loc3);
         }
 
         [WorkItem(541612, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/541612")]
@@ -462,8 +463,8 @@ class Program
             foreach (var diag in expressionDiags)
             {
                 // verify the diagnostic span doesn't go past the text span
-                Assert.InRange(diag.Location.SourceSpan.Start, 0, syntaxTree.GetText().Length);
-                Assert.InRange(diag.Location.SourceSpan.End, 0, syntaxTree.GetText().Length);
+                diag.Location.SourceSpan.Start.Should().BeInRange(0, syntaxTree.GetText().Length);
+                diag.Location.SourceSpan.End.Should().BeInRange(0, syntaxTree.GetText().Length);
             }
         }
 
@@ -492,10 +493,10 @@ class MainClass
             SourceLocation loc1 = new SourceLocation(syntaxTree, span1);
             SourceLocation loc2 = new SourceLocation(syntaxTree, span2);
             // GetDebuggerDisplay() is private
-            // Assert.Equal("SourceLocation(@8:13)\"i;\"", loc1.GetDebuggerDisplay());
-            Assert.Equal("SourceFile([91..93))", loc1.ToString());
-            // Assert.Equal("SourceLocation(@10:14)\"c;\"", loc2.GetDebuggerDisplay());
-            Assert.Equal("SourceFile([148..150))", loc2.ToString());
+            // loc1.GetDebuggerDisplay().Should().Be("SourceLocation(@8:13)\"i;\"");
+            loc1.ToString().Should().Be("SourceFile([91..93))");
+            // loc2.GetDebuggerDisplay().Should().Be("SourceLocation(@10:14)\"c;\"");
+            loc2.ToString().Should().Be("SourceFile([148..150))");
         }
 
         [Fact]
@@ -504,7 +505,7 @@ class MainClass
             Location location = Location.Create("test.txt", new TextSpan(), new LinePositionSpan(new LinePosition(2, 1), new LinePosition(3, 1)));
             var diagnostic = CodeAnalysis.Diagnostic.Create("CS0000", "", "msg", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 1, location: location);
 
-            Assert.Equal("test.txt(3,2): warning CS0000: msg", CSharpDiagnosticFormatter.Instance.Format(diagnostic, EnsureEnglishUICulture.PreferredOrNull));
+            CSharpDiagnosticFormatter.Instance.Format(diagnostic, EnsureEnglishUICulture.PreferredOrNull).Should().Be("test.txt(3,2): warning CS0000: msg");
         }
 
         [Fact, WorkItem(64236, "https://github.com/dotnet/roslyn/issues/64236")]
@@ -518,33 +519,33 @@ class MainClass
 
             Location locationWithoutMapping = Location.Create(filePath, sourceSpan, lineSpan);
             Location locationWithMapping = Location.Create(filePath, sourceSpan, lineSpan, mappedFilePath, mappedLineSpan);
-            Assert.NotEqual(locationWithMapping, locationWithoutMapping);
+            locationWithoutMapping.Should().NotBe(locationWithMapping);
 
             var diagnosticWithoutMapping = CodeAnalysis.Diagnostic.Create("CS0000", "", "msg", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 1, location: locationWithoutMapping);
-            Assert.Equal("test.txt(3,2): warning CS0000: msg", CSharpDiagnosticFormatter.Instance.Format(diagnosticWithoutMapping, EnsureEnglishUICulture.PreferredOrNull));
+            CSharpDiagnosticFormatter.Instance.Format(diagnosticWithoutMapping, EnsureEnglishUICulture.PreferredOrNull).Should().Be("test.txt(3,2): warning CS0000: msg");
 
             var diagnosticWithMapping = CodeAnalysis.Diagnostic.Create("CS0000", "", "msg", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 1, location: locationWithMapping);
-            Assert.Equal("test2.txt(4,3): warning CS0000: msg", CSharpDiagnosticFormatter.Instance.Format(diagnosticWithMapping, EnsureEnglishUICulture.PreferredOrNull));
+            CSharpDiagnosticFormatter.Instance.Format(diagnosticWithMapping, EnsureEnglishUICulture.PreferredOrNull).Should().Be("test2.txt(4,3): warning CS0000: msg");
 
             var lineInfo = locationWithoutMapping.GetLineSpan();
-            Assert.Equal(filePath, lineInfo.Path);
-            Assert.Equal(lineSpan, lineInfo.Span);
-            Assert.False(lineInfo.HasMappedPath);
+            lineInfo.Path.Should().Be(filePath);
+            lineInfo.Span.Should().Be(lineSpan);
+            lineInfo.HasMappedPath.Should().BeFalse();
 
             var mappedLineInfo = locationWithoutMapping.GetMappedLineSpan();
-            Assert.Equal(filePath, mappedLineInfo.Path);
-            Assert.Equal(lineSpan, mappedLineInfo.Span);
-            Assert.False(mappedLineInfo.HasMappedPath);
+            mappedLineInfo.Path.Should().Be(filePath);
+            mappedLineInfo.Span.Should().Be(lineSpan);
+            mappedLineInfo.HasMappedPath.Should().BeFalse();
 
             lineInfo = locationWithMapping.GetLineSpan();
-            Assert.Equal(filePath, lineInfo.Path);
-            Assert.Equal(lineSpan, lineInfo.Span);
-            Assert.False(lineInfo.HasMappedPath);
+            lineInfo.Path.Should().Be(filePath);
+            lineInfo.Span.Should().Be(lineSpan);
+            lineInfo.HasMappedPath.Should().BeFalse();
 
             mappedLineInfo = locationWithMapping.GetMappedLineSpan();
-            Assert.Equal(mappedFilePath, mappedLineInfo.Path);
-            Assert.Equal(mappedLineSpan, mappedLineInfo.Span);
-            Assert.True(mappedLineInfo.HasMappedPath);
+            mappedLineInfo.Path.Should().Be(mappedFilePath);
+            mappedLineInfo.Span.Should().Be(mappedLineSpan);
+            mappedLineInfo.HasMappedPath.Should().BeTrue();
         }
 
         [WorkItem(1097381, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/1097381")]
@@ -559,21 +560,21 @@ class MainClass
             var tree = SyntaxFactory.SyntaxTree(nodeWithBadError);
 
             var treeSpan = tree.GetRoot().FullSpan;
-            Assert.Equal(5, treeSpan.Length);
+            treeSpan.Length.Should().Be(5);
 
             var diagnostics = tree.GetDiagnostics().ToList();
 
-            Assert.Equal(1, diagnostics.Count);
-            Assert.Equal(5, diagnostics[0].Location.SourceSpan.Start);
-            Assert.Equal(0, diagnostics[0].Location.SourceSpan.Length);
+            diagnostics.Count.Should().Be(1);
+            diagnostics[0].Location.SourceSpan.Start.Should().Be(5);
+            diagnostics[0].Location.SourceSpan.Length.Should().Be(0);
 
-            Assert.True(treeSpan.Contains(diagnostics[0].Location.SourceSpan));
+            treeSpan.Contains(diagnostics[0].Location.SourceSpan).Should().BeTrue();
 
             var lineSpan = diagnostics[0].Location.GetLineSpan();
-            Assert.Equal(0, lineSpan.StartLinePosition.Line);
-            Assert.Equal(5, lineSpan.StartLinePosition.Character);
-            Assert.Equal(0, lineSpan.EndLinePosition.Line);
-            Assert.Equal(5, lineSpan.EndLinePosition.Character);
+            lineSpan.StartLinePosition.Line.Should().Be(0);
+            lineSpan.StartLinePosition.Character.Should().Be(5);
+            lineSpan.EndLinePosition.Line.Should().Be(0);
+            lineSpan.EndLinePosition.Character.Should().Be(5);
         }
 
         [WorkItem(1097381, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/1097381")]
@@ -587,21 +588,21 @@ class MainClass
             var tree = SyntaxFactory.SyntaxTree(nodeWithBadError);
 
             var treeSpan = tree.GetRoot().FullSpan;
-            Assert.Equal(0, treeSpan.Length);
+            treeSpan.Length.Should().Be(0);
 
             var diagnostics = tree.GetDiagnostics().ToList();
 
-            Assert.Equal(1, diagnostics.Count);
-            Assert.Equal(0, diagnostics[0].Location.SourceSpan.Start);
-            Assert.Equal(0, diagnostics[0].Location.SourceSpan.Length);
+            diagnostics.Count.Should().Be(1);
+            diagnostics[0].Location.SourceSpan.Start.Should().Be(0);
+            diagnostics[0].Location.SourceSpan.Length.Should().Be(0);
 
-            Assert.True(treeSpan.Contains(diagnostics[0].Location.SourceSpan));
+            treeSpan.Contains(diagnostics[0].Location.SourceSpan).Should().BeTrue();
 
             var lineSpan = diagnostics[0].Location.GetLineSpan();
-            Assert.Equal(0, lineSpan.StartLinePosition.Line);
-            Assert.Equal(0, lineSpan.StartLinePosition.Character);
-            Assert.Equal(0, lineSpan.EndLinePosition.Line);
-            Assert.Equal(0, lineSpan.EndLinePosition.Character);
+            lineSpan.StartLinePosition.Line.Should().Be(0);
+            lineSpan.StartLinePosition.Character.Should().Be(0);
+            lineSpan.EndLinePosition.Line.Should().Be(0);
+            lineSpan.EndLinePosition.Character.Should().Be(0);
         }
     }
 }

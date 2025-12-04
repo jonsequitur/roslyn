@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var oldToken = default(SyntaxToken);
             var newToken = oldToken.WithAdditionalAnnotations(annotation);
 
-            Assert.False(newToken.ContainsAnnotations);
+            newToken.ContainsAnnotations.Should().BeFalse();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var oldTrivia = default(SyntaxTrivia);
             var newTrivia = oldTrivia.WithAdditionalAnnotations(annotation);
 
-            Assert.False(newTrivia.ContainsAnnotations);
+            newTrivia.ContainsAnnotations.Should().BeFalse();
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromNode = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot();
             var toNode = (SyntaxNode)null;
             var annotatedNode = fromNode.CopyAnnotationsTo(toNode);
-            Assert.Null(annotatedNode);
+            annotatedNode.Should().BeNull();
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromNode = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot();
             var toNode = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot();
             var annotatedNode = fromNode.CopyAnnotationsTo(toNode);
-            Assert.Equal(annotatedNode, toNode); // Reference Equal
+            toNode.Should().Be(annotatedNode); // Reference Equal
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromToken = default(SyntaxToken);
             var toToken = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot().DescendantTokens().First();
             var annotatedToken = fromToken.CopyAnnotationsTo(toToken);
-            Assert.True(annotatedToken.IsEquivalentTo(toToken));
+            annotatedToken.IsEquivalentTo(toToken).Should().BeTrue();
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromToken = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot().DescendantTokens().First();
             var toToken = default(SyntaxToken);
             var annotatedToken = fromToken.CopyAnnotationsTo(toToken);
-            Assert.True(annotatedToken.IsEquivalentTo(default(SyntaxToken)));
+            annotatedToken.IsEquivalentTo(default(SyntaxToken)).Should().BeTrue();
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromToken = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot().DescendantTokens().First();
             var toToken = SyntaxFactory.ParseSyntaxTree(_helloWorldCode).GetCompilationUnitRoot().DescendantTokens().First();
             var annotatedToken = fromToken.CopyAnnotationsTo(toToken);
-            Assert.Equal(annotatedToken, toToken); // Reference Equal
+            toToken.Should().Be(annotatedToken); // Reference Equal
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var tree = SyntaxFactory.ParseSyntaxTree(_helloWorldCode);
             var toTrivia = GetAllTrivia(tree.GetCompilationUnitRoot()).FirstOrDefault();
             var annotatedTrivia = fromTrivia.CopyAnnotationsTo(toTrivia);
-            Assert.True(toTrivia.IsEquivalentTo(annotatedTrivia));
+            toTrivia.IsEquivalentTo(annotatedTrivia).Should().BeTrue();
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var tree = SyntaxFactory.ParseSyntaxTree(_helloWorldCode);
             var fromTrivia = GetAllTrivia(tree.GetCompilationUnitRoot()).FirstOrDefault();
             var annotatedTrivia = fromTrivia.CopyAnnotationsTo(toTrivia);
-            Assert.True(default(SyntaxTrivia).IsEquivalentTo(annotatedTrivia));
+            default(SyntaxTrivia).IsEquivalentTo(annotatedTrivia).Should().BeTrue();
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var fromTrivia = GetAllTrivia(tree.GetCompilationUnitRoot()).FirstOrDefault();
             var toTrivia = GetAllTrivia(tree.GetCompilationUnitRoot()).FirstOrDefault();
             var annotatedTrivia = fromTrivia.CopyAnnotationsTo(toTrivia);
-            Assert.Equal(annotatedTrivia, toTrivia); // Reference Equal
+            toTrivia.Should().Be(annotatedTrivia); // Reference Equal
         }
 
         #endregion
@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var tree = SyntaxFactory.ParseSyntaxTree(_allInOneCSharpCode, options: Test.Utilities.TestOptions.Regular);
 
             var matchingNodesOrTokens = tree.GetCompilationUnitRoot().GetAnnotatedNodesAndTokens(annotation);
-            Assert.Empty(matchingNodesOrTokens);
+            matchingNodesOrTokens.Should().BeEmpty();
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var tree = SyntaxFactory.ParseSyntaxTree(_allInOneCSharpCode, options: Test.Utilities.TestOptions.Regular);
 
             var matchingTrivia = tree.GetCompilationUnitRoot().GetAnnotatedTrivia(annotation);
-            Assert.Empty(matchingTrivia);
+            matchingTrivia.Should().BeEmpty();
         }
 
         #endregion
@@ -293,11 +293,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             // Pick the first node from new tree and see if any of its children is annotated
             var firstNodeInNewTree = GetAllNodesAndTokens(newRoot).First(t => t.IsNode).AsNode();
-            Assert.True(firstNodeInNewTree.ContainsAnnotations);
+            firstNodeInNewTree.ContainsAnnotations.Should().BeTrue();
 
             // Pick the node which was annotated and see if it has the annotation
             var rightNode = firstNodeInNewTree.ChildNodesAndTokens().Last(t => t.IsNode).AsNode();
-            Assert.NotNull(rightNode.GetAnnotations().Single());
+            rightNode.GetAnnotations().Single().Should().NotBeNull();
         }
 
         [Fact]
@@ -351,30 +351,30 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 var annotatedNodesOrTokens = newRoot.GetAnnotatedNodesAndTokens(annotation).OrderBy(t => t.SpanStart).ToList();
                 var actualNodesOrTokens = GetAllNodesAndTokens(oldRoot).OrderBy(t => t.SpanStart).ToList();
 
-                Assert.Equal(actualNodesOrTokens.Count, annotatedNodesOrTokens.Count);
+                annotatedNodesOrTokens.Count.Should().Be(actualNodesOrTokens.Count);
 
                 for (int i = 0; i < actualNodesOrTokens.Count(); i++)
                 {
                     var oldNode = actualNodesOrTokens.ElementAt(i);
                     var annotatedNode = annotatedNodesOrTokens.ElementAt(i);
-                    Assert.Equal(oldNode.FullSpan, annotatedNode.FullSpan);
-                    Assert.Equal(oldNode.Span, annotatedNode.Span);
-                    Assert.True(oldNode.IsEquivalentTo(annotatedNode));
+                    annotatedNode.FullSpan.Should().Be(oldNode.FullSpan);
+                    annotatedNode.Span.Should().Be(oldNode.Span);
+                    oldNode.IsEquivalentTo(annotatedNode).Should().BeTrue();
                 }
 
                 // Verify annotations in Trivia
                 var annotatedTrivia = newRoot.GetAnnotatedTrivia(annotation).OrderBy(t => t.SpanStart);
                 var actualTrivia = GetAllTrivia(oldRoot).OrderBy(t => t.SpanStart);
 
-                Assert.Equal(annotatedTrivia.Count(), actualTrivia.Count());
+                actualTrivia.Count().Should().Be(annotatedTrivia.Count());
 
                 for (int i = 0; i < actualTrivia.Count(); i++)
                 {
                     var oldTrivia = actualTrivia.ElementAt(i);
                     var newTrivia = annotatedTrivia.ElementAt(i);
-                    Assert.Equal(oldTrivia.FullSpan, newTrivia.FullSpan);
-                    Assert.Equal(oldTrivia.Span, newTrivia.Span);
-                    Assert.True(oldTrivia.IsEquivalentTo(newTrivia));
+                    newTrivia.FullSpan.Should().Be(oldTrivia.FullSpan);
+                    newTrivia.Span.Should().Be(oldTrivia.Span);
+                    oldTrivia.IsEquivalentTo(newTrivia).Should().BeTrue();
                 }
             }
         }
@@ -401,11 +401,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 var destNodeOrTokens = destTreeRoot.GetAnnotatedNodesAndTokens(annotation);
                 var destNodeOrTokenEnumerator = destNodeOrTokens.GetEnumerator();
 
-                Assert.Equal(sourceNodeOrTokens.Count(), destNodeOrTokens.Count());
+                destNodeOrTokens.Count().Should().Be(sourceNodeOrTokens.Count());
 
                 while (sourceNodeOrTokenEnumerator.MoveNext() && destNodeOrTokenEnumerator.MoveNext())
                 {
-                    Assert.True(sourceNodeOrTokenEnumerator.Current.IsEquivalentTo(destNodeOrTokenEnumerator.Current));
+                    sourceNodeOrTokenEnumerator.Current.IsEquivalentTo(destNodeOrTokenEnumerator.Current).Should().BeTrue();
                 }
 
                 // verify annotation at trivia
@@ -415,11 +415,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 var sourceTriviaEnumerator = sourceTrivia.GetEnumerator();
                 var destTriviaEnumerator = destTrivia.GetEnumerator();
 
-                Assert.Equal(sourceTrivia.Count(), destTrivia.Count());
+                destTrivia.Count().Should().Be(sourceTrivia.Count());
 
                 while (sourceTriviaEnumerator.MoveNext() && destTriviaEnumerator.MoveNext())
                 {
-                    Assert.True(sourceTriviaEnumerator.Current.IsEquivalentTo(destTriviaEnumerator.Current));
+                    sourceTriviaEnumerator.Current.IsEquivalentTo(destTriviaEnumerator.Current).Should().BeTrue();
                 }
             }
         }
@@ -615,42 +615,42 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var results = root.GetAnnotatedNodesAndTokens(annotation);
 
-            Assert.Equal(1, results.Count());
+            results.Count().Should().Be(1);
 
             var annotatedNode = results.Single().AsNode();
 
             // try to check whether it is same node as old node.
-            Assert.Equal(oldNode.FullSpan, annotatedNode.FullSpan);
-            Assert.Equal(oldNode.Span, annotatedNode.Span);
-            Assert.True(oldNode.IsEquivalentTo(annotatedNode));
+            annotatedNode.FullSpan.Should().Be(oldNode.FullSpan);
+            annotatedNode.Span.Should().Be(oldNode.Span);
+            oldNode.IsEquivalentTo(annotatedNode).Should().BeTrue();
         }
 
         private void TestAnnotation(SyntaxAnnotation annotation, SyntaxNode root, SyntaxToken oldToken)
         {
             var results = root.GetAnnotatedNodesAndTokens(annotation);
 
-            Assert.Equal(1, results.Count());
+            results.Count().Should().Be(1);
 
             var annotatedToken = results.Single().AsToken();
 
             // try to check whether it is same token as old token.
-            Assert.Equal(oldToken.FullSpan, annotatedToken.FullSpan);
-            Assert.Equal(oldToken.Span, annotatedToken.Span);
-            Assert.True(oldToken.IsEquivalentTo(annotatedToken));
+            annotatedToken.FullSpan.Should().Be(oldToken.FullSpan);
+            annotatedToken.Span.Should().Be(oldToken.Span);
+            oldToken.IsEquivalentTo(annotatedToken).Should().BeTrue();
         }
 
         private void TestAnnotation(SyntaxAnnotation annotation, SyntaxNode root, SyntaxTrivia oldTrivia)
         {
             var results = root.GetAnnotatedTrivia(annotation);
 
-            Assert.Equal(1, results.Count());
+            results.Count().Should().Be(1);
 
             var annotatedTrivia = results.Single();
 
             // try to check whether it is same token as old token.
-            Assert.Equal(oldTrivia.FullSpan, annotatedTrivia.FullSpan);
-            Assert.Equal(oldTrivia.Span, annotatedTrivia.Span);
-            Assert.True(oldTrivia.IsEquivalentTo(annotatedTrivia));
+            annotatedTrivia.FullSpan.Should().Be(oldTrivia.FullSpan);
+            annotatedTrivia.Span.Should().Be(oldTrivia.Span);
+            oldTrivia.IsEquivalentTo(annotatedTrivia).Should().BeTrue();
         }
 
         private List<SyntaxTrivia> GetAllTrivia(SyntaxNode root)
@@ -859,6 +859,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         private readonly string _helloWorldCode = @"using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 
 /// <summary>
 /// Sample Documentation

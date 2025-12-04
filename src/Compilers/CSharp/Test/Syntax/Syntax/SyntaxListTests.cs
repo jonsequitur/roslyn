@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Roslyn.Test.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -47,120 +48,120 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     SyntaxFactory.ParseExpression("B "),
                     SyntaxFactory.ParseExpression("C ") });
 
-            Assert.Equal(3, list.Count);
-            Assert.Equal("A", list[0].ToString());
-            Assert.Equal("B", list[1].ToString());
-            Assert.Equal("C", list[2].ToString());
-            Assert.Equal("A B C ", list.ToFullString());
+            list.Count.Should().Be(3);
+            list[0].ToString().Should().Be("A");
+            list[1].ToString().Should().Be("B");
+            list[2].ToString().Should().Be("C");
+            list.ToFullString().Should().Be("A B C ");
 
             var elementA = list[0];
             var elementB = list[1];
             var elementC = list[2];
 
-            Assert.Equal(0, list.IndexOf(elementA));
-            Assert.Equal(1, list.IndexOf(elementB));
-            Assert.Equal(2, list.IndexOf(elementC));
+            list.IndexOf(elementA).Should().Be(0);
+            list.IndexOf(elementB).Should().Be(1);
+            list.IndexOf(elementC).Should().Be(2);
 
             SyntaxNode nodeD = SyntaxFactory.ParseExpression("D ");
             SyntaxNode nodeE = SyntaxFactory.ParseExpression("E ");
 
             var newList = list.Add(nodeD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B C D ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B C D ");
 
             newList = list.AddRange(new[] { nodeD, nodeE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B C D E ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B C D E ");
 
             newList = list.Insert(0, nodeD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("D A B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("D A B C ");
 
             newList = list.Insert(1, nodeD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A D B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A D B C ");
 
             newList = list.Insert(2, nodeD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B D C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B D C ");
 
             newList = list.Insert(3, nodeD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B C D ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B C D ");
 
             newList = list.InsertRange(0, new[] { nodeD, nodeE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("D E A B C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("D E A B C ");
 
             newList = list.InsertRange(1, new[] { nodeD, nodeE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A D E B C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A D E B C ");
 
             newList = list.InsertRange(2, new[] { nodeD, nodeE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B D E C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B D E C ");
 
             newList = list.InsertRange(3, new[] { nodeD, nodeE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B C D E ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B C D E ");
 
             newList = list.RemoveAt(0);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.RemoveAt(list.Count - 1);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
             newList = list.Remove(elementA);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.Remove(elementB);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A C ");
 
             newList = list.Remove(elementC);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
             newList = list.Replace(elementA, nodeD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("D B C ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("D B C ");
 
             newList = list.Replace(elementB, nodeD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("A D C ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("A D C ");
 
             newList = list.Replace(elementC, nodeD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("A B D ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("A B D ");
 
             newList = list.ReplaceRange(elementA, new[] { nodeD, nodeE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("D E B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("D E B C ");
 
             newList = list.ReplaceRange(elementB, new[] { nodeD, nodeE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A D E C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A D E C ");
 
             newList = list.ReplaceRange(elementC, new[] { nodeD, nodeE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B D E ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B D E ");
 
             newList = list.ReplaceRange(elementA, new SyntaxNode[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.ReplaceRange(elementB, new SyntaxNode[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A C ");
 
             newList = list.ReplaceRange(elementC, new SyntaxNode[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
-            Assert.Equal(-1, list.IndexOf(nodeD));
+            list.IndexOf(nodeD).Should().Be(-1);
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, nodeD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(list.Count + 1, nodeD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { nodeD }));
@@ -183,31 +184,31 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         private void DoTestAddInsertRemoveReplaceOnEmptyList(SyntaxList<SyntaxNode> list)
         {
-            Assert.Equal(0, list.Count);
+            list.Count.Should().Be(0);
 
             SyntaxNode nodeD = SyntaxFactory.ParseExpression("D ");
             SyntaxNode nodeE = SyntaxFactory.ParseExpression("E ");
 
             var newList = list.Add(nodeD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("D ", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("D ");
 
             newList = list.AddRange(new[] { nodeD, nodeE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("D E ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("D E ");
 
             newList = list.Insert(0, nodeD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("D ", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("D ");
 
             newList = list.InsertRange(0, new[] { nodeD, nodeE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("D E ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("D E ");
 
             newList = list.Remove(nodeD);
-            Assert.Equal(0, newList.Count);
+            newList.Count.Should().Be(0);
 
-            Assert.Equal(-1, list.IndexOf(nodeD));
+            list.IndexOf(nodeD).Should().Be(-1);
             Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(0));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(1, nodeD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, nodeD));
@@ -234,8 +235,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var declaration = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("M"));
 
-            Assert.True(declaration.AttributeLists.Count == 0);
-            Assert.True(declaration.Modifiers.Count == 0);
+            declaration.AttributeLists.Count == 0.Should().BeTrue();
+            declaration.Modifiers.Count == 0.Should().BeTrue();
 
             declaration = declaration.AddAttributeLists(new[]
             {
@@ -243,13 +244,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     SyntaxFactory.Attribute(SyntaxFactory.ParseName("Attr")))),
             });
 
-            Assert.True(declaration.AttributeLists.Count == 1);
-            Assert.True(declaration.Modifiers.Count == 0);
+            declaration.AttributeLists.Count == 1.Should().BeTrue();
+            declaration.Modifiers.Count == 0.Should().BeTrue();
 
             declaration = declaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
 
-            Assert.True(declaration.AttributeLists.Count == 1);
-            Assert.True(declaration.Modifiers.Count == 1);
+            declaration.AttributeLists.Count == 1.Should().BeTrue();
+            declaration.Modifiers.Count == 1.Should().BeTrue();
         }
 
         [Fact]
@@ -261,17 +262,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     SyntaxFactory.IdentifierName("B"),
                     SyntaxFactory.ParseExpression("1") });
 
-            Assert.Equal(0, list.IndexOf(SyntaxKind.AddExpression));
-            Assert.True(list.Any(SyntaxKind.AddExpression));
+            list.IndexOf(SyntaxKind.AddExpression).Should().Be(0);
+            list.Any(SyntaxKind.AddExpression).Should().BeTrue();
 
-            Assert.Equal(1, list.IndexOf(SyntaxKind.IdentifierName));
-            Assert.True(list.Any(SyntaxKind.IdentifierName));
+            list.IndexOf(SyntaxKind.IdentifierName).Should().Be(1);
+            list.Any(SyntaxKind.IdentifierName).Should().BeTrue();
 
-            Assert.Equal(2, list.IndexOf(SyntaxKind.NumericLiteralExpression));
-            Assert.True(list.Any(SyntaxKind.NumericLiteralExpression));
+            list.IndexOf(SyntaxKind.NumericLiteralExpression).Should().Be(2);
+            list.Any(SyntaxKind.NumericLiteralExpression).Should().BeTrue();
 
-            Assert.Equal(-1, list.IndexOf(SyntaxKind.WhereClause));
-            Assert.False(list.Any(SyntaxKind.WhereClause));
+            list.IndexOf(SyntaxKind.WhereClause).Should().Be(-1);
+            list.Any(SyntaxKind.WhereClause).Should().BeFalse();
         }
 
         [Fact]
@@ -280,28 +281,28 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var alphabet = "abcdefghijklmnopqrstuvwxyz";
             var commaSeparatedList = string.Join(",", (IEnumerable<char>)alphabet);
             var parsedArgumentList = SyntaxFactory.ParseArgumentList(commaSeparatedList);
-            Assert.Equal(alphabet.Length, parsedArgumentList.Arguments.Count);
+            parsedArgumentList.Arguments.Count.Should().Be(alphabet.Length);
 
             for (int position = 0; position < parsedArgumentList.FullWidth; position++)
             {
                 var item = ChildSyntaxList.ChildThatContainsPosition(parsedArgumentList, position);
-                Assert.Equal(position, item.Position);
-                Assert.Equal(1, item.Width);
+                item.Position.Should().Be(position);
+                item.Width.Should().Be(1);
                 if (position % 2 == 0)
                 {
                     // Even. We should get a node
-                    Assert.True(item.IsNode);
-                    Assert.True(item.IsKind(SyntaxKind.Argument));
+                    item.IsNode.Should().BeTrue();
+                    item.IsKind(SyntaxKind.Argument).Should().BeTrue();
                     string expectedArgName = ((char)('a' + (position / 2))).ToString();
-                    Assert.Equal(expectedArgName, ((ArgumentSyntax)item).Expression.ToString());
+                    ((ArgumentSyntax)item).Expression.ToString().Should().Be(expectedArgName);
                 }
                 else
                 {
                     // Odd. We should get a comma
-                    Assert.True(item.IsToken);
-                    Assert.True(item.IsKind(SyntaxKind.CommaToken));
+                    item.IsToken.Should().BeTrue();
+                    item.IsKind(SyntaxKind.CommaToken).Should().BeTrue();
                     int expectedTokenIndex = position + 1; // + 1 because there is a (missing) OpenParen at slot 0
-                    Assert.Equal(expectedTokenIndex, item.AsToken().Index);
+                    item.AsToken().Index.Should().Be(expectedTokenIndex);
                 }
             }
         }

@@ -7,6 +7,7 @@
 using System;
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
 {
@@ -29,8 +30,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithInsertBefore("public", "async ");
 
-                Assert.Equal(default(SyntaxNodeOrToken), oldTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression));
-                Assert.NotEqual(default(SyntaxNodeOrToken), newTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression));
+                oldTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression).Should().Be(default(SyntaxNodeOrToken));
+                newTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression).Should().NotBe(default(SyntaxNodeOrToken));
             });
         }
 
@@ -50,8 +51,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithRemoveFirst("async");
 
-                Assert.NotEqual(default(SyntaxNodeOrToken), oldTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression));
-                Assert.Equal(default(SyntaxNodeOrToken), newTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression));
+                oldTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression).Should().NotBe(default(SyntaxNodeOrToken));
+                newTree.FindNodeOrTokenByKind(SyntaxKind.AwaitExpression).Should().Be(default(SyntaxNodeOrToken));
             });
         }
 

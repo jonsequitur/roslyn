@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
 {
@@ -81,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             // Make the change to the node
             var newTree = oldTree.WithReplaceFirst(oldName, newName);
             var treeNode = topLevel ? GetGlobalExpressionNode(newTree) : GetExpressionNode(newTree);
-            Assert.Equal(treeNode.Kind(), newSyntaxKind);
+            newSyntaxKind.Should().Be(treeNode.Kind());
         }
 
         private static PrefixUnaryExpressionSyntax GetExpressionNode(SyntaxTree newTree)
@@ -97,8 +98,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
         private static PrefixUnaryExpressionSyntax GetGlobalExpressionNode(SyntaxTree newTree)
         {
             var statementType = newTree.GetCompilationUnitRoot().Members[0] as GlobalStatementSyntax;
-            Assert.True(statementType.AttributeLists.Count == 0);
-            Assert.True(statementType.Modifiers.Count == 0);
+            statementType.AttributeLists.Count == 0.Should().BeTrue();
+            statementType.Modifiers.Count == 0.Should().BeTrue();
             var statement = statementType.Statement as ExpressionStatementSyntax;
             var expression = statement.Expression as PrefixUnaryExpressionSyntax;
             return expression;

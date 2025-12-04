@@ -7,6 +7,7 @@
 using System;
 using Roslyn.Test.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -14,29 +15,29 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
     {
         private void VerifyEquivalent(SyntaxTree tree1, SyntaxTree tree2, bool topLevel)
         {
-            Assert.True(SyntaxFactory.AreEquivalent(tree1, tree2, topLevel));
+            SyntaxFactory.AreEquivalent(tree1, tree2, topLevel).Should().BeTrue();
 
             // now try as if the second tree were created from scratch.
             var tree3 = SyntaxFactory.ParseSyntaxTree(tree2.GetText().ToString());
-            Assert.True(SyntaxFactory.AreEquivalent(tree1, tree3, topLevel));
+            SyntaxFactory.AreEquivalent(tree1, tree3, topLevel).Should().BeTrue();
         }
 
         private void VerifyNotEquivalent(SyntaxTree tree1, SyntaxTree tree2, bool topLevel)
         {
-            Assert.False(SyntaxFactory.AreEquivalent(tree1, tree2, topLevel));
+            SyntaxFactory.AreEquivalent(tree1, tree2, topLevel).Should().BeFalse();
 
             // now try as if the second tree were created from scratch.
             var tree3 = SyntaxFactory.ParseSyntaxTree(tree2.GetText().ToString());
-            Assert.False(SyntaxFactory.AreEquivalent(tree1, tree3, topLevel));
+            SyntaxFactory.AreEquivalent(tree1, tree3, topLevel).Should().BeFalse();
         }
 
         private void VerifyEquivalent(SyntaxNode node1, SyntaxNode node2, Func<SyntaxKind, bool> ignoreChildNode)
         {
-            Assert.True(SyntaxFactory.AreEquivalent(node1, node2, ignoreChildNode));
+            SyntaxFactory.AreEquivalent(node1, node2, ignoreChildNode).Should().BeTrue();
 
             // now try as if the second tree were created from scratch.
             var tree3 = SyntaxFactory.ParseSyntaxTree(node2.GetText().ToString());
-            Assert.True(SyntaxFactory.AreEquivalent(node1, tree3.GetRoot(), ignoreChildNode));
+            SyntaxFactory.AreEquivalent(node1, tree3.GetRoot(), ignoreChildNode).Should().BeTrue();
         }
 
         [Fact]

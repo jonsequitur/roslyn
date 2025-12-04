@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.Test.Utilities;
 using Roslyn.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -3037,12 +3038,12 @@ case KeyValuePair<String, DateTime>[] pairs2:
                 catch (StackOverflowException)
                 {
                     Console.WriteLine("Failed on \"" + source + "\"");
-                    Assert.True(false, source);
+                    false.Should().BeTrue(source);
                 }
                 catch (OutOfMemoryException)
                 {
                     Console.WriteLine("Failed on \"" + source + "\"");
-                    Assert.True(false, source);
+                    false.Should().BeTrue(source);
                 }
             }
             return;

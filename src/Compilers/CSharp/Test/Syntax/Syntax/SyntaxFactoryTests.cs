@@ -14,6 +14,7 @@ using Roslyn.Test.Utilities;
 using Xunit;
 using InternalSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -23,64 +24,64 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void AlternateVerbatimString()
         {
             var token = SyntaxFactory.Token(SyntaxKind.InterpolatedVerbatimStringStartToken);
-            Assert.Equal("$@\"", token.Text);
-            Assert.Equal("$@\"", token.ValueText);
+            token.Text.Should().Be("$@\"");
+            token.ValueText.Should().Be("$@\"");
         }
 
         [Fact]
         public void SyntaxTree()
         {
             var text = SyntaxFactory.SyntaxTree(SyntaxFactory.CompilationUnit(), encoding: null).GetText();
-            Assert.Null(text.Encoding);
-            Assert.Equal(SourceHashAlgorithm.Sha1, text.ChecksumAlgorithm);
+            text.Encoding.Should().BeNull();
+            text.ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         [Fact]
         public void SyntaxTreeFromNode()
         {
             var text = SyntaxFactory.CompilationUnit().SyntaxTree.GetText();
-            Assert.Null(text.Encoding);
-            Assert.Equal(SourceHashAlgorithm.Sha1, text.ChecksumAlgorithm);
+            text.Encoding.Should().BeNull();
+            text.ChecksumAlgorithm.Should().Be(SourceHashAlgorithm.Sha1);
         }
 
         [Fact]
         public void TestConstructNamespaceWithNameOnly()
         {
             var n = SyntaxFactory.NamespaceDeclaration(name: SyntaxFactory.IdentifierName(SyntaxFactory.Identifier("goo")));
-            Assert.NotNull(n);
-            Assert.Equal(0, n.Errors().Length);
-            Assert.Equal(0, n.Externs.Count);
-            Assert.Equal(0, n.Usings.Count);
-            Assert.False(n.NamespaceKeyword.IsMissing);
-            Assert.Equal(9, n.NamespaceKeyword.Width);
-            Assert.False(n.OpenBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.OpenBraceToken, n.OpenBraceToken.Kind());
-            Assert.Equal(1, n.OpenBraceToken.Width);
-            Assert.Equal(0, n.Members.Count);
-            Assert.False(n.CloseBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.CloseBraceToken, n.CloseBraceToken.Kind());
-            Assert.Equal(1, n.CloseBraceToken.Width);
-            Assert.Equal(SyntaxKind.None, n.SemicolonToken.Kind());
+            n.Should().NotBeNull();
+            n.Errors().Length.Should().Be(0);
+            n.Externs.Count.Should().Be(0);
+            n.Usings.Count.Should().Be(0);
+            n.NamespaceKeyword.IsMissing.Should().BeFalse();
+            n.NamespaceKeyword.Width.Should().Be(9);
+            n.OpenBraceToken.IsMissing.Should().BeFalse();
+            n.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            n.OpenBraceToken.Width.Should().Be(1);
+            n.Members.Count.Should().Be(0);
+            n.CloseBraceToken.IsMissing.Should().BeFalse();
+            n.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            n.CloseBraceToken.Width.Should().Be(1);
+            n.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
         }
 
         [Fact]
         public void TestConstructClassWithKindAndNameOnly()
         {
             var c = SyntaxFactory.ClassDeclaration(identifier: SyntaxFactory.Identifier("goo"));
-            Assert.NotNull(c);
-            Assert.Equal(0, c.AttributeLists.Count);
-            Assert.Equal(0, c.Modifiers.Count);
-            Assert.Equal(5, c.Keyword.Width);
-            Assert.Equal(SyntaxKind.ClassKeyword, c.Keyword.Kind());
-            Assert.Equal(0, c.ConstraintClauses.Count);
-            Assert.False(c.OpenBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.OpenBraceToken, c.OpenBraceToken.Kind());
-            Assert.Equal(1, c.OpenBraceToken.Width);
-            Assert.Equal(0, c.Members.Count);
-            Assert.False(c.CloseBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.CloseBraceToken, c.CloseBraceToken.Kind());
-            Assert.Equal(1, c.CloseBraceToken.Width);
-            Assert.Equal(SyntaxKind.None, c.SemicolonToken.Kind());
+            c.Should().NotBeNull();
+            c.AttributeLists.Count.Should().Be(0);
+            c.Modifiers.Count.Should().Be(0);
+            c.Keyword.Width.Should().Be(5);
+            c.Keyword.Kind().Should().Be(SyntaxKind.ClassKeyword);
+            c.ConstraintClauses.Count.Should().Be(0);
+            c.OpenBraceToken.IsMissing.Should().BeFalse();
+            c.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            c.OpenBraceToken.Width.Should().Be(1);
+            c.Members.Count.Should().Be(0);
+            c.CloseBraceToken.IsMissing.Should().BeFalse();
+            c.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            c.CloseBraceToken.Width.Should().Be(1);
+            c.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
         }
 
         [WorkItem(528399, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/528399")]
@@ -98,9 +99,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Func<string, SyntaxToken> makeStringLiteral = value =>
                 SyntaxFactory.ParseToken(string.Format("\"{0}\"", value)).WithLeadingTrivia(SyntaxFactory.ElasticMarker).WithTrailingTrivia(SyntaxFactory.ElasticMarker);
             var t = SyntaxFactory.PragmaChecksumDirectiveTrivia(makeStringLiteral("file"), makeStringLiteral("guid"), makeStringLiteral("bytes"), true);
-            Assert.Equal(SyntaxKind.PragmaChecksumDirectiveTrivia, t.Kind());
-            Assert.Equal("#pragmachecksum\"file\"\"guid\"\"bytes\"", t.ToString());
-            Assert.Equal("#pragma checksum \"file\" \"guid\" \"bytes\"\r\n", t.NormalizeWhitespace().ToFullString());
+            t.Kind().Should().Be(SyntaxKind.PragmaChecksumDirectiveTrivia);
+            t.ToString().Should().Be("#pragmachecksum\"file\"\"guid\"\"bytes\"");
+            t.NormalizeWhitespace().ToFullString().Should().Be("#pragma checksum \"file\" \"guid\" \"bytes\"\r\n");
         }
 
         [Fact]
@@ -141,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 }
                 catch (ArgumentException e)
                 {
-                    Assert.Contains(typeof(SyntaxFactory).ToString(), e.Message); // Make sure the class/namespace aren't updated without also updating the exception message
+                    e.Message.Should().Contain(typeof(SyntaxFactory).ToString()); // Make sure the class/namespace aren't updated without also updating the exception message
                 }
 
                 try
@@ -152,7 +153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 }
                 catch (ArgumentException e)
                 {
-                    Assert.Contains(typeof(SyntaxFactory).ToString(), e.Message); // Make sure the class/namespace aren't updated without also updating the exception message
+                    e.Message.Should().Contain(typeof(SyntaxFactory).ToString()); // Make sure the class/namespace aren't updated without also updating the exception message
                 }
 
                 try
@@ -163,7 +164,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 }
                 catch (ArgumentException e)
                 {
-                    Assert.Contains(typeof(SyntaxFactory).ToString(), e.Message); // Make sure the class/namespace aren't updated without also updating the exception message
+                    e.Message.Should().Contain(typeof(SyntaxFactory).ToString()); // Make sure the class/namespace aren't updated without also updating the exception message
                 }
             }
 
@@ -186,7 +187,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
                 var expectedGreen = InternalSyntax.SyntaxFactory.Token(InternalSyntax.SyntaxFactory.ElasticZeroSpace, kind, InternalSyntax.SyntaxFactory.ElasticZeroSpace);
 
-                Assert.Same(expectedGreen, actualGreen); // Don't create a new token if we don't have to.
+                actualGreen.Should().BeSameAs(expectedGreen); // Don't create a new token if we don't have to.
             }
         }
 
@@ -203,17 +204,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
                 var token = SyntaxFactory.Token(SyntaxTriviaList.Create(SyntaxFactory.ElasticMarker), kind, text, valueText, SyntaxTriviaList.Create(SyntaxFactory.ElasticMarker));
 
-                Assert.Equal(kind, token.Kind());
-                Assert.Equal(text, token.Text);
-                Assert.Equal(valueText, token.ValueText);
+                token.Kind().Should().Be(kind);
+                token.Text.Should().Be(text);
+                token.ValueText.Should().Be(valueText);
 
                 if (string.IsNullOrEmpty(valueText))
                 {
-                    Assert.IsType<InternalSyntax.SyntaxToken.SyntaxTokenWithTrivia>(token.Node);
+                    token.Node.Should().BeOfType<InternalSyntax.SyntaxToken.SyntaxTokenWithTrivia>();
                 }
                 else
                 {
-                    Assert.IsType<InternalSyntax.SyntaxToken.SyntaxTokenWithValueAndTrivia<string>>(token.Node);
+                    token.Node.Should().BeOfType<InternalSyntax.SyntaxToken.SyntaxTokenWithValueAndTrivia<string>>();
                 }
             }
         }
@@ -223,45 +224,45 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var null1 = SyntaxFactory.SeparatedList((ParameterSyntax[])null);
 
-            Assert.Equal(0, null1.Count);
-            Assert.Equal(0, null1.SeparatorCount);
-            Assert.Equal("", null1.ToString());
+            null1.Count.Should().Be(0);
+            null1.SeparatorCount.Should().Be(0);
+            null1.ToString().Should().Be("");
 
             var null2 = SyntaxFactory.SeparatedList((System.Collections.Generic.IEnumerable<VariableDeclaratorSyntax>)null);
 
-            Assert.Equal(0, null2.Count);
-            Assert.Equal(0, null2.SeparatorCount);
-            Assert.Equal("", null2.ToString());
+            null2.Count.Should().Be(0);
+            null2.SeparatorCount.Should().Be(0);
+            null2.ToString().Should().Be("");
 
             var empty1 = SyntaxFactory.SeparatedList(new TypeArgumentListSyntax[] { });
 
-            Assert.Equal(0, empty1.Count);
-            Assert.Equal(0, empty1.SeparatorCount);
-            Assert.Equal("", empty1.ToString());
+            empty1.Count.Should().Be(0);
+            empty1.SeparatorCount.Should().Be(0);
+            empty1.ToString().Should().Be("");
 
             var empty2 = SyntaxFactory.SeparatedList(System.Linq.Enumerable.Empty<TypeParameterSyntax>());
 
-            Assert.Equal(0, empty2.Count);
-            Assert.Equal(0, empty2.SeparatorCount);
-            Assert.Equal("", empty2.ToString());
+            empty2.Count.Should().Be(0);
+            empty2.SeparatorCount.Should().Be(0);
+            empty2.ToString().Should().Be("");
 
             var singleton1 = SyntaxFactory.SeparatedList(new[] { SyntaxFactory.IdentifierName("a") });
 
-            Assert.Equal(1, singleton1.Count);
-            Assert.Equal(0, singleton1.SeparatorCount);
-            Assert.Equal("a", singleton1.ToString());
+            singleton1.Count.Should().Be(1);
+            singleton1.SeparatorCount.Should().Be(0);
+            singleton1.ToString().Should().Be("a");
 
             var singleton2 = SyntaxFactory.SeparatedList((System.Collections.Generic.IEnumerable<ExpressionSyntax>)new[] { SyntaxFactory.IdentifierName("x") });
 
-            Assert.Equal(1, singleton2.Count);
-            Assert.Equal(0, singleton2.SeparatorCount);
-            Assert.Equal("x", singleton2.ToString());
+            singleton2.Count.Should().Be(1);
+            singleton2.SeparatorCount.Should().Be(0);
+            singleton2.ToString().Should().Be("x");
 
             var list1 = SyntaxFactory.SeparatedList(new[] { SyntaxFactory.IdentifierName("a"), SyntaxFactory.IdentifierName("b"), SyntaxFactory.IdentifierName("c") });
 
-            Assert.Equal(3, list1.Count);
-            Assert.Equal(2, list1.SeparatorCount);
-            Assert.Equal("a,b,c", list1.ToString());
+            list1.Count.Should().Be(3);
+            list1.SeparatorCount.Should().Be(2);
+            list1.ToString().Should().Be("a,b,c");
 
             var builder = new System.Collections.Generic.List<ArgumentSyntax>();
             builder.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("x")));
@@ -270,9 +271,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             var list2 = SyntaxFactory.SeparatedList<ArgumentSyntax>(builder);
 
-            Assert.Equal(3, list2.Count);
-            Assert.Equal(2, list2.SeparatorCount);
-            Assert.Equal("x,y,z", list2.ToString());
+            list2.Count.Should().Be(3);
+            list2.SeparatorCount.Should().Be(2);
+            list2.ToString().Should().Be("x,y,z");
         }
 
         [Fact]
@@ -362,7 +363,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             // decimal values should render as , instead of .
             TestLiteralDefaultStringValues();
             var literal = SyntaxFactory.Literal(3.14);
-            Assert.Equal("3.14", literal.ValueText);
+            literal.ValueText.Should().Be("3.14");
 
             CultureInfo.CurrentCulture = culture;
         }
@@ -372,7 +373,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestEscapeLineSeparator()
         {
             var literal = SyntaxFactory.Literal("\u2028");
-            Assert.Equal("\"\\u2028\"", literal.Text);
+            literal.Text.Should().Be("\"\\u2028\"");
         }
 
         [WorkItem(20693, "https://github.com/dotnet/roslyn/issues/20693")]
@@ -380,13 +381,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestEscapeSurrogate()
         {
             var literal = SyntaxFactory.Literal('\uDBFF');
-            Assert.Equal("'\\udbff'", literal.Text);
+            literal.Text.Should().Be("'\\udbff'");
         }
 
         private static void CheckLiteralToString(dynamic value, string expected)
         {
             var literal = SyntaxFactory.Literal(value);
-            Assert.Equal(expected, literal.ToString());
+            literal.ToString().Should().Be(expected);
         }
 
         private static string ToXmlEntities(string str)
@@ -406,11 +407,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void GetTokenDiagnosticsWithoutSyntaxTree_WithDiagnostics()
         {
             var tokens = SyntaxFactory.ParseTokens("1l").ToList();
-            Assert.Equal(2, tokens.Count); // { "1l", "EOF" }
+            tokens.Count.Should().Be(2); // { "1l", "EOF" }
 
             var literal = tokens.First();
-            Assert.Equal("1l", literal.Text);
-            Assert.Equal(Location.None, literal.GetLocation());
+            literal.Text.Should().Be("1l");
+            literal.GetLocation().Should().Be(Location.None);
 
             literal.GetDiagnostics().Verify();
         }
@@ -420,11 +421,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void GetTokenDiagnosticsWithoutSyntaxTree_WithoutDiagnostics()
         {
             var tokens = SyntaxFactory.ParseTokens("1L").ToList();
-            Assert.Equal(2, tokens.Count); // { "1L", "EOF" }
+            tokens.Count.Should().Be(2); // { "1L", "EOF" }
 
             var literal = tokens.First();
-            Assert.Equal("1L", literal.Text);
-            Assert.Equal(Location.None, literal.GetLocation());
+            literal.Text.Should().Be("1L");
+            literal.GetLocation().Should().Be(Location.None);
 
             literal.GetDiagnostics().Verify();
         }
@@ -434,11 +435,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void GetTokenDiagnosticsWithSyntaxTree_WithDiagnostics()
         {
             var expression = (LiteralExpressionSyntax)SyntaxFactory.ParseExpression("1l");
-            Assert.Equal("1l", expression.Token.Text);
-            Assert.NotNull(expression.Token.SyntaxTree);
+            expression.Token.Text.Should().Be("1l");
+            expression.Token.SyntaxTree.Should().NotBeNull();
 
             var expectedLocation = Location.Create(expression.Token.SyntaxTree, TextSpan.FromBounds(0, 2));
-            Assert.Equal(expectedLocation, expression.Token.GetLocation());
+            expression.Token.GetLocation().Should().Be(expectedLocation);
 
             expression.Token.GetDiagnostics().Verify();
         }
@@ -448,11 +449,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void GetTokenDiagnosticsWithSyntaxTree_WithoutDiagnostics()
         {
             var expression = (LiteralExpressionSyntax)SyntaxFactory.ParseExpression("1L");
-            Assert.Equal("1L", expression.Token.Text);
-            Assert.NotNull(expression.Token.SyntaxTree);
+            expression.Token.Text.Should().Be("1L");
+            expression.Token.SyntaxTree.Should().NotBeNull();
 
             var expectedLocation = Location.Create(expression.Token.SyntaxTree, TextSpan.FromBounds(0, 2));
-            Assert.Equal(expectedLocation, expression.Token.GetLocation());
+            expression.Token.GetLocation().Should().Be(expectedLocation);
 
             expression.Token.GetDiagnostics().Verify();
         }
@@ -462,7 +463,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void GetDiagnosticsFromNullToken()
         {
             var token = new SyntaxToken(null);
-            Assert.Equal(Location.None, token.GetLocation());
+            token.GetLocation().Should().Be(Location.None);
             token.GetDiagnostics().Verify();
         }
 
@@ -487,7 +488,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 .NormalizeWhitespace();
 
             // no space between int and ?
-            Assert.Equal("class C\r\n{\r\n    int? P { }\r\n}", syntaxNode.ToFullString());
+            syntaxNode.ToFullString().Should().Be("class C\r\n{\r\n    int? P { }\r\n}");
         }
 
         [Fact]
@@ -510,7 +511,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 .NormalizeWhitespace();
 
             // no space between DateTime and ?
-            Assert.Equal("class C\r\n{\r\n    DateTime? P { }\r\n}", syntaxNode.ToFullString());
+            syntaxNode.ToFullString().Should().Be("class C\r\n{\r\n    DateTime? P { }\r\n}");
         }
 
         [Fact]
@@ -520,12 +521,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var syntaxNode = SyntaxFactory.ParseExpression("x is int? y: z").NormalizeWhitespace();
 
             // space between int and ?
-            Assert.Equal("x is int ? y : z", syntaxNode.ToFullString());
+            syntaxNode.ToFullString().Should().Be("x is int ? y : z");
 
             var syntaxNode2 = SyntaxFactory.ParseExpression("x is DateTime? y: z").NormalizeWhitespace();
 
             // space between DateTime and ?
-            Assert.Equal("x is DateTime ? y : z", syntaxNode2.ToFullString());
+            syntaxNode2.ToFullString().Should().Be("x is DateTime ? y : z");
         }
 
         [Fact]
@@ -533,13 +534,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestSpacingOnCoalescing()
         {
             var syntaxNode = SyntaxFactory.ParseExpression("x is int??y").NormalizeWhitespace();
-            Assert.Equal("x is int ?? y", syntaxNode.ToFullString());
+            syntaxNode.ToFullString().Should().Be("x is int ?? y");
 
             var syntaxNode2 = SyntaxFactory.ParseExpression("x is DateTime??y").NormalizeWhitespace();
-            Assert.Equal("x is DateTime ?? y", syntaxNode2.ToFullString());
+            syntaxNode2.ToFullString().Should().Be("x is DateTime ?? y");
 
             var syntaxNode3 = SyntaxFactory.ParseExpression("x is object??y").NormalizeWhitespace();
-            Assert.Equal("x is object ?? y", syntaxNode3.ToFullString());
+            syntaxNode3.ToFullString().Should().Be("x is object ?? y");
         }
 
         [Fact]
@@ -558,31 +559,31 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 body: (BlockSyntax)SyntaxFactory.ParseStatement("{}"),
                 semicolonToken: SyntaxFactory.Token(SyntaxKind.SemicolonToken)
                 );
-            Assert.Equal("int[]M(){};", syntaxNode.ToFullString());
+            syntaxNode.ToFullString().Should().Be("int[]M(){};");
         }
 
         [Fact, WorkItem(40342, "https://github.com/dotnet/roslyn/issues/40342")]
         public void TestParenthesizedLambdaNoParameterList()
         {
             var lambda = SyntaxFactory.ParenthesizedLambdaExpression(body: SyntaxFactory.Block());
-            Assert.NotNull(lambda);
-            Assert.Equal("()=>{}", lambda.ToFullString());
+            lambda.Should().NotBeNull();
+            lambda.ToFullString().Should().Be("()=>{}");
 
             var fullySpecified = SyntaxFactory.ParenthesizedLambdaExpression(parameterList: SyntaxFactory.ParameterList(), body: SyntaxFactory.Block());
-            Assert.Equal(fullySpecified.ToFullString(), lambda.ToFullString());
+            lambda.ToFullString().Should().Be(fullySpecified.ToFullString());
         }
 
         [Fact, WorkItem(40342, "https://github.com/dotnet/roslyn/issues/40342")]
         public void TestParenthesizedLambdaNoParameterList_ExpressionBody()
         {
             var lambda = SyntaxFactory.ParenthesizedLambdaExpression(body: SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(1)));
-            Assert.NotNull(lambda);
-            Assert.Equal("()=>1", lambda.ToFullString());
+            lambda.Should().NotBeNull();
+            lambda.ToFullString().Should().Be("()=>1");
 
             var fullySpecified = SyntaxFactory.ParenthesizedLambdaExpression(
                 parameterList: SyntaxFactory.ParameterList(),
                 body: SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(1)));
-            Assert.Equal(fullySpecified.ToFullString(), lambda.ToFullString());
+            lambda.ToFullString().Should().Be(fullySpecified.ToFullString());
         }
 
         [Fact]

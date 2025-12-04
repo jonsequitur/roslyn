@@ -28,23 +28,23 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var tree = SyntaxFactory.ParseSyntaxTree(SourceText.From(text), options);
             var toText = tree.GetCompilationUnitRoot().ToFullString();
 
-            Assert.Equal(text, toText);
+            toText.Should().Be(text);
 
             // -1 mean there are errors but actual number of errors is not important.
             // it makes the test more robust in case error count changes
             if (errorCount == -1)
             {
-                Assert.NotEqual(0, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+                tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().NotBe(0);
             }
             else
             {
-                Assert.Equal(errorCount, tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length);
+                tree.GetCompilationUnitRoot().ErrorsAndWarnings().Length.Should().Be(errorCount);
             }
 
             // check member count only if > 0
             if (memberCount > 0)
             {
-                Assert.Equal(memberCount, tree.GetCompilationUnitRoot().Members.Count);
+                tree.GetCompilationUnitRoot().Members.Count.Should().Be(memberCount);
             }
 
             ParentChecker.CheckParents(tree.GetCompilationUnitRoot(), tree);
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var tree = SyntaxFactory.ParseSyntaxTree(text);
             var toText = tree.GetCompilationUnitRoot().ToFullString();
-            Assert.Equal(text, toText);
+            toText.Should().Be(text);
 
             var nodes = tree.GetCompilationUnitRoot().DescendantTokens(tk => tk.FullWidth > 0).ToList();
             if (nodes.Count > 0)
@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 for (int i = 1; i < nodes.Count; i++)
                 {
                     var span = nodes[i].FullSpan;
-                    Assert.Equal(prevSpan.End, span.Start);
+                    span.Start.Should().Be(prevSpan.End);
                     prevSpan = span;
                 }
             }
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             string text = "abc" + char.MaxValue + "def";
             var tree = SyntaxFactory.ParseSyntaxTree(SourceText.From(text), path: "");
             var toText = tree.GetCompilationUnitRoot().ToFullString();
-            Assert.Equal(text, toText);
+            toText.Should().Be(text);
         }
 
         [Fact]
@@ -1381,8 +1381,8 @@ public class A : Attribute
 }";
             ParseAndRoundTripping(text, -1);
 
-            // Assert.Equal((int)ErrorCode.ERR_SyntaxError, tree.Errors()[0].Code); // CS1003
-            // Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, tree.Errors()[1].Code); // CS1519
+            // tree.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError); // CS1003
+            // tree.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl); // CS1519
         }
 
         [WorkItem(911477, "DevDiv/Personal")]
@@ -1402,7 +1402,7 @@ public class C
             // The warning WRN_ExternCtorNoImplementation is given in semantic analysis.
             ParseAndRoundTripping(text); // , 1);
 
-            // Assert.Equal((int)ErrorCode.WRN_ExternCtorNoImplementation, tree.Errors()[0].Code); // W CS0824
+            // tree.Errors()[0].Code.Should().Be((int)ErrorCode.WRN_ExternCtorNoImplementation); // W CS0824
         }
 
         [WorkItem(911488, "DevDiv/Personal")]
@@ -1581,7 +1581,7 @@ class A
             var itext = SourceText.From(text);
             var tree = SyntaxFactory.ParseSyntaxTree(itext, options, "");
             var newTest = tree.GetCompilationUnitRoot().ToFullString();
-            Assert.Equal(text, newTest);
+            newTest.Should().Be(text);
         }
 
         [WorkItem(527490, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/527490")]
@@ -1590,12 +1590,12 @@ class A
         {
             string text = "typeof(System.String value)";
             var typeOfExpression = SyntaxFactory.ParseExpression(text, consumeFullText: true);
-            Assert.Equal(text, typeOfExpression.ToFullString());
-            Assert.NotEmpty(typeOfExpression.GetDiagnostics());
+            typeOfExpression.ToFullString().Should().Be(text);
+            typeOfExpression.GetDiagnostics().Should().NotBeEmpty();
 
             typeOfExpression = SyntaxFactory.ParseExpression(text, consumeFullText: false);
-            Assert.Equal("typeof(System.String ", typeOfExpression.ToFullString());
-            Assert.NotEmpty(typeOfExpression.GetDiagnostics());
+            typeOfExpression.ToFullString().Should().Be("typeof(System.String ");
+            typeOfExpression.GetDiagnostics().Should().NotBeEmpty();
         }
 
         [WorkItem(540809, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/540809")]
@@ -1669,6 +1669,7 @@ class Program
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 
 class Program
 {

@@ -36,13 +36,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var parsedText = parsedTree.GetCompilationUnitRoot();
 
             // we validate the text roundtrips
-            Assert.Equal(text, parsedText.ToFullString());
+            parsedText.ToFullString().Should().Be(text);
 
             // get all errors
             var actualErrors = parsedTree.GetDiagnostics(parsedText);
             if (errors == null || errors.Length == 0)
             {
-                Assert.Empty(actualErrors);
+                actualErrors.Should().BeEmpty();
             }
             else
             {
@@ -188,7 +188,7 @@ bar();
                 // (1,7): error CS1002: ; expected
                 // int x y;
                 Diagnostic(ErrorCode.ERR_SemicolonExpected, "y").WithLocation(1, 7));
-            Assert.True(tree.GetCompilationUnitRoot().ContainsDiagnostics);
+            tree.GetCompilationUnitRoot().ContainsDiagnostics.Should().BeTrue();
 
             N(SyntaxKind.CompilationUnit);
             {
@@ -230,7 +230,7 @@ bar();
                 // (1,7): error CS1002: ; expected
                 // int x y z;
                 Diagnostic(ErrorCode.ERR_SemicolonExpected, "y").WithLocation(1, 7));
-            Assert.True(tree.GetCompilationUnitRoot().ContainsDiagnostics);
+            tree.GetCompilationUnitRoot().ContainsDiagnostics.Should().BeTrue();
 
             N(SyntaxKind.CompilationUnit);
             {
@@ -2641,7 +2641,7 @@ fixed int x[10];
         {
             var tree = UsingTree(@"a * b", TestOptions.Script);
 
-            Assert.False(tree.GetCompilationUnitRoot().ContainsDiagnostics);
+            tree.GetCompilationUnitRoot().ContainsDiagnostics.Should().BeFalse();
 
             N(SyntaxKind.CompilationUnit);
             {
@@ -2673,7 +2673,7 @@ fixed int x[10];
         public void Multiplication_Complex()
         {
             var tree = UsingTree(@"a<t>.n * f(x)", TestOptions.Script);
-            Assert.False(tree.GetCompilationUnitRoot().ContainsDiagnostics);
+            tree.GetCompilationUnitRoot().ContainsDiagnostics.Should().BeFalse();
 
             N(SyntaxKind.CompilationUnit);
             {
@@ -9484,6 +9484,7 @@ int नुसौप्रख्यातनिदेशकपुरानी
         {
             var test = @"
 using System;
+using AwesomeAssertions;
 int a
 Console.Goo()
 ";
@@ -9612,8 +9613,8 @@ p class A
             var test = @"/";
             var tree = SyntaxFactory.ParseSyntaxTree(test, options: TestOptions.Script);
 
-            Assert.Equal(1, tree.GetCompilationUnitRoot().ChildNodes().Count());
-            Assert.Equal(SyntaxKind.GlobalStatement, tree.GetCompilationUnitRoot().ChildNodes().ToList()[0].Kind());
+            tree.GetCompilationUnitRoot().ChildNodes().Count().Should().Be(1);
+            tree.GetCompilationUnitRoot().ChildNodes().ToList()[0].Kind().Should().Be(SyntaxKind.GlobalStatement);
         }
 
         [WorkItem(541164, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/541164")]
@@ -9637,26 +9638,26 @@ p class A
             var tree = ParseAndValidate($"#!{command}", TestOptions.Script);
             var root = tree.GetCompilationUnitRoot();
 
-            Assert.Empty(root.ChildNodes());
+            root.ChildNodes().Should().BeEmpty();
             var eof = root.EndOfFileToken;
-            Assert.Equal(SyntaxKind.EndOfFileToken, eof.Kind());
+            eof.Kind().Should().Be(SyntaxKind.EndOfFileToken);
             var trivia = eof.GetLeadingTrivia().Single();
             TestShebang(trivia, command);
-            Assert.True(root.ContainsDirectives);
+            root.ContainsDirectives.Should().BeTrue();
             TestShebang(root.GetDirectives().Single(), command);
 
             tree = ParseAndValidate($"#! {command}\r\n ", TestOptions.Script);
             root = tree.GetCompilationUnitRoot();
 
-            Assert.Empty(root.ChildNodes());
+            root.ChildNodes().Should().BeEmpty();
             eof = root.EndOfFileToken;
-            Assert.Equal(SyntaxKind.EndOfFileToken, eof.Kind());
+            eof.Kind().Should().Be(SyntaxKind.EndOfFileToken);
             var leading = eof.GetLeadingTrivia().ToArray();
-            Assert.Equal(2, leading.Length);
-            Assert.Equal(SyntaxKind.ShebangDirectiveTrivia, leading[0].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, leading[1].Kind());
+            leading.Length.Should().Be(2);
+            leading[0].Kind().Should().Be(SyntaxKind.ShebangDirectiveTrivia);
+            leading[1].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
             TestShebang(leading[0], command);
-            Assert.True(root.ContainsDirectives);
+            root.ContainsDirectives.Should().BeTrue();
             TestShebang(root.GetDirectives().Single(), command);
 
             tree = ParseAndValidate(
@@ -9665,10 +9666,10 @@ Console.WriteLine(""Hi!"");", TestOptions.Script);
             root = tree.GetCompilationUnitRoot();
 
             var statement = root.ChildNodes().Single();
-            Assert.Equal(SyntaxKind.GlobalStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.GlobalStatement);
             trivia = statement.GetLeadingTrivia().Single();
             TestShebang(trivia, command);
-            Assert.True(root.ContainsDirectives);
+            root.ContainsDirectives.Should().BeTrue();
             TestShebang(root.GetDirectives().Single(), command);
         }
 
@@ -9711,10 +9712,10 @@ Console.WriteLine(""Hi!"");", TestOptions.Script);
             var tree = ParseAndValidate("//#!/usr/bin/env csi", TestOptions.Script);
             var root = tree.GetCompilationUnitRoot();
 
-            Assert.Empty(root.ChildNodes());
+            root.ChildNodes().Should().BeEmpty();
             var eof = root.EndOfFileToken;
-            Assert.Equal(SyntaxKind.EndOfFileToken, eof.Kind());
-            Assert.Equal(SyntaxKind.SingleLineCommentTrivia, eof.GetLeadingTrivia().Single().Kind());
+            eof.Kind().Should().Be(SyntaxKind.EndOfFileToken);
+            eof.GetLeadingTrivia().Single().Kind().Should().Be(SyntaxKind.SingleLineCommentTrivia);
         }
 
         [Fact]
@@ -9726,24 +9727,24 @@ Console.WriteLine(""Hi!"");", TestOptions.Script);
 
         private void TestShebang(SyntaxTrivia trivia, string expectedSkippedText)
         {
-            Assert.True(trivia.IsDirective);
-            Assert.Equal(SyntaxKind.ShebangDirectiveTrivia, trivia.Kind());
-            Assert.True(trivia.HasStructure);
+            trivia.IsDirective.Should().BeTrue();
+            trivia.Kind().Should().Be(SyntaxKind.ShebangDirectiveTrivia);
+            trivia.HasStructure.Should().BeTrue();
             TestShebang((ShebangDirectiveTriviaSyntax)trivia.GetStructure(), expectedSkippedText);
         }
 
         private void TestShebang(DirectiveTriviaSyntax directive, string expectedSkippedText)
         {
             var shebang = (ShebangDirectiveTriviaSyntax)directive;
-            Assert.False(shebang.HasStructuredTrivia);
-            Assert.Equal(SyntaxKind.HashToken, shebang.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ExclamationToken, shebang.ExclamationToken.Kind());
+            shebang.HasStructuredTrivia.Should().BeFalse();
+            shebang.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            shebang.ExclamationToken.Kind().Should().Be(SyntaxKind.ExclamationToken);
             var endOfDirective = shebang.EndOfDirectiveToken;
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, endOfDirective.Kind());
-            Assert.Equal(0, endOfDirective.Span.Length);
+            endOfDirective.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            endOfDirective.Span.Length.Should().Be(0);
             var skippedText = endOfDirective.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, skippedText.Kind());
-            Assert.Equal(expectedSkippedText, skippedText.ToString());
+            skippedText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            skippedText.ToString().Should().Be(expectedSkippedText);
         }
 
         #endregion

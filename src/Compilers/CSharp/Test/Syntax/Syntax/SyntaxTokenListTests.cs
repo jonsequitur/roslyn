@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Test.Utilities;
 using System;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -61,120 +62,120 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var list = SyntaxFactory.TokenList(SyntaxFactory.ParseToken("A "), SyntaxFactory.ParseToken("B "), SyntaxFactory.ParseToken("C "));
 
-            Assert.Equal(3, list.Count);
-            Assert.Equal("A", list[0].ToString());
-            Assert.Equal("B", list[1].ToString());
-            Assert.Equal("C", list[2].ToString());
-            Assert.Equal("A B C ", list.ToFullString());
+            list.Count.Should().Be(3);
+            list[0].ToString().Should().Be("A");
+            list[1].ToString().Should().Be("B");
+            list[2].ToString().Should().Be("C");
+            list.ToFullString().Should().Be("A B C ");
 
             var elementA = list[0];
             var elementB = list[1];
             var elementC = list[2];
 
-            Assert.Equal(0, list.IndexOf(elementA));
-            Assert.Equal(1, list.IndexOf(elementB));
-            Assert.Equal(2, list.IndexOf(elementC));
+            list.IndexOf(elementA).Should().Be(0);
+            list.IndexOf(elementB).Should().Be(1);
+            list.IndexOf(elementC).Should().Be(2);
 
             var tokenD = SyntaxFactory.ParseToken("D ");
             var tokenE = SyntaxFactory.ParseToken("E ");
 
             var newList = list.Add(tokenD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B C D ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B C D ");
 
             newList = list.AddRange(new[] { tokenD, tokenE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B C D E ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B C D E ");
 
             newList = list.Insert(0, tokenD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("D A B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("D A B C ");
 
             newList = list.Insert(1, tokenD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A D B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A D B C ");
 
             newList = list.Insert(2, tokenD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B D C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B D C ");
 
             newList = list.Insert(3, tokenD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B C D ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B C D ");
 
             newList = list.InsertRange(0, new[] { tokenD, tokenE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("D E A B C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("D E A B C ");
 
             newList = list.InsertRange(1, new[] { tokenD, tokenE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A D E B C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A D E B C ");
 
             newList = list.InsertRange(2, new[] { tokenD, tokenE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B D E C ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B D E C ");
 
             newList = list.InsertRange(3, new[] { tokenD, tokenE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("A B C D E ", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("A B C D E ");
 
             newList = list.RemoveAt(0);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.RemoveAt(list.Count - 1);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
             newList = list.Remove(elementA);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.Remove(elementB);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A C ");
 
             newList = list.Remove(elementC);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
             newList = list.Replace(elementA, tokenD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("D B C ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("D B C ");
 
             newList = list.Replace(elementB, tokenD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("A D C ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("A D C ");
 
             newList = list.Replace(elementC, tokenD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("A B D ", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("A B D ");
 
             newList = list.ReplaceRange(elementA, new[] { tokenD, tokenE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("D E B C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("D E B C ");
 
             newList = list.ReplaceRange(elementB, new[] { tokenD, tokenE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A D E C ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A D E C ");
 
             newList = list.ReplaceRange(elementC, new[] { tokenD, tokenE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("A B D E ", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("A B D E ");
 
             newList = list.ReplaceRange(elementA, new SyntaxToken[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("B C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("B C ");
 
             newList = list.ReplaceRange(elementB, new SyntaxToken[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A C ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A C ");
 
             newList = list.ReplaceRange(elementC, new SyntaxToken[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("A B ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("A B ");
 
-            Assert.Equal(-1, list.IndexOf(tokenD));
+            list.IndexOf(tokenD).Should().Be(-1);
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(list.Count + 1, tokenD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { tokenD }));
@@ -197,31 +198,31 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void DoTestAddInsertRemoveReplaceOnEmptyList(SyntaxTokenList list)
         {
-            Assert.Equal(0, list.Count);
+            list.Count.Should().Be(0);
 
             var tokenD = SyntaxFactory.ParseToken("D ");
             var tokenE = SyntaxFactory.ParseToken("E ");
 
             var newList = list.Add(tokenD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("D ", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("D ");
 
             newList = list.AddRange(new[] { tokenD, tokenE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("D E ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("D E ");
 
             newList = list.Insert(0, tokenD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("D ", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("D ");
 
             newList = list.InsertRange(0, new[] { tokenD, tokenE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("D E ", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("D E ");
 
             newList = list.Remove(tokenD);
-            Assert.Equal(0, newList.Count);
+            newList.Count.Should().Be(0);
 
-            Assert.Equal(-1, list.IndexOf(tokenD));
+            list.IndexOf(tokenD).Should().Be(-1);
             Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(0));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(1, tokenD));
             Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, tokenD));
@@ -243,17 +244,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                 SyntaxFactory.Literal("x"),
                 SyntaxFactory.Token(SyntaxKind.DotToken));
 
-            Assert.Equal(0, list.IndexOf(SyntaxKind.SizeOfKeyword));
-            Assert.True(list.Any(SyntaxKind.SizeOfKeyword));
+            list.IndexOf(SyntaxKind.SizeOfKeyword).Should().Be(0);
+            list.Any(SyntaxKind.SizeOfKeyword).Should().BeTrue();
 
-            Assert.Equal(1, list.IndexOf(SyntaxKind.StringLiteralToken));
-            Assert.True(list.Any(SyntaxKind.StringLiteralToken));
+            list.IndexOf(SyntaxKind.StringLiteralToken).Should().Be(1);
+            list.Any(SyntaxKind.StringLiteralToken).Should().BeTrue();
 
-            Assert.Equal(2, list.IndexOf(SyntaxKind.DotToken));
-            Assert.True(list.Any(SyntaxKind.DotToken));
+            list.IndexOf(SyntaxKind.DotToken).Should().Be(2);
+            list.Any(SyntaxKind.DotToken).Should().BeTrue();
 
-            Assert.Equal(-1, list.IndexOf(SyntaxKind.NullKeyword));
-            Assert.False(list.Any(SyntaxKind.NullKeyword));
+            list.IndexOf(SyntaxKind.NullKeyword).Should().Be(-1);
+            list.Any(SyntaxKind.NullKeyword).Should().BeFalse();
         }
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Test.Utilities;
 using Roslyn.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing
 {
@@ -1876,12 +1877,12 @@ class C
         {
             var text = "(T, T)[] id;";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var declaration = ((LocalDeclarationStatementSyntax)statement).Declaration;
-            Assert.Equal("(T, T)[]", declaration.Type.ToString());
-            Assert.Equal("id", declaration.Variables.ToString());
+            declaration.Type.ToString().Should().Be("(T, T)[]");
+            declaration.Variables.ToString().Should().Be("id");
         }
 
         [Fact]
@@ -1889,11 +1890,11 @@ class C
         {
             var text = "(x).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.ExpressionStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.InvocationExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
         }
 
         [Fact]
@@ -1901,11 +1902,11 @@ class C
         {
             var text = "(x, x).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.ExpressionStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.InvocationExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
         }
 
         [Fact]
@@ -1913,11 +1914,11 @@ class C
         {
             var text = "((x)).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.ExpressionStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.InvocationExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
         }
 
         [Fact]
@@ -1925,16 +1926,16 @@ class C
         {
             var text = "((x, y) = M()).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.ExpressionStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.InvocationExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
 
             var invocation = (InvocationExpressionSyntax)expression;
             var lhs = (MemberAccessExpressionSyntax)invocation.Expression;
             var lhsContent = (ParenthesizedExpressionSyntax)lhs.Expression;
-            Assert.Equal(SyntaxKind.SimpleAssignmentExpression, lhsContent.Expression.Kind());
+            lhsContent.Expression.Kind().Should().Be(SyntaxKind.SimpleAssignmentExpression);
         }
 
         [Fact]
@@ -1942,16 +1943,16 @@ class C
         {
             var text = "(((x, y))z).Goo();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
-            Assert.Equal(SyntaxKind.ExpressionStatement, statement.Kind());
+            statement.Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.InvocationExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
 
             var invocation = (InvocationExpressionSyntax)expression;
             var lhs = (MemberAccessExpressionSyntax)invocation.Expression;
             var lhsContent = (ParenthesizedExpressionSyntax)lhs.Expression;
-            Assert.Equal(SyntaxKind.CastExpression, lhsContent.Expression.Kind());
+            lhsContent.Expression.Kind().Should().Be(SyntaxKind.CastExpression);
         }
 
         [Fact]
@@ -1959,13 +1960,13 @@ class C
         {
             var text = "((Int32.MaxValue, Int32.MaxValue)).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
             var expression = ((ExpressionStatementSyntax)statement).Expression;
             var invocation = (InvocationExpressionSyntax)expression;
             var lhs = (MemberAccessExpressionSyntax)invocation.Expression;
             var paren = (ParenthesizedExpressionSyntax)lhs.Expression;
-            Assert.Equal(SyntaxKind.TupleExpression, paren.Expression.Kind());
+            paren.Expression.Kind().Should().Be(SyntaxKind.TupleExpression);
         }
 
         [Fact]
@@ -1973,13 +1974,13 @@ class C
         {
             var text = "((x, y)).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
             var expression = ((ExpressionStatementSyntax)statement).Expression;
             var invocation = (InvocationExpressionSyntax)expression;
             var lhs = (MemberAccessExpressionSyntax)invocation.Expression;
             var paren = (ParenthesizedExpressionSyntax)lhs.Expression;
-            Assert.Equal(SyntaxKind.TupleExpression, paren.Expression.Kind());
+            paren.Expression.Kind().Should().Be(SyntaxKind.TupleExpression);
         }
 
         [Fact]
@@ -1987,7 +1988,7 @@ class C
         {
             var text = "((((x, y)))).ToString();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
             var expression = ((ExpressionStatementSyntax)statement).Expression;
             var invocation = (InvocationExpressionSyntax)expression;
@@ -1995,7 +1996,7 @@ class C
             var paren1 = (ParenthesizedExpressionSyntax)lhs.Expression;
             var paren2 = (ParenthesizedExpressionSyntax)paren1.Expression;
             var paren3 = (ParenthesizedExpressionSyntax)paren2.Expression;
-            Assert.Equal(SyntaxKind.TupleExpression, paren3.Expression.Kind());
+            paren3.Expression.Kind().Should().Be(SyntaxKind.TupleExpression);
         }
 
         [Fact]
@@ -2003,10 +2004,10 @@ class C
         {
             var text = "(a) => a;"; // syntax ok
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
         }
 
         [Fact]
@@ -2014,10 +2015,10 @@ class C
         {
             var text = "(a, b) => { };"; // syntax ok
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
 
             var expression = ((ExpressionStatementSyntax)statement).Expression;
-            Assert.Equal(SyntaxKind.ParenthesizedLambdaExpression, expression.Kind());
+            expression.Kind().Should().Be(SyntaxKind.ParenthesizedLambdaExpression);
         }
 
         [Fact]
@@ -2025,7 +2026,7 @@ class C
         {
             var text = "(x, y)? = M();"; // error
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.True(statement.HasErrors);
+            statement.HasErrors.Should().BeTrue();
         }
 
         [Fact(Skip = "https://github.com/dotnet/roslyn/issues/12402")]
@@ -2036,7 +2037,7 @@ class C
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
 
             // This expectation is wrong. We should expect a foreach statement (because the 'in' keyword is there)
-            Assert.True(statement.Kind() == SyntaxKind.ForStatement);
+            statement.Kind() == SyntaxKind.ForStatement.Should().BeTrue();
         }
 
         [Fact]
@@ -2044,10 +2045,10 @@ class C
         {
             var text = "(x, y)? z = M();";
             var statement = SyntaxFactory.ParseStatement(text, offset: 0, options: TestOptions.Regular.WithTuplesFeature());
-            Assert.False(statement.HasErrors);
+            statement.HasErrors.Should().BeFalse();
             var declaration = ((LocalDeclarationStatementSyntax)statement).Declaration;
             var nullable = (NullableTypeSyntax)declaration.Type;
-            Assert.Equal(SyntaxKind.TupleType, nullable.ElementType.Kind());
+            nullable.ElementType.Kind().Should().Be(SyntaxKind.TupleType);
         }
 
         [Fact, WorkItem(12803, "https://github.com/dotnet/roslyn/issues/12803")]
