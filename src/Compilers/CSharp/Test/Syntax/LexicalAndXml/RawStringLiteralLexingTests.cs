@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Roslyn.Test.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.LexicalAndXml
 {
@@ -182,23 +183,23 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.LexicalAndXml
 
             MarkupTestFile.GetSpans(markup, out var input, out IDictionary<string, ImmutableArray<TextSpan>> spans);
 
-            Assert.True(spans.Count == 0 || spans.Count == 1);
+            spans.Count == 0 || spans.Count == 1.Should().BeTrue();
 
             var token = SyntaxFactory.ParseToken(input);
             var literal = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
             token = literal.Token;
 
-            Assert.Equal(expectedKind, token.Kind());
-            Assert.Equal(input.Length, token.FullWidth);
-            Assert.Equal(input, token.ToFullString());
-            Assert.NotNull(token.Value);
-            Assert.IsType<string>(token.Value);
-            Assert.NotNull(token.ValueText);
-            Assert.Equal(expectedValue, token.ValueText);
+            token.Kind().Should().Be(expectedKind);
+            token.FullWidth.Should().Be(input.Length);
+            token.ToFullString().Should().Be(input);
+            token.Value.Should().NotBeNull();
+            token.Value.Should().BeOfType<string>();
+            token.ValueText.Should().NotBeNull();
+            token.ValueText.Should().Be(expectedValue);
 
             if (spans.Count == 0)
             {
-                Assert.Empty(token.GetDiagnostics());
+                token.GetDiagnostics().Should().BeEmpty();
 
                 if (testOutput)
                 {
@@ -214,16 +215,16 @@ System.Console.WriteLine(
             }
             else
             {
-                Assert.Equal(1, spans.Count);
+                spans.Count.Should().Be(1);
 
                 var diagnostics = token.GetDiagnostics();
 
-                Assert.All(diagnostics, d => Assert.Equal(spans.Single().Key, d.Id));
+                diagnostics.Should().AllSatisfy(d => d.Id.Should().Be(spans.Single().Key));
 
                 var expectedDiagnosticSpans = spans.Single().Value.OrderBy(d => d.Start);
                 var actualDiagnosticsSpans = diagnostics.Select(d => d.Location.SourceSpan).OrderBy(d => d.Start);
 
-                Assert.Equal(expectedDiagnosticSpans, actualDiagnosticsSpans);
+                actualDiagnosticsSpans.Should().Be(expectedDiagnosticSpans);
             }
         }
 

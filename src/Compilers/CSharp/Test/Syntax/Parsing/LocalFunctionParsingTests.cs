@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.Test.Utilities;
 using Roslyn.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -1178,7 +1179,7 @@ class C
             goo<T>() where T : IFace { return 5; }
     }
 }");
-            Assert.NotNull(file);
+            file.Should().NotBeNull();
             file.SyntaxTree.GetDiagnostics().Verify();
 
             var errorText = @"
@@ -1225,11 +1226,11 @@ class C
                 //             goo<T>) { }
                 Diagnostic(ErrorCode.WRN_UnreferencedLocalFunction, "goo").WithArguments("goo").WithLocation(11, 13));
 
-            var m = Assert.IsType<MethodDeclarationSyntax>(file.DescendantNodes()
+            var m = file.DescendantNodes()
                 .Where(n => n.Kind() == SyntaxKind.MethodDeclaration)
-                .Single());
-            Assert.All(m.Body.Statements,
-                s => Assert.Equal(SyntaxKind.LocalFunctionStatement, s.Kind()));
+                .Single().Should().BeOfType<MethodDeclarationSyntax>();
+            m.Body.Statements.Should().AllSatisfy(
+                s => s.Kind().Should().Be(SyntaxKind.LocalFunctionStatement));
         }
 
         [Fact]
@@ -1285,21 +1286,21 @@ class c
 }";
 
             var file = ParseFile(text, parseOptions: TestOptions.Regular.WithLanguageVersion(LanguageVersion.CSharp6));
-            Assert.NotNull(file);
-            Assert.True(file.DescendantNodes().Any(n => n.Kind() == SyntaxKind.LocalFunctionStatement && !n.ContainsDiagnostics));
-            Assert.False(file.HasErrors);
+            file.Should().NotBeNull();
+            file.DescendantNodes().Any(n => n.Kind() == SyntaxKind.LocalFunctionStatement && !n.ContainsDiagnostics).Should().BeTrue();
+            file.HasErrors.Should().BeFalse();
             file.SyntaxTree.GetDiagnostics().Verify();
 
-            Assert.Equal(0, file.SyntaxTree.Options.Features.Count);
-            var c = Assert.IsType<ClassDeclarationSyntax>(file.Members.Single());
-            Assert.Equal(2, c.Members.Count);
-            var m = Assert.IsType<MethodDeclarationSyntax>(c.Members[0]);
-            var s1 = Assert.IsType<LocalFunctionStatementSyntax>(m.Body.Statements[0]);
-            Assert.False(s1.ContainsDiagnostics);
+            file.SyntaxTree.Options.Features.Count.Should().Be(0);
+            var c = file.Members.Single().Should().BeOfType<ClassDeclarationSyntax>();
+            c.Members.Count.Should().Be(2);
+            var m = c.Members[0].Should().BeOfType<MethodDeclarationSyntax>();
+            var s1 = m.Body.Statements[0].Should().BeOfType<LocalFunctionStatementSyntax>();
+            s1.ContainsDiagnostics.Should().BeFalse();
 
-            var m2 = Assert.IsType<MethodDeclarationSyntax>(c.Members[1]);
-            s1 = Assert.IsType<LocalFunctionStatementSyntax>(m.Body.Statements[0]);
-            Assert.False(s1.ContainsDiagnostics);
+            var m2 = c.Members[1].Should().BeOfType<MethodDeclarationSyntax>();
+            s1 = m.Body.Statements[0].Should().BeOfType<LocalFunctionStatementSyntax>();
+            s1.ContainsDiagnostics.Should().BeFalse();
 
             CreateCompilation(text, parseOptions: TestOptions.Regular6).VerifyDiagnostics(
                 // (2,7): warning CS8981: The type name 'c' only contains lower-cased ascii characters. Such names may become reserved for the language.
@@ -1340,32 +1341,32 @@ class c
     }
 }");
 
-            Assert.NotNull(file);
-            Assert.False(file.HasErrors);
-            Assert.Equal(0, file.SyntaxTree.Options.Features.Count);
-            var c = Assert.IsType<ClassDeclarationSyntax>(file.Members.Single());
-            Assert.Equal(2, c.Members.Count);
-            var m = Assert.IsType<MethodDeclarationSyntax>(c.Members[0]);
-            var s1 = Assert.IsType<LocalFunctionStatementSyntax>(m.Body.Statements[0]);
-            Assert.Equal(SyntaxKind.PredefinedType, s1.ReturnType.Kind());
-            Assert.Equal("int", s1.ReturnType.ToString());
-            Assert.Equal("local", s1.Identifier.ToString());
-            Assert.NotNull(s1.ParameterList);
-            Assert.Empty(s1.ParameterList.Parameters);
-            Assert.NotNull(s1.ExpressionBody);
-            Assert.Equal(SyntaxKind.NumericLiteralExpression, s1.ExpressionBody.Expression.Kind());
+            file.Should().NotBeNull();
+            file.HasErrors.Should().BeFalse();
+            file.SyntaxTree.Options.Features.Count.Should().Be(0);
+            var c = file.Members.Single().Should().BeOfType<ClassDeclarationSyntax>();
+            c.Members.Count.Should().Be(2);
+            var m = c.Members[0].Should().BeOfType<MethodDeclarationSyntax>();
+            var s1 = m.Body.Statements[0].Should().BeOfType<LocalFunctionStatementSyntax>();
+            s1.ReturnType.Kind().Should().Be(SyntaxKind.PredefinedType);
+            s1.ReturnType.ToString().Should().Be("int");
+            s1.Identifier.ToString().Should().Be("local");
+            s1.ParameterList.Should().NotBeNull();
+            s1.ParameterList.Parameters.Should().BeEmpty();
+            s1.ExpressionBody.Should().NotBeNull();
+            s1.ExpressionBody.Expression.Kind().Should().Be(SyntaxKind.NumericLiteralExpression);
 
-            var m2 = Assert.IsType<MethodDeclarationSyntax>(c.Members[1]);
-            s1 = Assert.IsType<LocalFunctionStatementSyntax>(m2.Body.Statements[0]);
-            Assert.Equal(SyntaxKind.PredefinedType, s1.ReturnType.Kind());
-            Assert.Equal("int", s1.ReturnType.ToString());
-            Assert.Equal("local", s1.Identifier.ToString());
-            Assert.NotNull(s1.ParameterList);
-            Assert.Empty(s1.ParameterList.Parameters);
-            Assert.Null(s1.ExpressionBody);
-            Assert.NotNull(s1.Body);
-            var s2 = Assert.IsType<ReturnStatementSyntax>(s1.Body.Statements.Single());
-            Assert.Equal(SyntaxKind.NumericLiteralExpression, s2.Expression.Kind());
+            var m2 = c.Members[1].Should().BeOfType<MethodDeclarationSyntax>();
+            s1 = m2.Body.Statements[0].Should().BeOfType<LocalFunctionStatementSyntax>();
+            s1.ReturnType.Kind().Should().Be(SyntaxKind.PredefinedType);
+            s1.ReturnType.ToString().Should().Be("int");
+            s1.Identifier.ToString().Should().Be("local");
+            s1.ParameterList.Should().NotBeNull();
+            s1.ParameterList.Parameters.Should().BeEmpty();
+            s1.ExpressionBody.Should().BeNull();
+            s1.Body.Should().NotBeNull();
+            var s2 = s1.Body.Statements.Single().Should().BeOfType<ReturnStatementSyntax>();
+            s2.Expression.Kind().Should().Be(SyntaxKind.NumericLiteralExpression);
         }
 
         [Fact]

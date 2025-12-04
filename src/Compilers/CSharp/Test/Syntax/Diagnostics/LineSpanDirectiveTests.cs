@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.Test.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Roslyn.Test.Utilities;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -466,7 +467,7 @@ class Page
             var directives = tree.GetRoot().DescendantNodesAndSelf(descendIntoTrivia: true).OfType<DirectiveTriviaSyntax>();
             foreach (var directive in directives)
             {
-                Assert.NotEqual(SyntaxKind.None, directive.DirectiveNameToken.Kind());
+                directive.DirectiveNameToken.Kind().Should().NotBe(SyntaxKind.None);
             }
             return tree.GetLineMappings().Select(mapping => mapping.ToString()!).ToImmutableArray();
         }

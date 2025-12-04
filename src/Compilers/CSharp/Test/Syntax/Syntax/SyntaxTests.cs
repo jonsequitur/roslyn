@@ -8,6 +8,7 @@ using System;
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -15,20 +16,20 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
     {
         private static void AssertIncompleteSubmission(string code)
         {
-            Assert.False(SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree(code, options: TestOptions.Script)));
+            SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree(code, options: TestOptions.Script)).Should().BeFalse();
         }
 
         private static void AssertCompleteSubmission(string code)
         {
-            Assert.True(SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree(code, options: TestOptions.Script)));
+            SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree(code, options: TestOptions.Script)).Should().BeTrue();
         }
 
         [Fact]
         public void TextIsCompleteSubmission()
         {
-            Assert.Throws<ArgumentNullException>(() => SyntaxFactory.IsCompleteSubmission(null));
-            Assert.Throws<ArgumentException>(() =>
-                SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree("", options: TestOptions.Regular)));
+            FluentActions.Invoking(() => SyntaxFactory.IsCompleteSubmission(null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() =>
+                SyntaxFactory.IsCompleteSubmission(SyntaxFactory.ParseSyntaxTree("", options: TestOptions.Regular))).Should().Throw<ArgumentException>();
 
             AssertCompleteSubmission("");
             AssertCompleteSubmission("//hello");
@@ -158,7 +159,7 @@ void goo()
         {
             var section = SyntaxFactory.SwitchSection();
             var span = section.Span;
-            Assert.Equal(default(TextSpan), span);
+            span.Should().Be(default(TextSpan));
         }
 
         [Theory]
@@ -177,7 +178,7 @@ void goo()
         {
             var expr = SyntaxFactory.ParseExpression(source, options: TestOptions.Regular);
             var actual = SyntaxFacts.TryGetInferredMemberName(expr);
-            Assert.Equal(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Theory]
@@ -194,7 +195,7 @@ void goo()
         [InlineData("Alice", false)]
         public void TestIsReservedTupleElementName(string elementName, bool isReserved)
         {
-            Assert.Equal(isReserved, SyntaxFacts.IsReservedTupleElementName(elementName));
+            SyntaxFacts.IsReservedTupleElementName(elementName).Should().Be(isReserved);
         }
 
         [Theory]
@@ -208,7 +209,7 @@ void goo()
         [InlineData(SyntaxKind.XmlEntityLiteralToken)]
         public void TestIsLiteral(SyntaxKind kind)
         {
-            Assert.True(SyntaxFacts.IsLiteral(kind));
+            SyntaxFacts.IsLiteral(kind).Should().BeTrue();
         }
 
         [Theory]
@@ -222,7 +223,7 @@ void goo()
         [InlineData(SyntaxKind.XmlEntityLiteralToken)]
         public void TestIsAnyToken(SyntaxKind kind)
         {
-            Assert.True(SyntaxFacts.IsAnyToken(kind));
+            SyntaxFacts.IsAnyToken(kind).Should().BeTrue();
         }
 
         [Theory]
@@ -237,7 +238,7 @@ void goo()
         [InlineData(SyntaxKind.ArgListKeyword, SyntaxKind.ArgListExpression)]
         public void TestGetLiteralExpression(SyntaxKind tokenKind, SyntaxKind expressionKind)
         {
-            Assert.Equal(expressionKind, SyntaxFacts.GetLiteralExpression(tokenKind));
+            SyntaxFacts.GetLiteralExpression(tokenKind).Should().Be(expressionKind);
         }
 
         [Fact]
@@ -245,7 +246,7 @@ void goo()
         {
             foreach (var kind in SyntaxFacts.GetPunctuationKinds())
             {
-                Assert.True(SyntaxFacts.IsPunctuation(kind));
+                SyntaxFacts.IsPunctuation(kind).Should().BeTrue();
             }
         }
     }

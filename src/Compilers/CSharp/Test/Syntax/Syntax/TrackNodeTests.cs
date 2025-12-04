@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.Text;
 using Roslyn.Test.Utilities;
 using Xunit;
 using InternalSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -24,8 +25,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var a = expr.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "a");
             var trackedExpr = expr.TrackNodes(a);
             var currentA = trackedExpr.GetCurrentNode(a);
-            Assert.NotNull(currentA);
-            Assert.Equal("a", currentA.ToString());
+            currentA.Should().NotBeNull();
+            currentA.ToString().Should().Be("a");
         }
 
         [Fact]
@@ -35,9 +36,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var a = expr.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "a");
             var trackedExpr = expr.TrackNodes(a);
             var currentAs = trackedExpr.GetCurrentNodes(a);
-            Assert.NotNull(currentAs);
-            Assert.Equal(1, currentAs.Count());
-            Assert.Equal("a", currentAs.ElementAt(0).ToString());
+            currentAs.Should().NotBeNull();
+            currentAs.Count().Should().Be(1);
+            currentAs.ElementAt(0).ToString().Should().Be("a");
         }
 
         [Fact]
@@ -46,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var expr = SyntaxFactory.ParseExpression("a + b");
             var a = expr.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "a");
             var currentA = expr.GetCurrentNode(a);
-            Assert.Null(currentA);
+            currentA.Should().BeNull();
         }
 
         [Fact]
@@ -55,8 +56,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var expr = SyntaxFactory.ParseExpression("a + b");
             var a = expr.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "a");
             var currentAs = expr.GetCurrentNodes(a);
-            Assert.NotNull(currentAs);
-            Assert.Equal(0, currentAs.Count());
+            currentAs.Should().NotBeNull();
+            currentAs.Count().Should().Be(0);
         }
 
         [Fact]
@@ -69,9 +70,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newA = currentA.WithLeadingTrivia(SyntaxFactory.Comment("/* ayup */"));
             var replacedExpr = trackedExpr.ReplaceNode(currentA, newA);
             var latestA = replacedExpr.GetCurrentNode(originalA);
-            Assert.NotNull(latestA);
-            Assert.NotSame(latestA, newA); // not the same reference
-            Assert.Equal(newA.ToFullString(), latestA.ToFullString());
+            latestA.Should().NotBeNull();
+            newA.Should().NotBeSameAs(latestA); // not the same reference
+            latestA.ToFullString().Should().Be(newA.ToFullString());
         }
 
         [Fact]
@@ -84,9 +85,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var newA = currentA.WithLeadingTrivia(SyntaxFactory.Comment("/* ayup */"));
             var replacedExpr = trackedExpr.ReplaceNode(currentA, newA);
             var latestAs = replacedExpr.GetCurrentNodes(originalA);
-            Assert.NotNull(latestAs);
-            Assert.Equal(1, latestAs.Count());
-            Assert.Equal(newA.ToFullString(), latestAs.ElementAt(0).ToFullString());
+            latestAs.Should().NotBeNull();
+            latestAs.Count().Should().Be(1);
+            latestAs.ElementAt(0).ToFullString().Should().Be(newA.ToFullString());
         }
 
         [WorkItem(1070667, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/1070667")]
@@ -99,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var currentA = trackedExpr.GetCurrentNode(originalA);
             var replacedExpr = trackedExpr.ReplaceNode(currentA, SyntaxFactory.IdentifierName("c"));
             var latestA = replacedExpr.GetCurrentNode(originalA);
-            Assert.Null(latestA);
+            latestA.Should().BeNull();
         }
 
         [Fact]
@@ -111,8 +112,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var currentA = trackedExpr.GetCurrentNode(originalA);
             var replacedExpr = trackedExpr.ReplaceNode(currentA, SyntaxFactory.IdentifierName("c"));
             var latestAs = replacedExpr.GetCurrentNodes(originalA);
-            Assert.NotNull(latestAs);
-            Assert.Equal(0, latestAs.Count());
+            latestAs.Should().NotBeNull();
+            latestAs.Count().Should().Be(0);
         }
 
         [Fact]
@@ -124,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var currentA = trackedExpr.GetCurrentNode(originalA);
             // replace all identifiers with same 'a'
             var replacedExpr = trackedExpr.ReplaceNodes(trackedExpr.DescendantNodes().OfType<IdentifierNameSyntax>(), (original, changed) => currentA);
-            Assert.Throws<InvalidOperationException>(() => replacedExpr.GetCurrentNode(originalA));
+            FluentActions.Invoking(() => replacedExpr.GetCurrentNode(originalA)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -137,9 +138,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             // replace all identifiers with same 'a'
             var replacedExpr = trackedExpr.ReplaceNodes(trackedExpr.DescendantNodes().OfType<IdentifierNameSyntax>(), (original, changed) => currentA);
             var nodes = replacedExpr.GetCurrentNodes(originalA).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal("a", nodes[0].ToString());
-            Assert.Equal("a", nodes[1].ToString());
+            nodes.Count.Should().Be(2);
+            nodes[0].ToString().Should().Be("a");
+            nodes[1].ToString().Should().Be("a");
         }
 
         [Fact]
@@ -149,14 +150,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var ids = expr.DescendantNodes().OfType<IdentifierNameSyntax>().ToList();
             var trackedExpr = expr.TrackNodes(ids);
 
-            Assert.Equal(3, ids.Count);
+            ids.Count.Should().Be(3);
 
             foreach (var id in ids)
             {
                 var currentId = trackedExpr.GetCurrentNode(id);
-                Assert.NotNull(currentId);
-                Assert.NotSame(id, currentId);
-                Assert.Equal(id.ToString(), currentId.ToString());
+                currentId.Should().NotBeNull();
+                currentId.Should().NotBeSameAs(id);
+                currentId.ToString().Should().Be(id.ToString());
             }
         }
 
@@ -168,12 +169,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             var trackedExpr = expr.TrackNodes();
 
-            Assert.Equal(3, ids.Count);
+            ids.Count.Should().Be(3);
 
             foreach (var id in ids)
             {
                 var currentId = trackedExpr.GetCurrentNode(id);
-                Assert.Null(currentId);
+                currentId.Should().BeNull();
             }
         }
 
@@ -181,7 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestTrackNodeThatIsNotInTheSubtreeThrows()
         {
             var expr = SyntaxFactory.ParseExpression("a + b");
-            Assert.Throws<ArgumentException>(() => expr.TrackNodes(SyntaxFactory.IdentifierName("c")));
+            FluentActions.Invoking(() => expr.TrackNodes(SyntaxFactory.IdentifierName("c"))).Should().Throw<ArgumentException>();
         }
     }
 }

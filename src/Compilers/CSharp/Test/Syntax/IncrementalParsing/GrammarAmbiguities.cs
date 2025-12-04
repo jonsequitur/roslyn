@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
 {
@@ -88,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             var code = codeBefore + codeToBeReplaced + codeAfter;
 
             var originalTree = SyntaxFactory.ParseSyntaxTree(code);
-            Assert.False(originalTree.GetCompilationUnitRoot().ContainsDiagnostics);
+            originalTree.GetCompilationUnitRoot().ContainsDiagnostics.Should().BeFalse();
 
             var incrementalTree = originalTree.WithReplace(start, length, replacement);
 
@@ -108,9 +109,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
 
         private void AssertNodesAreEquivalent(SyntaxNodeOrToken expectedNode, SyntaxNodeOrToken actualNode)
         {
-            Assert.Equal(expectedNode.Kind(), actualNode.Kind());
-            Assert.Equal(expectedNode.FullSpan, actualNode.FullSpan);
-            Assert.Equal(expectedNode.ChildNodesAndTokens().Count, actualNode.ChildNodesAndTokens().Count);
+            actualNode.Kind().Should().Be(expectedNode.Kind());
+            actualNode.FullSpan.Should().Be(expectedNode.FullSpan);
+            actualNode.ChildNodesAndTokens().Count.Should().Be(expectedNode.ChildNodesAndTokens().Count);
 
             for (var i = 0; i < expectedNode.ChildNodesAndTokens().Count; i++)
             {

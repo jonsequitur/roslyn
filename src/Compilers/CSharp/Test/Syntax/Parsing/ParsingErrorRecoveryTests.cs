@@ -49,7 +49,7 @@ class C
     {accessibility} void M4() {{}}
 }}");
 
-            Assert.NotNull(file);
+            file.Should().NotBeNull();
             file.GetDiagnostics().Verify(
                 // (7,9): error CS0106: The modifier '{accessibility}' is not valid for this item
                 //         {accessibility} void localFunc() {}
@@ -75,13 +75,13 @@ class C
             var text = "[assembly: $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -90,14 +90,14 @@ class C
             var text = "[assembly: using n;";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UsingAfterElements, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UsingAfterElements);
         }
 
         [Fact]
@@ -106,14 +106,14 @@ class C
             var text = "[assembly: extern alias a;";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExternAfterElements, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_ExternAfterElements);
         }
 
         [Fact]
@@ -122,14 +122,14 @@ class C
             var text = "[assembly: namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -138,14 +138,14 @@ class C
             var text = "[assembly: class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -154,13 +154,13 @@ class C
             var text = "[assembly: [assembly: attr]";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(2);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -169,13 +169,13 @@ class C
             var text = "[assembly: ";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -184,13 +184,13 @@ class C
             var text = "[assembly: a $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -199,14 +199,14 @@ class C
             var text = "[assembly: a( $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -215,14 +215,14 @@ class C
             var text = "[assembly: a(b $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -231,13 +231,13 @@ class C
             var text = "[assembly: a(b c)";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -246,14 +246,14 @@ class C
             var text = "[assembly: a(b $ c)";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -262,11 +262,11 @@ class C
             var text = "[assembly: a $ b";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
             file.Errors().Verify(
                 // error CS1056: Unexpected character '$'
                 Diagnostic(ErrorCode.ERR_UnexpectedCharacter).WithArguments("$"),
@@ -283,14 +283,14 @@ class C
             var text = "[assembly: a( using n;";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UsingAfterElements, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UsingAfterElements);
         }
 
         [Fact]
@@ -299,14 +299,14 @@ class C
             var text = "[assembly: a( extern alias n;";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(0, file.Members.Count);
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExternAfterElements, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_ExternAfterElements);
         }
 
         [Fact]
@@ -315,14 +315,14 @@ class C
             var text = "[assembly: a( namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -331,14 +331,14 @@ class C
             var text = "[assembly: a( class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.AttributeLists.Count);
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.AttributeLists.Count.Should().Be(1);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -347,12 +347,12 @@ class C
             var text = "$ namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -361,12 +361,12 @@ class C
             var text = "namespace n { } $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -375,12 +375,12 @@ class C
             var text = "namespace n { } ,,,,,,,,";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
         }
 
         [Fact]
@@ -389,13 +389,13 @@ class C
             var text = ",,,, namespace n { } ,,,,";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
         }
 
         [Fact]
@@ -404,12 +404,12 @@ class C
             var text = "namespace n { $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -432,8 +432,8 @@ class C
 [a]fod;
 [b";
             var file = this.ParseTree(text);
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
         }
 
         [Fact]
@@ -442,14 +442,14 @@ class C
             var text = "[ $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -458,13 +458,13 @@ class C
             var text = "[a $";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -473,13 +473,13 @@ class C
             var text = "[ class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -488,12 +488,12 @@ class C
             var text = "[a class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -502,13 +502,13 @@ class C
             var text = "[a( class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -517,13 +517,13 @@ class C
             var text = "[a(b class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -532,14 +532,14 @@ class C
             var text = "[a(b, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -548,15 +548,15 @@ class C
             var text = "[a(, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -565,16 +565,16 @@ class C
             var text = "[a(,, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[4].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -583,14 +583,14 @@ class C
             var text = "[a(, b class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -599,12 +599,12 @@ class C
             var text = "namespace n { $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -613,12 +613,12 @@ class C
             var text = "namespace n { int }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_NamespaceUnexpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_NamespaceUnexpected);
         }
 
         [Fact]
@@ -627,12 +627,12 @@ class C
             var text = "namespace n { { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
         }
 
         [Fact]
@@ -641,12 +641,12 @@ class C
             var text = "namespace n { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
         }
 
         [Fact]
@@ -655,12 +655,12 @@ class C
             var text = "} namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_EOFExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_EOFExpected);
         }
 
         [Fact]
@@ -669,8 +669,8 @@ class C
             var text = "{ namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
         }
 
         [Fact]
@@ -679,11 +679,11 @@ class C
             var text = "partial namespace n { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, file.Members[0].Kind());
-            Assert.Equal(0, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -692,15 +692,15 @@ class C
             var text = "class c : class b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -709,14 +709,14 @@ class C
             var text = "class c : t class b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -725,15 +725,15 @@ class C
             var text = "class c : t, class b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -742,15 +742,15 @@ class C
             var text = "class c : x y class b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -759,13 +759,13 @@ class C
             var text = "class c : $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -774,12 +774,12 @@ class C
             var text = "class c : t $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -788,13 +788,13 @@ class C
             var text = "class c : t, $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -803,13 +803,13 @@ class C
             var text = "class c : x y $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -818,12 +818,12 @@ class C
             var text = "class c<t> : where t : b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -832,11 +832,11 @@ class C
             var text = "class c<t> : x where t : b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(0, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -845,12 +845,12 @@ class C
             var text = "class c<t> : x, where t : b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -859,11 +859,11 @@ class C
             var text = "class c<t> : x, y where t : b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(0, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -872,12 +872,12 @@ class C
             var text = "class c<t> : x y where t : b { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -886,12 +886,12 @@ class C
             var text = "class c<t> : { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -900,11 +900,11 @@ class C
             var text = "class c<t> : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(0, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -913,12 +913,12 @@ class C
             var text = "class c<t> : x, { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -927,11 +927,11 @@ class C
             var text = "class c<t> : x, y { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(0, file.Errors().Length);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -940,12 +940,12 @@ class C
             var text = "class c<t> : x y { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -954,14 +954,14 @@ class C
             var text = "class c<t> where { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -970,13 +970,13 @@ class C
             var text = "class c<t> where t { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -985,12 +985,12 @@ class C
             var text = "class c<t> where t : { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -999,12 +999,12 @@ class C
             var text = "class c<t> where t : x, { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -1013,14 +1013,14 @@ class C
             var text = "class c<t> where where t : a { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -1029,13 +1029,13 @@ class C
             var text = "class c<t> where t where t : a { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -1044,12 +1044,12 @@ class C
             var text = "class c<t> where t : where t : a { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -1058,12 +1058,12 @@ class C
             var text = "class c<t> where t : a, where t : a { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
         }
 
         [Fact]
@@ -1072,15 +1072,15 @@ class C
             var text = "class c<t> where $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1089,14 +1089,14 @@ class C
             var text = "class c<t> where t $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1105,13 +1105,13 @@ class C
             var text = "class c<t> where t : $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1120,12 +1120,12 @@ class C
             var text = "class c<t> where t : x $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1134,13 +1134,13 @@ class C
             var text = "class c<t> where t : x, $ { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1149,13 +1149,13 @@ class C
             var text = "class c<$> { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1164,12 +1164,12 @@ class C
             var text = "class c<t $> { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1178,13 +1178,13 @@ class C
             var text = "class c<t, $> { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1193,13 +1193,13 @@ class C
             var text = "class c< { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1208,12 +1208,12 @@ class C
             var text = "class c<t { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1222,16 +1222,16 @@ class C
             var text = "class c< class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1240,15 +1240,15 @@ class C
             var text = "class c<t class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1257,16 +1257,16 @@ class C
             var text = "class c<t, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1275,13 +1275,13 @@ class C
             var text = "class c< : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1290,12 +1290,12 @@ class C
             var text = "class c<t : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1304,13 +1304,13 @@ class C
             var text = "class c<t, : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1319,13 +1319,13 @@ class C
             var text = "class c< where t : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1334,12 +1334,12 @@ class C
             var text = "class c<t where t : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1348,13 +1348,13 @@ class C
             var text = "class c<t, where t : x { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -1363,16 +1363,16 @@ class C
             var text = "class c { int int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl);
         }
 
         [Fact]
@@ -1381,16 +1381,16 @@ class C
             var text = "class c { int x int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1399,17 +1399,17 @@ class C
             var text = "class c { int x, int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1418,18 +1418,18 @@ class C
             var text = "class c { int $ int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl);
         }
 
         [Fact]
@@ -1438,17 +1438,17 @@ class C
             var text = "class c { int x $ int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1457,18 +1457,18 @@ class C
             var text = "class c { int x, $ int y; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1477,15 +1477,15 @@ class C
             var text = "class c { int }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl);
         }
 
         [Fact]
@@ -1494,15 +1494,15 @@ class C
             var text = "class c { int x }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1511,16 +1511,16 @@ class C
             var text = "class c { int x, }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1529,16 +1529,16 @@ class C
             var text = "class c { int m( }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1547,17 +1547,17 @@ class C
             var text = "class c { int m(x }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1566,16 +1566,16 @@ class C
             var text = "class c { int m(x y}";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1584,18 +1584,18 @@ class C
             var text = "class c { int m(x y, }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1604,15 +1604,15 @@ class C
             var text = "class c { int m() }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1621,15 +1621,15 @@ class C
             var text = "class c { int m( $ ); }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1638,16 +1638,16 @@ class C
             var text = "class c { int m( x $ ); }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1656,15 +1656,15 @@ class C
             var text = "class c { int m( x y $ ); }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1673,17 +1673,17 @@ class C
             var text = "class c { int m( x y, $ ); }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -1692,17 +1692,17 @@ class C
             var text = "class c { int m( public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1711,18 +1711,18 @@ class C
             var text = "class c { int m(x public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1731,17 +1731,17 @@ class C
             var text = "class c { int m(x y public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1750,19 +1750,19 @@ class C
             var text = "class c { int m(x y, public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1771,16 +1771,16 @@ class C
             var text = "class c { int m(x y) public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -1789,15 +1789,15 @@ class C
             var text = "class c { int m( { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -1806,15 +1806,15 @@ class C
             var text = "class c { int m( ; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -1823,15 +1823,15 @@ class C
             var text = "class c { c( { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.ConstructorDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.ConstructorDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -1840,13 +1840,13 @@ class C
             var text = "delegate void d( ;";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
             var agg = (DelegateDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -1855,17 +1855,17 @@ class C
             var text = "class c { int this[ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
 
             CreateCompilation(text).VerifyDiagnostics(
                 // (1,21): error CS1003: Syntax error, ']' expected
@@ -1894,18 +1894,18 @@ class C
             var text = "class c { int this[x }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1914,17 +1914,17 @@ class C
             var text = "class c { int this[x y }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1933,19 +1933,19 @@ class C
             var text = "class c { int this[x y, }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[4].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1954,16 +1954,16 @@ class C
             var text = "class c { int this[x y] }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -1972,15 +1972,15 @@ class C
             var text = "class c { int this[ $ ] { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
 
             CreateCompilation(text).VerifyDiagnostics(
                 // (1,21): error CS1056: Unexpected character '$'
@@ -2003,16 +2003,16 @@ class C
             var text = "class c { int this[ x $ ] { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2021,15 +2021,15 @@ class C
             var text = "class c { int this[ x y $ ] { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2038,17 +2038,17 @@ class C
             var text = "class c { int this[ x y, $ ] { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2057,18 +2057,18 @@ class C
             var text = "class c { int this[ public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
 
             CreateCompilation(text).VerifyDiagnostics(
                 // (1,21): error CS1003: Syntax error, ']' expected
@@ -2097,19 +2097,19 @@ class C
             var text = "class c { int this[x public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2118,18 +2118,18 @@ class C
             var text = "class c { int this[x y public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2138,20 +2138,20 @@ class C
             var text = "class c { int this[x y, public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[4].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2160,17 +2160,17 @@ class C
             var text = "class c { int this[x y] public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IndexerDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IndexerDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2179,16 +2179,16 @@ class C
             var text = "delegate";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[4].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2197,15 +2197,15 @@ class C
             var text = "delegate d";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2214,14 +2214,14 @@ class C
             var text = "delegate void d";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2230,13 +2230,13 @@ class C
             var text = "delegate void d(";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2245,14 +2245,14 @@ class C
             var text = "delegate void d(t";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2261,13 +2261,13 @@ class C
             var text = "delegate void d(t n";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2276,12 +2276,12 @@ class C
             var text = "delegate void d(t n)";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2290,15 +2290,15 @@ class C
             var text = "delegate void d(t n, ";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2307,17 +2307,17 @@ class C
             var text = "delegate class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[4].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2326,16 +2326,16 @@ class C
             var text = "delegate d class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2344,15 +2344,15 @@ class C
             var text = "delegate void d class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2361,14 +2361,14 @@ class C
             var text = "delegate void d( class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2377,15 +2377,15 @@ class C
             var text = "delegate void d(t class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2394,14 +2394,14 @@ class C
             var text = "delegate void d(t n class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2410,13 +2410,13 @@ class C
             var text = "delegate void d(t n) class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2425,16 +2425,16 @@ class C
             var text = "delegate void d(t n, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2443,12 +2443,12 @@ class C
             var text = "delegate void d($);";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2457,13 +2457,13 @@ class C
             var text = "delegate void d(t $);";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2472,12 +2472,12 @@ class C
             var text = "delegate void d(t n $);";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2486,14 +2486,14 @@ class C
             var text = "delegate void d(t n, $);";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.DelegateDeclaration, file.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[2].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.DelegateDeclaration);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2502,12 +2502,12 @@ class C
             var text = "enum e { $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2516,12 +2516,12 @@ class C
             var text = "enum e { n $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2530,12 +2530,12 @@ class C
             var text = "enum e { $ n }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2544,12 +2544,12 @@ class C
             var text = "enum e { n, $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2558,12 +2558,12 @@ class C
             var text = "enum e { n, n $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2572,12 +2572,12 @@ class C
             var text = "enum e { n, $ n }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2586,13 +2586,13 @@ class C
             var text = "enum e { n $ n }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -2601,13 +2601,13 @@ class C
             var text = "enum e { n = $ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2616,12 +2616,12 @@ class C
             var text = "enum e { ";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2630,12 +2630,12 @@ class C
             var text = "enum e { n ";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2644,12 +2644,12 @@ class C
             var text = "enum e { n, ";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2658,13 +2658,13 @@ class C
             var text = "enum e { class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2673,13 +2673,13 @@ class C
             var text = "enum e { n class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2688,13 +2688,13 @@ class C
             var text = "enum e { n, class c { }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(2, file.Members.Count);
-            Assert.Equal(SyntaxKind.EnumDeclaration, file.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(2);
+            file.Members[0].Kind().Should().Be(SyntaxKind.EnumDeclaration);
+            file.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -2703,15 +2703,15 @@ class C
             var text = "class c { fixed int x[$]; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_ValueExpected, file.Errors()[1].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_ValueExpected);
         }
 
         [Fact]
@@ -2720,14 +2720,14 @@ class C
             var text = "class c { fixed int x[$ 10]; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2736,16 +2736,16 @@ class C
             var text = "class c { fixed int x[10 $]; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal(ErrorCode.ERR_SyntaxError, (ErrorCode)file.Errors()[0].Code); //expected comma
-            Assert.Equal(ErrorCode.ERR_UnexpectedCharacter, (ErrorCode)file.Errors()[1].Code); //didn't expect '$'
-            Assert.Equal(ErrorCode.ERR_ValueExpected, (ErrorCode)file.Errors()[2].Code); //expected value after (missing) comma
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(3);
+            (ErrorCode)file.Errors()[0].Code.Should().Be(ErrorCode.ERR_SyntaxError); //expected comma
+            (ErrorCode)file.Errors()[1].Code.Should().Be(ErrorCode.ERR_UnexpectedCharacter); //didn't expect '$'
+            (ErrorCode)file.Errors()[2].Code.Should().Be(ErrorCode.ERR_ValueExpected); //expected value after (missing) comma
         }
 
         [Fact]
@@ -2754,14 +2754,14 @@ class C
             var text = "class c { int[$] x; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2770,14 +2770,14 @@ class C
             var text = "class c { int[,$] x; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2786,14 +2786,14 @@ class C
             var text = "class c { int[$,] x; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.FieldDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -2802,14 +2802,14 @@ class C
             var text = "class c { int[ }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -2818,14 +2818,14 @@ class C
             var text = "class c { int[, }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -2834,16 +2834,16 @@ class C
             var text = "class c { int[ public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -2852,16 +2852,16 @@ class C
             var text = "class c { int[, public void m() { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.IncompleteMember, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.IncompleteMember);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -2870,21 +2870,21 @@ class C
             var text = "class c { void m() { int if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2893,22 +2893,22 @@ class C
             var text = "class c { void m() { int [ if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2917,22 +2917,22 @@ class C
             var text = "class c { void m() { int [, if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2941,20 +2941,20 @@ class C
             var text = "class c { void m() { int a if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2963,21 +2963,21 @@ class C
             var text = "class c { void m() { int a, if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -2986,21 +2986,21 @@ class C
             var text = "class c { void m() { int a = if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3009,21 +3009,21 @@ class C
             var text = "class c { void m() { int a = { if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3032,21 +3032,21 @@ class C
             var text = "class c { void m() { int a = { e if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3055,21 +3055,21 @@ class C
             var text = "class c { void m() { int a = { e, if (x) y(); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3078,19 +3078,19 @@ class C
             var text = "class c { void m() { int a = { $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3099,19 +3099,19 @@ class C
             var text = "class c { void m() { int a = { e $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3120,19 +3120,19 @@ class C
             var text = "class c { void m() { int a = { $ e }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3141,19 +3141,19 @@ class C
             var text = "class c { void m() { int a = { e, $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3162,19 +3162,19 @@ class C
             var text = "class c { void m() { int a = { e, e $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3183,19 +3183,19 @@ class C
             var text = "class c { void m() { int a = { e, $ e }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3204,20 +3204,20 @@ class C
             var text = "class c { void m() { int a = { e $ e }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -3226,21 +3226,21 @@ class C
             var text = "class c { void m() { m($); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3249,21 +3249,21 @@ class C
             var text = "class c { void m() { m(a $); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3272,21 +3272,21 @@ class C
             var text = "class c { void m() { m($ a); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3295,22 +3295,22 @@ class C
             var text = "class c { void m() { m(a, $); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3319,21 +3319,21 @@ class C
             var text = "class c { void m() { m(; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -3342,21 +3342,21 @@ class C
             var text = "class c { void m() { m(a; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -3365,22 +3365,22 @@ class C
             var text = "class c { void m() { m(a,; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -3393,13 +3393,13 @@ class C
             var ie = (md.Body.Statements[0] as ExpressionStatementSyntax).Expression as InvocationExpressionSyntax;
 
             // whitespace trivia is part of the following '}', not the invocation expression
-            Assert.Equal("", ie.ArgumentList.CloseParenToken.ToFullString());
-            Assert.Equal("\t\t\t} ", md.Body.CloseBraceToken.ToFullString());
+            ie.ArgumentList.CloseParenToken.ToFullString().Should().Be("");
+            md.Body.CloseBraceToken.ToFullString().Should().Be("\t\t\t} ");
 
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3408,23 +3408,23 @@ class C
             var text = "class c { void m() { m( if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3433,23 +3433,23 @@ class C
             var text = "class c { void m() { m(a if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3458,24 +3458,24 @@ class C
             var text = "class c { void m() { m(a, if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3484,22 +3484,22 @@ class C
             var text = "class c { void m() { m( } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3508,22 +3508,22 @@ class C
             var text = "class c { void m() { m(a } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3532,23 +3532,23 @@ class C
             var text = "class c { void m() { m(a, } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.InvocationExpression, es.Expression.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.InvocationExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3557,22 +3557,22 @@ class C
             var text = "class c { void m() { ++a[$]; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3581,22 +3581,22 @@ class C
             var text = "class c { void m() { ++a[e $]; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3605,22 +3605,22 @@ class C
             var text = "class c { void m() { ++a[$ e]; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3629,23 +3629,23 @@ class C
             var text = "class c { void m() { ++a[e, $]; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -3654,22 +3654,22 @@ class C
             var text = "class c { void m() { ++a[; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -3678,22 +3678,22 @@ class C
             var text = "class c { void m() { ++a[e; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -3702,23 +3702,23 @@ class C
             var text = "class c { void m() { ++a[e,; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -3727,24 +3727,24 @@ class C
             var text = "class c { void m() { ++a[ if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3753,24 +3753,24 @@ class C
             var text = "class c { void m() { ++a[e if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3779,25 +3779,25 @@ class C
             var text = "class c { void m() { ++a[e, if(e) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.IfStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.IfStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3806,23 +3806,23 @@ class C
             var text = "class c { void m() { ++a[ } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3831,23 +3831,23 @@ class C
             var text = "class c { void m() { ++a[e } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3856,24 +3856,24 @@ class C
             var text = "class c { void m() { ++a[e, } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ExpressionStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ExpressionStatement);
             var es = (ExpressionStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(SyntaxKind.PreIncrementExpression, es.Expression.Kind());
-            Assert.Equal(SyntaxKind.ElementAccessExpression, ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            es.Expression.Kind().Should().Be(SyntaxKind.PreIncrementExpression);
+            ((PrefixUnaryExpressionSyntax)es.Expression).Operand.Kind().Should().Be(SyntaxKind.ElementAccessExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -3882,19 +3882,19 @@ class C
             var text = "class c { void m() { fixed(t v { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.FixedStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.FixedStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -3903,20 +3903,20 @@ class C
             var text = "class c { void m() { fixed(t v; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.FixedStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.FixedStatement);
             var diags = file.ErrorsAndWarnings();
-            Assert.Equal(1, diags.Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, diags[0].Code);
+            diags.Length.Should().Be(1);
+            diags[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
 
             CreateCompilation(text).VerifyDiagnostics(
                 // (1,31): error CS1026: ) expected
@@ -3948,19 +3948,19 @@ class C
             var text = "class c { void m() { fixed(t ) { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.FixedStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.FixedStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
         }
 
         [Fact]
@@ -3969,19 +3969,19 @@ class C
             var text = "class c { void m() { try { catch { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -3990,19 +3990,19 @@ class C
             var text = "class c { void m() { try { finally { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4011,20 +4011,20 @@ class C
             var text = "class c { void m() { try { } catch finally { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4033,20 +4033,20 @@ class C
             var text = "class c { void m() { try { } catch catch { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4055,21 +4055,21 @@ class C
             var text = "class c { void m() { try { } catch (t finally { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4078,21 +4078,21 @@ class C
             var text = "class c { void m() { try { } catch (t catch { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4101,19 +4101,19 @@ class C
             var text = "class c { void m() { try { } catch } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
         }
 
         [Fact]
@@ -4122,20 +4122,20 @@ class C
             var text = "class c { void m() { try { } catch(t } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.TryStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.TryStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
         }
 
         [Fact]
@@ -4145,20 +4145,20 @@ class C
             var text = "class c { void m() { do { } while(e[; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.DoStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.DoStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -4168,17 +4168,17 @@ class C
             var text = "class c { void m() { do { } while(e[); } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.DoStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.DoStatement);
             file.Errors().Verify(
                 // error CS1003: Syntax error, ']' expected
                 Diagnostic(ErrorCode.ERR_SyntaxError).WithArguments("]").WithLocation(1, 1),
@@ -4194,19 +4194,19 @@ class C
             var text = "class c { void m() { for (a[;;) { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -4216,23 +4216,23 @@ class C
             var text = "class c { void m() { for (a[ { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[4].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -4242,25 +4242,25 @@ class C
             var text = "class c { void m() { for (a[ } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(7, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[4].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[5].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[6].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(7);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[5].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[6].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4269,19 +4269,19 @@ class C
             var text = "class c { void m() { for (;a[;) { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
         }
 
         [Fact]
@@ -4290,21 +4290,21 @@ class C
             var text = "class c { void m() { for (;a[ { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -4313,23 +4313,23 @@ class C
             var text = "class c { void m() { for (;a[ } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(5, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[3].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[4].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(5);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[4].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4338,17 +4338,17 @@ class C
             var text = "class c { void m() { for (;;++a[) { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
             file.Errors().Verify(
                 // error CS1003: Syntax error, ']' expected
                 Diagnostic(ErrorCode.ERR_SyntaxError).WithArguments("]").WithLocation(1, 1),
@@ -4363,20 +4363,20 @@ class C
             var text = "class c { void m() { for (;;++a[ { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -4385,22 +4385,22 @@ class C
             var text = "class c { void m() { for (;;++a[ } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.ForStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[3].Code);
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.ForStatement);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SyntaxError);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4410,24 +4410,24 @@ class C
             var text = "class c { void m() { var x = new {}; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(0, file.Errors().Length);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -4436,25 +4436,25 @@ class C
             var text = "class c { void m() { var x = new {; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.Kind());
-            Assert.NotEqual(default, ds.Declaration.Variables[0].Initializer.EqualsToken);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Should().NotBe(default);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4463,25 +4463,25 @@ class C
             var text = "class c { void m() { var x = new {a; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4490,26 +4490,26 @@ class C
             var text = "class c { void m() { var x = new {a =; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4518,25 +4518,25 @@ class C
             var text = "class c { void m() { var x = new {a = b; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4545,25 +4545,25 @@ class C
             var text = "class c { void m() { var x = new {a = b, ; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4572,27 +4572,27 @@ class C
             var text = "class c { void m() { var x = new { while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4601,27 +4601,27 @@ class C
             var text = "class c { void m() { var x = new { a while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4630,28 +4630,28 @@ class C
             var text = "class c { void m() { var x = new { a = while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4660,27 +4660,27 @@ class C
             var text = "class c { void m() { var x = new { a = b while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4689,27 +4689,27 @@ class C
             var text = "class c { void m() { var x = new { a = b, while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -4718,25 +4718,25 @@ class C
             var text = "class c { void m() { var x = new { $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4745,25 +4745,25 @@ class C
             var text = "class c { void m() { var x = new { $ a }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4772,25 +4772,25 @@ class C
             var text = "class c { void m() { var x = new { a $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4799,26 +4799,26 @@ class C
             var text = "class c { void m() { var x = new { a = $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4827,25 +4827,25 @@ class C
             var text = "class c { void m() { var x = new { a = b $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4854,25 +4854,25 @@ class C
             var text = "class c { void m() { var x = new { a = b, $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.AnonymousObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.AnonymousObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -4882,24 +4882,24 @@ class C
             var text = "class c { void m() { var x = new C {}; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(0, file.Errors().Length);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -4908,25 +4908,25 @@ class C
             var text = "class c { void m() { var x = new C {; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4935,25 +4935,25 @@ class C
             var text = "class c { void m() { var x = new C { a; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4962,26 +4962,26 @@ class C
             var text = "class c { void m() { var x = new C { a =; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -4990,25 +4990,25 @@ class C
             var text = "class c { void m() { var x = new C { a = b; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5017,26 +5017,26 @@ class C
             var text = "class c { void m() { var x = new C { a = b, ; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5045,27 +5045,27 @@ class C
             var text = "class c { void m() { var x = new C { while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5074,27 +5074,27 @@ class C
             var text = "class c { void m() { var x = new C { a while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5103,28 +5103,28 @@ class C
             var text = "class c { void m() { var x = new C { a = while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5133,27 +5133,27 @@ class C
             var text = "class c { void m() { var x = new C { a = b while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5162,28 +5162,28 @@ class C
             var text = "class c { void m() { var x = new C { a = b, while (x) {} } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5192,25 +5192,25 @@ class C
             var text = "class c { void m() { var x = new C { $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5219,25 +5219,25 @@ class C
             var text = "class c { void m() { var x = new C { $ a }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5246,25 +5246,25 @@ class C
             var text = "class c { void m() { var x = new C { a $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5273,26 +5273,26 @@ class C
             var text = "class c { void m() { var x = new C { a = $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5301,25 +5301,25 @@ class C
             var text = "class c { void m() { var x = new C { a = b $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[0].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5328,26 +5328,26 @@ class C
             var text = "class c { void m() { var x = new C { a = b, $ }; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.ObjectCreationExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_UnexpectedCharacter, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.ObjectCreationExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_UnexpectedCharacter);
         }
 
         [Fact]
@@ -5356,23 +5356,23 @@ class C
             var text = "class c { void m() { var x = (Y y, ; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
             file.Errors().Verify(
                 // error CS1525: Invalid expression term ';'
                 Diagnostic(ErrorCode.ERR_InvalidExprTerm).WithArguments(";").WithLocation(1, 1),
@@ -5387,26 +5387,26 @@ class C
             var text = "class c { void m() { var x = (y, ; } }";
             var file = this.ParseTree(text, options: TestOptions.Regular);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
         }
 
         [Fact]
@@ -5415,28 +5415,27 @@ class C
             var text = "class c { void m() { var x = (y, ; } }";
             var file = this.ParseTree(text, TestOptions.Regular.WithLanguageVersion(LanguageVersion.CSharp6));
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(1, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(1);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
 
-            Assert.Equal(new[] {
-                                (int)ErrorCode.ERR_InvalidExprTerm,
-                                (int)ErrorCode.ERR_CloseParenExpected
-                            }, file.Errors().Select(e => e.Code));
+            (int)ErrorCode.ERR_CloseParenExpected
+                            }.Should().Be(new[] {
+                                (int)ErrorCode.ERR_InvalidExprTerm, file.Errors().Select(e => e.Code));
 
             CreateCompilation(text, parseOptions: TestOptions.Regular6).VerifyDiagnostics(
                 // (1,7): warning CS8981: The type name 'c' only contains lower-cased ascii characters. Such names may become reserved for the language.
@@ -5462,24 +5461,24 @@ class C
             var text = "class c { void m() { var x = (Y y, while (c) { } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
             file.Errors().Verify(
                 // error CS1525: Invalid expression term 'while'
                 Diagnostic(ErrorCode.ERR_InvalidExprTerm).WithArguments("while").WithLocation(1, 1),
@@ -5496,28 +5495,28 @@ class C
             var text = "class c { void m() { var x = (y, while (c) { } } }";
             var file = this.ParseTree(text, options: TestOptions.Regular);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_CloseParenExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_CloseParenExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
         }
 
         [Fact]
@@ -5526,32 +5525,32 @@ class C
             var text = "class c { void m() { var x = (y, while (c) { } } }";
             var file = this.ParseTree(text, options: TestOptions.Regular.WithLanguageVersion(LanguageVersion.CSharp6));
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var ms = (MethodDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(ms.Body);
-            Assert.Equal(2, ms.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, ms.Body.Statements[0].Kind());
-            Assert.Equal(SyntaxKind.WhileStatement, ms.Body.Statements[1].Kind());
+            ms.Body.Should().NotBeNull();
+            ms.Body.Statements.Count.Should().Be(2);
+            ms.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
+            ms.Body.Statements[1].Kind().Should().Be(SyntaxKind.WhileStatement);
 
             var ds = (LocalDeclarationStatementSyntax)ms.Body.Statements[0];
-            Assert.Equal("var x = (y, ", ds.ToFullString());
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotEqual(SyntaxKind.None, ds.Declaration.Variables[0].Initializer.EqualsToken.Kind());
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.TupleExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.ToFullString().Should().Be("var x = (y, ");
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.EqualsToken.Kind().Should().NotBe(SyntaxKind.None);
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.TupleExpression);
 
-            Assert.Equal(new[] {
+            file.Errors().Select(e => e.Code).Should().Equal(new[] {
                                 (int)ErrorCode.ERR_InvalidExprTerm,
                                 (int)ErrorCode.ERR_CloseParenExpected,
                                 (int)ErrorCode.ERR_SemicolonExpected
-                            }, file.Errors().Select(e => e.Code));
+                            });
 
             CreateCompilation(text, parseOptions: TestOptions.Regular6).VerifyDiagnostics(
                 // (1,7): warning CS8981: The type name 'c' only contains lower-cased ascii characters. Such names may become reserved for the language.
@@ -5584,21 +5583,21 @@ class C
             var text = "class c { int p { } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.PropertyDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.PropertyDeclaration);
             var pd = (PropertyDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(pd.AccessorList);
-            Assert.NotEqual(default, pd.AccessorList.OpenBraceToken);
-            Assert.False(pd.AccessorList.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, pd.AccessorList.CloseBraceToken);
-            Assert.False(pd.AccessorList.CloseBraceToken.IsMissing);
-            Assert.Equal(0, pd.AccessorList.Accessors.Count);
-            Assert.Equal(0, file.Errors().Length);
+            pd.AccessorList.Should().NotBeNull();
+            pd.AccessorList.OpenBraceToken.Should().NotBe(default);
+            pd.AccessorList.OpenBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.CloseBraceToken.Should().NotBe(default);
+            pd.AccessorList.CloseBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.Accessors.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(0);
         }
 
         [Fact]
@@ -5608,23 +5607,23 @@ class C
             var text = "class c { int p { int M() {} }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.PropertyDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.PropertyDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var pd = (PropertyDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(pd.AccessorList);
-            Assert.NotEqual(default, pd.AccessorList.OpenBraceToken);
-            Assert.False(pd.AccessorList.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, pd.AccessorList.CloseBraceToken);
-            Assert.True(pd.AccessorList.CloseBraceToken.IsMissing);
-            Assert.Equal(0, pd.AccessorList.Accessors.Count);
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
+            pd.AccessorList.Should().NotBeNull();
+            pd.AccessorList.OpenBraceToken.Should().NotBe(default);
+            pd.AccessorList.OpenBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.CloseBraceToken.Should().NotBe(default);
+            pd.AccessorList.CloseBraceToken.IsMissing.Should().BeTrue();
+            pd.AccessorList.Accessors.Count.Should().Be(0);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5633,33 +5632,33 @@ class C
             var text = "class c { int p { get int M() {} }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.PropertyDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.PropertyDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var pd = (PropertyDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(pd.AccessorList);
-            Assert.NotEqual(default, pd.AccessorList.OpenBraceToken);
-            Assert.False(pd.AccessorList.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, pd.AccessorList.CloseBraceToken);
-            Assert.True(pd.AccessorList.CloseBraceToken.IsMissing);
-            Assert.Equal(1, pd.AccessorList.Accessors.Count);
+            pd.AccessorList.Should().NotBeNull();
+            pd.AccessorList.OpenBraceToken.Should().NotBe(default);
+            pd.AccessorList.OpenBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.CloseBraceToken.Should().NotBe(default);
+            pd.AccessorList.CloseBraceToken.IsMissing.Should().BeTrue();
+            pd.AccessorList.Accessors.Count.Should().Be(1);
             var acc = pd.AccessorList.Accessors[0];
-            Assert.Equal(SyntaxKind.GetAccessorDeclaration, acc.Kind());
-            Assert.NotEqual(default, acc.Keyword);
-            Assert.False(acc.Keyword.IsMissing);
-            Assert.Equal(SyntaxKind.GetKeyword, acc.Keyword.Kind());
-            Assert.Null(acc.Body);
-            Assert.NotEqual(default, acc.SemicolonToken);
-            Assert.True(acc.SemicolonToken.IsMissing);
+            acc.Kind().Should().Be(SyntaxKind.GetAccessorDeclaration);
+            acc.Keyword.Should().NotBe(default);
+            acc.Keyword.IsMissing.Should().BeFalse();
+            acc.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
+            acc.Body.Should().BeNull();
+            acc.SemicolonToken.Should().NotBe(default);
+            acc.SemicolonToken.IsMissing.Should().BeTrue();
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_SemiOrLBraceOrArrowExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_SemiOrLBraceOrArrowExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5668,37 +5667,37 @@ class C
             var text = "class c { int p { get { class d {} }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.PropertyDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.PropertyDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var pd = (PropertyDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(pd.AccessorList);
-            Assert.NotEqual(default, pd.AccessorList.OpenBraceToken);
-            Assert.False(pd.AccessorList.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, pd.AccessorList.CloseBraceToken);
-            Assert.True(pd.AccessorList.CloseBraceToken.IsMissing);
-            Assert.Equal(1, pd.AccessorList.Accessors.Count);
+            pd.AccessorList.Should().NotBeNull();
+            pd.AccessorList.OpenBraceToken.Should().NotBe(default);
+            pd.AccessorList.OpenBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.CloseBraceToken.Should().NotBe(default);
+            pd.AccessorList.CloseBraceToken.IsMissing.Should().BeTrue();
+            pd.AccessorList.Accessors.Count.Should().Be(1);
             var acc = pd.AccessorList.Accessors[0];
-            Assert.Equal(SyntaxKind.GetAccessorDeclaration, acc.Kind());
-            Assert.NotEqual(default, acc.Keyword);
-            Assert.False(acc.Keyword.IsMissing);
-            Assert.Equal(SyntaxKind.GetKeyword, acc.Keyword.Kind());
-            Assert.NotNull(acc.Body);
-            Assert.NotEqual(default, acc.Body.OpenBraceToken);
-            Assert.False(acc.Body.OpenBraceToken.IsMissing);
-            Assert.Equal(0, acc.Body.Statements.Count);
-            Assert.NotEqual(default, acc.Body.CloseBraceToken);
-            Assert.True(acc.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.None, acc.SemicolonToken.Kind());
+            acc.Kind().Should().Be(SyntaxKind.GetAccessorDeclaration);
+            acc.Keyword.Should().NotBe(default);
+            acc.Keyword.IsMissing.Should().BeFalse();
+            acc.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
+            acc.Body.Should().NotBeNull();
+            acc.Body.OpenBraceToken.Should().NotBe(default);
+            acc.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            acc.Body.Statements.Count.Should().Be(0);
+            acc.Body.CloseBraceToken.Should().NotBe(default);
+            acc.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            acc.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5707,37 +5706,37 @@ class C
             var text = "class c { int p { get { public class d {} }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.PropertyDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.ClassDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.PropertyDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var pd = (PropertyDeclarationSyntax)agg.Members[0];
-            Assert.NotNull(pd.AccessorList);
-            Assert.NotEqual(default, pd.AccessorList.OpenBraceToken);
-            Assert.False(pd.AccessorList.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, pd.AccessorList.CloseBraceToken);
-            Assert.True(pd.AccessorList.CloseBraceToken.IsMissing);
-            Assert.Equal(1, pd.AccessorList.Accessors.Count);
+            pd.AccessorList.Should().NotBeNull();
+            pd.AccessorList.OpenBraceToken.Should().NotBe(default);
+            pd.AccessorList.OpenBraceToken.IsMissing.Should().BeFalse();
+            pd.AccessorList.CloseBraceToken.Should().NotBe(default);
+            pd.AccessorList.CloseBraceToken.IsMissing.Should().BeTrue();
+            pd.AccessorList.Accessors.Count.Should().Be(1);
             var acc = pd.AccessorList.Accessors[0];
-            Assert.Equal(SyntaxKind.GetAccessorDeclaration, acc.Kind());
-            Assert.NotEqual(default, acc.Keyword);
-            Assert.False(acc.Keyword.IsMissing);
-            Assert.Equal(SyntaxKind.GetKeyword, acc.Keyword.Kind());
-            Assert.NotNull(acc.Body);
-            Assert.NotEqual(default, acc.Body.OpenBraceToken);
-            Assert.False(acc.Body.OpenBraceToken.IsMissing);
-            Assert.Equal(0, acc.Body.Statements.Count);
-            Assert.NotEqual(default, acc.Body.CloseBraceToken);
-            Assert.True(acc.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(SyntaxKind.None, acc.SemicolonToken.Kind());
+            acc.Kind().Should().Be(SyntaxKind.GetAccessorDeclaration);
+            acc.Keyword.Should().NotBe(default);
+            acc.Keyword.IsMissing.Should().BeFalse();
+            acc.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
+            acc.Body.Should().NotBeNull();
+            acc.Body.OpenBraceToken.Should().NotBe(default);
+            acc.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            acc.Body.Statements.Count.Should().Be(0);
+            acc.Body.CloseBraceToken.Should().NotBe(default);
+            acc.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            acc.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5746,30 +5745,30 @@ class C
             var text = "class c { int p { get return 0; } } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
 
             var classDecl = (TypeDeclarationSyntax)file.Members[0];
             var propertyDecl = (PropertyDeclarationSyntax)classDecl.Members[0];
 
             var accessorDecls = propertyDecl.AccessorList.Accessors;
-            Assert.Equal(1, accessorDecls.Count);
+            accessorDecls.Count.Should().Be(1);
 
             var getDecl = accessorDecls[0];
-            Assert.Equal(SyntaxKind.GetKeyword, getDecl.Keyword.Kind());
+            getDecl.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
 
             var getBodyDecl = getDecl.Body;
-            Assert.NotNull(getBodyDecl);
-            Assert.True(getBodyDecl.OpenBraceToken.IsMissing);
+            getBodyDecl.Should().NotBeNull();
+            getBodyDecl.OpenBraceToken.IsMissing.Should().BeTrue();
 
             var getBodyStmts = getBodyDecl.Statements;
-            Assert.Equal(1, getBodyStmts.Count);
-            Assert.Equal(SyntaxKind.ReturnKeyword, getBodyStmts[0].GetFirstToken().Kind());
-            Assert.False(getBodyStmts[0].ContainsDiagnostics);
+            getBodyStmts.Count.Should().Be(1);
+            getBodyStmts[0].GetFirstToken().Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            getBodyStmts[0].ContainsDiagnostics.Should().BeFalse();
 
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal(ErrorCode.ERR_SemiOrLBraceOrArrowExpected, (ErrorCode)file.Errors()[0].Code);
+            file.Errors().Length.Should().Be(1);
+            (ErrorCode)file.Errors()[0].Code.Should().Be(ErrorCode.ERR_SemiOrLBraceOrArrowExpected);
         }
 
         [Fact]
@@ -5778,29 +5777,29 @@ class C
             var text = "class c { int p { get set } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
 
             var classDecl = (TypeDeclarationSyntax)file.Members[0];
             var propertyDecl = (PropertyDeclarationSyntax)classDecl.Members[0];
 
             var accessorDecls = propertyDecl.AccessorList.Accessors;
-            Assert.Equal(2, accessorDecls.Count);
+            accessorDecls.Count.Should().Be(2);
 
             var getDecl = accessorDecls[0];
-            Assert.Equal(SyntaxKind.GetKeyword, getDecl.Keyword.Kind());
-            Assert.Null(getDecl.Body);
-            Assert.True(getDecl.SemicolonToken.IsMissing);
+            getDecl.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
+            getDecl.Body.Should().BeNull();
+            getDecl.SemicolonToken.IsMissing.Should().BeTrue();
 
             var setDecl = accessorDecls[1];
-            Assert.Equal(SyntaxKind.SetKeyword, setDecl.Keyword.Kind());
-            Assert.Null(setDecl.Body);
-            Assert.True(setDecl.SemicolonToken.IsMissing);
+            setDecl.Keyword.Kind().Should().Be(SyntaxKind.SetKeyword);
+            setDecl.Body.Should().BeNull();
+            setDecl.SemicolonToken.IsMissing.Should().BeTrue();
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal(ErrorCode.ERR_SemiOrLBraceOrArrowExpected, (ErrorCode)file.Errors()[0].Code);
-            Assert.Equal(ErrorCode.ERR_SemiOrLBraceOrArrowExpected, (ErrorCode)file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            (ErrorCode)file.Errors()[0].Code.Should().Be(ErrorCode.ERR_SemiOrLBraceOrArrowExpected);
+            (ErrorCode)file.Errors()[1].Code.Should().Be(ErrorCode.ERR_SemiOrLBraceOrArrowExpected);
         }
 
         [Fact]
@@ -5809,43 +5808,43 @@ class C
             var text = "class c { void m() { var q = from x in y orderby; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.False(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeFalse();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(1, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(1);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.True(nm.IsMissing);
+            nm.IsMissing.Should().BeTrue();
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
         }
 
         [Fact]
@@ -5854,42 +5853,42 @@ class C
             var text = "class c { void m() { var q = from x in y orderby e; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.False(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeFalse();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(1, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(1);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.False(nm.IsMissing);
+            nm.IsMissing.Should().BeFalse();
 
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[0].Code);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
         }
 
         [Fact]
@@ -5898,47 +5897,47 @@ class C
             var text = "class c { void m() { var q = from x in y orderby e, ; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(1, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
+            agg.Members.Count.Should().Be(1);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.False(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeFalse();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(2, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(2);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.False(nm.IsMissing);
-            Assert.NotNull(oc.Orderings[1].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            nm.IsMissing.Should().BeFalse();
+            oc.Orderings[1].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             nm = (IdentifierNameSyntax)oc.Orderings[1].Expression;
-            Assert.True(nm.IsMissing);
+            nm.IsMissing.Should().BeTrue();
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[1].Code);
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
         }
 
         [Fact]
@@ -5947,46 +5946,46 @@ class C
             var text = "class c { void m() { var q = from x in y orderby public int Goo; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.True(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(1, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(1);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.True(nm.IsMissing);
+            nm.IsMissing.Should().BeTrue();
 
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -5995,45 +5994,45 @@ class C
             var text = "class c { void m() { var q = from x in y orderby e public int Goo; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.True(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(1, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(1);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.False(nm.IsMissing);
+            nm.IsMissing.Should().BeFalse();
 
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -6042,50 +6041,50 @@ class C
             var text = "class c { void m() { var q = from x in y orderby e, public int Goo; }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var agg = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal(2, agg.Members.Count);
-            Assert.Equal(SyntaxKind.MethodDeclaration, agg.Members[0].Kind());
-            Assert.Equal(SyntaxKind.FieldDeclaration, agg.Members[1].Kind());
+            agg.Members.Count.Should().Be(2);
+            agg.Members[0].Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            agg.Members[1].Kind().Should().Be(SyntaxKind.FieldDeclaration);
             var md = (MethodDeclarationSyntax)agg.Members[0];
 
-            Assert.NotNull(md.Body);
-            Assert.NotEqual(default, md.Body.OpenBraceToken);
-            Assert.False(md.Body.OpenBraceToken.IsMissing);
-            Assert.NotEqual(default, md.Body.CloseBraceToken);
-            Assert.True(md.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, md.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, md.Body.Statements[0].Kind());
+            md.Body.Should().NotBeNull();
+            md.Body.OpenBraceToken.Should().NotBe(default);
+            md.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            md.Body.CloseBraceToken.Should().NotBe(default);
+            md.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            md.Body.Statements.Count.Should().Be(1);
+            md.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var ds = (LocalDeclarationStatementSyntax)md.Body.Statements[0];
-            Assert.Equal(1, ds.Declaration.Variables.Count);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer);
-            Assert.NotNull(ds.Declaration.Variables[0].Initializer.Value);
-            Assert.Equal(SyntaxKind.QueryExpression, ds.Declaration.Variables[0].Initializer.Value.Kind());
+            ds.Declaration.Variables.Count.Should().Be(1);
+            ds.Declaration.Variables[0].Initializer.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Should().NotBeNull();
+            ds.Declaration.Variables[0].Initializer.Value.Kind().Should().Be(SyntaxKind.QueryExpression);
             var qx = (QueryExpressionSyntax)ds.Declaration.Variables[0].Initializer.Value;
-            Assert.Equal(1, qx.Body.Clauses.Count);
-            Assert.Equal(SyntaxKind.FromClause, qx.FromClause.Kind());
-            Assert.Equal(SyntaxKind.OrderByClause, qx.Body.Clauses[0].Kind());
+            qx.Body.Clauses.Count.Should().Be(1);
+            qx.FromClause.Kind().Should().Be(SyntaxKind.FromClause);
+            qx.Body.Clauses[0].Kind().Should().Be(SyntaxKind.OrderByClause);
             var oc = (OrderByClauseSyntax)qx.Body.Clauses[0];
-            Assert.NotEqual(default, oc.OrderByKeyword);
-            Assert.False(oc.OrderByKeyword.IsMissing);
-            Assert.Equal(2, oc.Orderings.Count);
-            Assert.NotNull(oc.Orderings[0].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            oc.OrderByKeyword.Should().NotBe(default);
+            oc.OrderByKeyword.IsMissing.Should().BeFalse();
+            oc.Orderings.Count.Should().Be(2);
+            oc.Orderings[0].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             var nm = (IdentifierNameSyntax)oc.Orderings[0].Expression;
-            Assert.False(nm.IsMissing);
-            Assert.NotNull(oc.Orderings[1].Expression);
-            Assert.Equal(SyntaxKind.IdentifierName, oc.Orderings[0].Expression.Kind());
+            nm.IsMissing.Should().BeFalse();
+            oc.Orderings[1].Expression.Should().NotBeNull();
+            oc.Orderings[0].Expression.Kind().Should().Be(SyntaxKind.IdentifierName);
             nm = (IdentifierNameSyntax)oc.Orderings[1].Expression;
-            Assert.True(nm.IsMissing);
+            nm.IsMissing.Should().BeTrue();
 
-            Assert.Equal(4, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_ExpectedSelectOrGroup, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[3].Code);
+            file.Errors().Length.Should().Be(4);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_ExpectedSelectOrGroup);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            file.Errors()[3].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
         }
 
         [Fact]
@@ -6094,44 +6093,44 @@ class C
             var text = "class C1 { void M1() { int x = 1, partial class y = 2; } }";
             var file = this.ParseTree(text);
 
-            Assert.NotNull(file);
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            file.Should().NotBeNull();
+            file.ToFullString().Should().Be(text);
+            file.Members.Count.Should().Be(1);
+            file.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
 
             var item1 = (TypeDeclarationSyntax)file.Members[0];
-            Assert.Equal("C1", item1.Identifier.ToString());
-            Assert.False(item1.OpenBraceToken.IsMissing);
-            Assert.Equal(2, item1.Members.Count);
-            Assert.False(item1.CloseBraceToken.IsMissing);
+            item1.Identifier.ToString().Should().Be("C1");
+            item1.OpenBraceToken.IsMissing.Should().BeFalse();
+            item1.Members.Count.Should().Be(2);
+            item1.CloseBraceToken.IsMissing.Should().BeFalse();
 
             var subitem1 = (MethodDeclarationSyntax)item1.Members[0];
-            Assert.Equal(SyntaxKind.MethodDeclaration, subitem1.Kind());
-            Assert.NotNull(subitem1.Body);
-            Assert.False(subitem1.Body.OpenBraceToken.IsMissing);
-            Assert.True(subitem1.Body.CloseBraceToken.IsMissing);
-            Assert.Equal(1, subitem1.Body.Statements.Count);
-            Assert.Equal(SyntaxKind.LocalDeclarationStatement, subitem1.Body.Statements[0].Kind());
+            subitem1.Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            subitem1.Body.Should().NotBeNull();
+            subitem1.Body.OpenBraceToken.IsMissing.Should().BeFalse();
+            subitem1.Body.CloseBraceToken.IsMissing.Should().BeTrue();
+            subitem1.Body.Statements.Count.Should().Be(1);
+            subitem1.Body.Statements[0].Kind().Should().Be(SyntaxKind.LocalDeclarationStatement);
             var decl = (LocalDeclarationStatementSyntax)subitem1.Body.Statements[0];
-            Assert.True(decl.SemicolonToken.IsMissing);
-            Assert.Equal(2, decl.Declaration.Variables.Count);
-            Assert.Equal("x", decl.Declaration.Variables[0].Identifier.ToString());
-            Assert.True(decl.Declaration.Variables[1].Identifier.IsMissing);
-            Assert.Equal(3, subitem1.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, subitem1.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, subitem1.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, subitem1.Errors()[2].Code);
+            decl.SemicolonToken.IsMissing.Should().BeTrue();
+            decl.Declaration.Variables.Count.Should().Be(2);
+            decl.Declaration.Variables[0].Identifier.ToString().Should().Be("x");
+            decl.Declaration.Variables[1].Identifier.IsMissing.Should().BeTrue();
+            subitem1.Errors().Length.Should().Be(3);
+            subitem1.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm);
+            subitem1.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected);
+            subitem1.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
 
             var subitem2 = (TypeDeclarationSyntax)item1.Members[1];
-            Assert.Equal(SyntaxKind.ClassDeclaration, item1.Members[1].Kind());
-            Assert.Equal("y", subitem2.Identifier.ToString());
-            Assert.Equal(SyntaxKind.PartialKeyword, subitem2.Modifiers[0].ContextualKind());
-            Assert.True(subitem2.OpenBraceToken.IsMissing);
-            Assert.True(subitem2.CloseBraceToken.IsMissing);
-            Assert.Equal(3, subitem2.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, subitem2.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, subitem2.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_InvalidMemberDecl, subitem2.Errors()[2].Code);
+            item1.Members[1].Kind().Should().Be(SyntaxKind.ClassDeclaration);
+            subitem2.Identifier.ToString().Should().Be("y");
+            subitem2.Modifiers[0].ContextualKind().Should().Be(SyntaxKind.PartialKeyword);
+            subitem2.OpenBraceToken.IsMissing.Should().BeTrue();
+            subitem2.CloseBraceToken.IsMissing.Should().BeTrue();
+            subitem2.Errors().Length.Should().Be(3);
+            subitem2.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            subitem2.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
+            subitem2.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_InvalidMemberDecl);
         }
 
         [WorkItem(905394, "DevDiv/Personal")]
@@ -6147,8 +6146,8 @@ class C
                          }";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [WorkItem(906986, "DevDiv/Personal")]
@@ -6158,8 +6157,8 @@ class C
             var text = @"    [type: F";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [WorkItem(908952, "DevDiv/Personal")]
@@ -6177,8 +6176,8 @@ class C
                         ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [WorkItem(918947, "DevDiv/Personal")]
@@ -6202,8 +6201,8 @@ class A
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.False(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeFalse();
         }
 
         [WorkItem(918947, "DevDiv/Personal")]
@@ -6218,8 +6217,8 @@ class A
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.False(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeFalse();
         }
 
         [WorkItem(919418, "DevDiv/Personal")]
@@ -6243,8 +6242,8 @@ class A
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [Fact]
@@ -6253,13 +6252,13 @@ class A
             var text = @"using;";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
 
             var usings = file.Usings;
-            Assert.Equal(1, usings.Count);
-            Assert.True(usings[0].Name.IsMissing);
+            usings.Count.Should().Be(1);
+            usings[0].Name.IsMissing.Should().BeTrue();
         }
 
         [Fact]
@@ -6268,13 +6267,13 @@ class A
             var text = @"using 10;";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
 
             var usings = file.Usings;
-            Assert.Equal(1, usings.Count);
-            Assert.True(usings[0].Name.IsMissing);
+            usings.Count.Should().Be(1);
+            usings[0].Name.IsMissing.Should().BeTrue();
         }
 
         [Fact]
@@ -6283,22 +6282,22 @@ class A
             var text = @"using namespace Goo";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpectedKW, file.Errors()[0].Code);
-            Assert.Equal((int)ErrorCode.ERR_LbraceExpected, file.Errors()[1].Code);
-            Assert.Equal((int)ErrorCode.ERR_RbraceExpected, file.Errors()[2].Code);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpectedKW);
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_LbraceExpected);
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_RbraceExpected);
 
             var usings = file.Usings;
-            Assert.Equal(1, usings.Count);
-            Assert.True(usings[0].Name.IsMissing);
+            usings.Count.Should().Be(1);
+            usings[0].Name.IsMissing.Should().BeTrue();
 
             var members = file.Members;
-            Assert.Equal(1, members.Count);
+            members.Count.Should().Be(1);
 
             var namespaceDeclaration = members[0];
-            Assert.Equal(SyntaxKind.NamespaceDeclaration, namespaceDeclaration.Kind());
-            Assert.False(((NamespaceDeclarationSyntax)namespaceDeclaration).Name.IsMissing);
+            namespaceDeclaration.Kind().Should().Be(SyntaxKind.NamespaceDeclaration);
+            ((NamespaceDeclarationSyntax)namespaceDeclaration).Name.IsMissing.Should().BeFalse();
         }
 
         [Fact]
@@ -6307,22 +6306,22 @@ class A
             var text = @"using namespace Goo;";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
+            file.ToFullString().Should().Be(text);
             file.GetDiagnostics().Verify(
                 // (1,7): error CS1041: Identifier expected; 'namespace' is a keyword
                 // using namespace Goo;
                 Diagnostic(ErrorCode.ERR_IdentifierExpectedKW, "namespace").WithArguments("", "namespace").WithLocation(1, 7));
 
             var usings = file.Usings;
-            Assert.Equal(1, usings.Count);
-            Assert.True(usings[0].Name.IsMissing);
+            usings.Count.Should().Be(1);
+            usings[0].Name.IsMissing.Should().BeTrue();
 
             var members = file.Members;
-            Assert.Equal(1, members.Count);
+            members.Count.Should().Be(1);
 
             var namespaceDeclaration = members[0];
-            Assert.Equal(SyntaxKind.FileScopedNamespaceDeclaration, namespaceDeclaration.Kind());
-            Assert.False(((FileScopedNamespaceDeclarationSyntax)namespaceDeclaration).Name.IsMissing);
+            namespaceDeclaration.Kind().Should().Be(SyntaxKind.FileScopedNamespaceDeclaration);
+            ((FileScopedNamespaceDeclarationSyntax)namespaceDeclaration).Name.IsMissing.Should().BeFalse();
         }
 
         [Fact]
@@ -6335,9 +6334,9 @@ class C
 }";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected);
         }
 
         [WorkItem(537210, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537210")]
@@ -6366,8 +6365,8 @@ class C
 }";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            // Assert.True(file.ContainsDiagnostics); // CS0136 is not parser error
+            file.ToFullString().Should().Be(text);
+            // file.ContainsDiagnostics.Should().BeTrue(); // CS0136 is not parser error
         }
 
         [WorkItem(931315, "DevDiv/Personal")]
@@ -6382,8 +6381,8 @@ class C
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [WorkItem(931316, "DevDiv/Personal")]
@@ -6398,8 +6397,8 @@ class C
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.True(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeTrue();
         }
 
         [WorkItem(537214, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537214")]
@@ -6419,8 +6418,8 @@ class C
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.False(file.ContainsDiagnostics);
+            file.ToFullString().Should().Be(text);
+            file.ContainsDiagnostics.Should().BeFalse();
         }
 
         [WorkItem(537150, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537150")]
@@ -6437,9 +6436,9 @@ class C
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(1, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_GetOrSetExpected, file.Errors()[0].Code);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(1);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_GetOrSetExpected);
         }
 
         [WorkItem(536050, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/536050")]
@@ -6457,23 +6456,23 @@ class C
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
-            Assert.Equal(0, file.Errors().Length);
+            file.ToFullString().Should().Be(text);
+            file.Errors().Length.Should().Be(0);
 
             // CONSIDER: Dev10 actually gives 'CS1002: ; expected', because it thinks you were trying to
             // specify a method without a body.  This is a little silly, since we already know the method
             // isn't abstract.  It might be reasonable to say that an open brace was expected though.
 
             var classDecl = file.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.ClassDeclaration, classDecl.Kind());
+            classDecl.Kind().Should().Be(SyntaxKind.ClassDeclaration);
 
             var methodDecl = classDecl.ChildNodesAndTokens()[3];
-            Assert.Equal(SyntaxKind.ConstructorDeclaration, methodDecl.Kind()); //not MethodDeclaration
-            Assert.False(methodDecl.ContainsDiagnostics);
+            methodDecl.Kind().Should().Be(SyntaxKind.ConstructorDeclaration); //not MethodDeclaration
+            methodDecl.ContainsDiagnostics.Should().BeFalse();
 
             var methodBody = methodDecl.ChildNodesAndTokens()[3];
-            Assert.Equal(SyntaxKind.Block, methodBody.Kind());
-            Assert.False(methodBody.ContainsDiagnostics);
+            methodBody.Kind().Should().Be(SyntaxKind.Block);
+            methodBody.ContainsDiagnostics.Should().BeFalse();
         }
 
         [WorkItem(537157, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537157")]
@@ -6483,31 +6482,31 @@ class C
             var text = @"[1]";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
+            file.ToFullString().Should().Be(text);
 
             var incompleteMemberDecl = file.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.IncompleteMember, incompleteMemberDecl.Kind());
-            Assert.False(incompleteMemberDecl.IsMissing);
+            incompleteMemberDecl.Kind().Should().Be(SyntaxKind.IncompleteMember);
+            incompleteMemberDecl.IsMissing.Should().BeFalse();
 
             var attributeDecl = incompleteMemberDecl.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.AttributeList, attributeDecl.Kind());
-            Assert.False(attributeDecl.IsMissing);
+            attributeDecl.Kind().Should().Be(SyntaxKind.AttributeList);
+            attributeDecl.IsMissing.Should().BeFalse();
 
             var openBracketToken = attributeDecl.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.OpenBracketToken, openBracketToken.Kind());
-            Assert.False(openBracketToken.IsMissing);
+            openBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            openBracketToken.IsMissing.Should().BeFalse();
 
             var attribute = attributeDecl.ChildNodesAndTokens()[1];
-            Assert.Equal(SyntaxKind.Attribute, attribute.Kind());
-            Assert.True(attribute.IsMissing);
+            attribute.Kind().Should().Be(SyntaxKind.Attribute);
+            attribute.IsMissing.Should().BeTrue();
 
             var identifierName = attribute.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.IdentifierName, identifierName.Kind());
-            Assert.True(identifierName.IsMissing);
+            identifierName.Kind().Should().Be(SyntaxKind.IdentifierName);
+            identifierName.IsMissing.Should().BeTrue();
 
             var identifierToken = identifierName.ChildNodesAndTokens()[0];
-            Assert.Equal(SyntaxKind.IdentifierToken, identifierToken.Kind());
-            Assert.True(identifierToken.IsMissing);
+            identifierToken.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            identifierToken.IsMissing.Should().BeTrue();
         }
 
         [WorkItem(538469, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/538469")]
@@ -6530,12 +6529,12 @@ public class QueryExpressionTest
 }";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
+            file.ToFullString().Should().Be(text);
 
-            Assert.Equal(3, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_IdentifierExpected, file.Errors()[0].Code); //expecting item name - found "select" keyword
-            Assert.Equal((int)ErrorCode.ERR_InvalidExprTerm, file.Errors()[1].Code); //expecting expression - found "select" keyword
-            Assert.Equal((int)ErrorCode.ERR_SemicolonExpected, file.Errors()[2].Code); //we inserted a missing semicolon in a place we didn't expect
+            file.Errors().Length.Should().Be(3);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_IdentifierExpected); //expecting item name - found "select" keyword
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_InvalidExprTerm); //expecting expression - found "select" keyword
+            file.Errors()[2].Code.Should().Be((int)ErrorCode.ERR_SemicolonExpected); //we inserted a missing semicolon in a place we didn't expect
         }
 
         [WorkItem(538971, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/538971")]
@@ -6555,11 +6554,11 @@ class C : I<int>
 ";
             var file = this.ParseTree(text);
 
-            Assert.Equal(text, file.ToFullString());
+            file.ToFullString().Should().Be(text);
 
-            Assert.Equal(2, file.Errors().Length);
-            Assert.Equal((int)ErrorCode.ERR_TypeExpected, file.Errors()[0].Code); //expecting a type (argument)
-            Assert.Equal((int)ErrorCode.ERR_SyntaxError, file.Errors()[1].Code); //expecting close angle bracket
+            file.Errors().Length.Should().Be(2);
+            file.Errors()[0].Code.Should().Be((int)ErrorCode.ERR_TypeExpected); //expecting a type (argument)
+            file.Errors()[1].Code.Should().Be((int)ErrorCode.ERR_SyntaxError); //expecting close angle bracket
         }
 
         [WorkItem(540788, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/540788")]
@@ -6575,14 +6574,14 @@ public class Test
 
             var srcTree = this.ParseTree(text);
 
-            Assert.Equal(text, srcTree.ToFullString());
-            Assert.Equal("foreach", srcTree.GetLastToken().ToString());
+            srcTree.ToFullString().Should().Be(text);
+            srcTree.GetLastToken().ToString().Should().Be("foreach");
 
             // Get the Foreach Node
             var foreachNode = srcTree.GetLastToken().Parent;
 
             // Verify 3 empty nodes are created by the parser for error recovery.
-            Assert.Equal(3, foreachNode.ChildNodes().ToList().Count);
+            foreachNode.ChildNodes().ToList().Count.Should().Be(3);
         }
 
         [WorkItem(542236, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/542236")]
@@ -6595,13 +6594,13 @@ public class Test
 }";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text, TestOptions.Regular9);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // The issue (9391) was exhibited while enumerating the diagnostics
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(4,1): error CS1022: Type or namespace definition, or end-of-file expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(542352, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/542352")]
@@ -6614,10 +6613,10 @@ class C { }
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             // 9553: Several of the locations were incorrect and one was negative
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).Should().Equal(new[]
             {
                 // Error on the return type, because in C# syntax it goes after the operator and implicit/explicit keywords
                 "(2,1): error CS1553: Declaration is not valid; use '+ operator <dest-type> (...' instead",
@@ -6629,7 +6628,7 @@ class C { }
                 "(2,12): error CS1003: Syntax error, '(' expected",
                 "(2,12): error CS1026: ) expected",
                 "(2,12): error CS1002: ; expected",
-            }));
+            });
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6648,13 +6647,13 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(6,10): error CS1001: Identifier expected",
                 "(6,10): error CS1002: ; expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6673,13 +6672,13 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(6,10): error CS1001: Identifier expected",
                 "(6,10): error CS1002: ; expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6698,13 +6697,13 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(6,10): error CS1001: Identifier expected",
                 "(6,10): error CS1002: ; expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6724,13 +6723,13 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(6,10): error CS1001: Identifier expected",
                 "(6,10): error CS1002: ; expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6748,13 +6747,13 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.True(syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
+            syntaxTree.GetDiagnostics().Select(d => ((IFormattable)d).ToString(null, EnsureEnglishUICulture.PreferredOrNull)).SequenceEqual(new[]
             {
                 "(6,18): error CS1003: Syntax error, ',' expected",
                 "(6,19): error CS1002: ; expected",
-            }));
+            }).Should().BeTrue();
         }
 
         [WorkItem(545647, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545647")]
@@ -6773,9 +6772,9 @@ class C
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
-            Assert.Empty(syntaxTree.GetDiagnostics());
+            syntaxTree.GetDiagnostics().Should().BeEmpty();
         }
 
         [WorkItem(547120, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/547120")]
@@ -6787,7 +6786,7 @@ _ _::this
 ";
 
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, syntaxTree.GetCompilationUnitRoot().ToFullString());
+            syntaxTree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             syntaxTree.GetDiagnostics().Verify(
                 // (2,4): error CS1003: Syntax error, '.' expected
@@ -6912,6 +6911,7 @@ class Test
         {
             var source = @"
 using System;
+using AwesomeAssertions;
 
 class Test
 {
@@ -6961,7 +6961,7 @@ class C {}");
         {
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
         }
 
         [WorkItem(684816, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/684816")]
@@ -6976,7 +6976,7 @@ class C : I
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().Verify(
                 // (4,22): error CS1001: Identifier expected
                 //     int I./*missing*/< {
@@ -7007,7 +7007,7 @@ class C : I
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().Verify(
                 // (4,26): error CS1001: Identifier expected
                 //     event D I./*missing*/< {
@@ -7041,7 +7041,7 @@ class C : I
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().Verify(
                 // (4,14): error CS0071: An explicit interface implementation of an event must use event accessor syntax
                 //     event D I::
@@ -7066,7 +7066,7 @@ class C
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().Verify(
                 // (4,25): error CS1001: Identifier expected
                 //     event System.Action this
@@ -7093,7 +7093,7 @@ enum
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().ToArray();
         }
 
@@ -7107,7 +7107,7 @@ static
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var toString = tree.GetRoot().ToFullString();
-            Assert.Equal(source, toString);
+            toString.Should().Be(source);
             tree.GetDiagnostics().ToArray();
         }
 
@@ -7119,8 +7119,8 @@ static
             var source = new string(',', numTokens);
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var eofToken = ((CompilationUnitSyntax)tree.GetRoot()).EndOfFileToken;
-            Assert.Equal(numTokens, eofToken.FullWidth);
-            Assert.Equal(numTokens, eofToken.LeadingTrivia.Count); // Confirm that we built a list.
+            eofToken.FullWidth.Should().Be(numTokens);
+            eofToken.LeadingTrivia.Count.Should().Be(numTokens); // Confirm that we built a list.
         }
 
         [WorkItem(947819, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/947819")]
@@ -7134,15 +7134,15 @@ static
 ";
             var root = SyntaxFactory.ParseSyntaxTree(source).GetRoot();
 
-            Assert.Equal(source, root.ToFullString());
+            root.ToFullString().Should().Be(source);
             // Verify incomplete class decls don't eat tokens of surrounding nodes
             var classDecl = root.DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-            Assert.False(classDecl.Identifier.IsMissing);
-            Assert.True(classDecl.OpenBraceToken.IsMissing);
-            Assert.True(classDecl.CloseBraceToken.IsMissing);
+            classDecl.Identifier.IsMissing.Should().BeFalse();
+            classDecl.OpenBraceToken.IsMissing.Should().BeTrue();
+            classDecl.CloseBraceToken.IsMissing.Should().BeTrue();
             var ns = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Single();
-            Assert.False(ns.OpenBraceToken.IsMissing);
-            Assert.False(ns.CloseBraceToken.IsMissing);
+            ns.OpenBraceToken.IsMissing.Should().BeFalse();
+            ns.CloseBraceToken.IsMissing.Should().BeFalse();
         }
 
         [WorkItem(947819, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/947819")]
@@ -7155,14 +7155,14 @@ class c
 ";
             var root = SyntaxFactory.ParseSyntaxTree(source).GetRoot();
 
-            Assert.Equal(source, root.ToFullString());
+            root.ToFullString().Should().Be(source);
             // Verify incomplete class decls don't eat tokens of surrounding nodes
             var classDecl = root.DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-            Assert.False(classDecl.Identifier.IsMissing);
-            Assert.True(classDecl.OpenBraceToken.IsMissing);
-            Assert.True(classDecl.CloseBraceToken.IsMissing);
+            classDecl.Identifier.IsMissing.Should().BeFalse();
+            classDecl.OpenBraceToken.IsMissing.Should().BeTrue();
+            classDecl.CloseBraceToken.IsMissing.Should().BeTrue();
             var ns = root.DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().Single();
-            Assert.False(ns.SemicolonToken.IsMissing);
+            ns.SemicolonToken.IsMissing.Should().BeFalse();
         }
 
         [WorkItem(947819, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/947819")]
@@ -7176,14 +7176,14 @@ class c
 ";
             var root = SyntaxFactory.ParseSyntaxTree(source).GetRoot();
 
-            Assert.Equal(source, root.ToFullString());
+            root.ToFullString().Should().Be(source);
             // Verify incomplete struct decls don't eat tokens of surrounding nodes
             var structDecl = root.DescendantNodes().OfType<StructDeclarationSyntax>().Single();
-            Assert.True(structDecl.OpenBraceToken.IsMissing);
-            Assert.True(structDecl.CloseBraceToken.IsMissing);
+            structDecl.OpenBraceToken.IsMissing.Should().BeTrue();
+            structDecl.CloseBraceToken.IsMissing.Should().BeTrue();
             var ns = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Single();
-            Assert.False(ns.OpenBraceToken.IsMissing);
-            Assert.False(ns.CloseBraceToken.IsMissing);
+            ns.OpenBraceToken.IsMissing.Should().BeFalse();
+            ns.CloseBraceToken.IsMissing.Should().BeFalse();
         }
 
         [WorkItem(947819, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/947819")]
@@ -7199,15 +7199,15 @@ class c
 ";
             var root = SyntaxFactory.ParseSyntaxTree(source).GetRoot();
 
-            Assert.Equal(source, root.ToFullString());
+            root.ToFullString().Should().Be(source);
             // Verify incomplete struct decls don't eat tokens of surrounding nodes
             var structDecl = root.DescendantNodes().OfType<StructDeclarationSyntax>().Single();
-            Assert.True(structDecl.Identifier.IsMissing);
-            Assert.False(structDecl.OpenBraceToken.IsMissing);
-            Assert.False(structDecl.CloseBraceToken.IsMissing);
+            structDecl.Identifier.IsMissing.Should().BeTrue();
+            structDecl.OpenBraceToken.IsMissing.Should().BeFalse();
+            structDecl.CloseBraceToken.IsMissing.Should().BeFalse();
             var ns = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Single();
-            Assert.False(ns.OpenBraceToken.IsMissing);
-            Assert.False(ns.CloseBraceToken.IsMissing);
+            ns.OpenBraceToken.IsMissing.Should().BeFalse();
+            ns.CloseBraceToken.IsMissing.Should().BeFalse();
         }
 
         [WorkItem(947819, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/947819")]
@@ -7223,15 +7223,15 @@ class c
 ";
             var root = SyntaxFactory.ParseSyntaxTree(source).GetRoot();
 
-            Assert.Equal(source, root.ToFullString());
+            root.ToFullString().Should().Be(source);
             // Verify incomplete class decls don't eat tokens of surrounding nodes
             var classDecl = root.DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-            Assert.True(classDecl.Identifier.IsMissing);
-            Assert.False(classDecl.OpenBraceToken.IsMissing);
-            Assert.False(classDecl.CloseBraceToken.IsMissing);
+            classDecl.Identifier.IsMissing.Should().BeTrue();
+            classDecl.OpenBraceToken.IsMissing.Should().BeFalse();
+            classDecl.CloseBraceToken.IsMissing.Should().BeFalse();
             var ns = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Single();
-            Assert.False(ns.OpenBraceToken.IsMissing);
-            Assert.False(ns.CloseBraceToken.IsMissing);
+            ns.OpenBraceToken.IsMissing.Should().BeFalse();
+            ns.CloseBraceToken.IsMissing.Should().BeFalse();
         }
     }
 }

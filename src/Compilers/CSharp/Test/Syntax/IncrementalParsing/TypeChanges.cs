@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 //test
 
@@ -30,7 +31,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithReplace(16, "construct", "~construct");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
-                Assert.IsType<DestructorDeclarationSyntax>(classType.Members[0]);
+                classType.Members[0].Should().BeOfType<DestructorDeclarationSyntax>();
             });
         }
 
@@ -45,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithReplace(16, "M", "construct");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
-                Assert.IsType<ConstructorDeclarationSyntax>(classType.Members[0]);
+                classType.Members[0].Should().BeOfType<ConstructorDeclarationSyntax>();
             });
         }
 
@@ -60,7 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithReplace(16, "construct", "M");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
-                Assert.IsType<ConstructorDeclarationSyntax>(classType.Members[0]);
+                classType.Members[0].Should().BeOfType<ConstructorDeclarationSyntax>();
             });
         }
 
@@ -75,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
             {
                 var newTree = oldTree.WithReplace(16, "~construct", "construct");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
-                Assert.IsType<ConstructorDeclarationSyntax>(classType.Members[0]);
+                classType.Members[0].Should().BeOfType<ConstructorDeclarationSyntax>();
             });
         }
 
@@ -91,7 +92,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
                 var newTree = oldTree.WithReplace(16, "get", "set");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
                 var propertyType = classType.Members[0] as PropertyDeclarationSyntax;
-                Assert.Equal(SyntaxKind.SetAccessorDeclaration, propertyType.AccessorList.Accessors[0].Kind());
+                propertyType.AccessorList.Accessors[0].Kind().Should().Be(SyntaxKind.SetAccessorDeclaration);
             });
         }
 
@@ -107,7 +108,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
                 var newTree = oldTree.WithReplace(16, "set", "get");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
                 var propertyType = classType.Members[0] as PropertyDeclarationSyntax;
-                Assert.Equal(SyntaxKind.GetAccessorDeclaration, propertyType.AccessorList.Accessors[0].Kind());
+                propertyType.AccessorList.Accessors[0].Kind().Should().Be(SyntaxKind.GetAccessorDeclaration);
             });
         }
 
@@ -123,7 +124,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
                 var newTree = oldTree.WithReplace(16, "add", "remove");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
                 var propertyType = classType.Members[0] as EventDeclarationSyntax;
-                Assert.Equal(SyntaxKind.RemoveAccessorDeclaration, propertyType.AccessorList.Accessors[0].Kind());
+                propertyType.AccessorList.Accessors[0].Kind().Should().Be(SyntaxKind.RemoveAccessorDeclaration);
             });
         }
 
@@ -139,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests.IncrementalParsing
                 var newTree = oldTree.WithReplace(16, "remove", "add");
                 var classType = newTree.GetCompilationUnitRoot().Members[0] as TypeDeclarationSyntax;
                 var propertyType = classType.Members[0] as EventDeclarationSyntax;
-                Assert.Equal(SyntaxKind.AddAccessorDeclaration, propertyType.AccessorList.Accessors[0].Kind());
+                propertyType.AccessorList.Accessors[0].Kind().Should().Be(SyntaxKind.AddAccessorDeclaration);
             });
         }
 

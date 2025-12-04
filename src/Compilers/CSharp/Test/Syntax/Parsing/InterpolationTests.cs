@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.Parsing;
 
@@ -11,19 +12,19 @@ public class InterpolationTests
     [Fact]
     public void APIBackCompatTest1()
     {
-        Assert.Equal("{a}", SyntaxFactory.Interpolation(SyntaxFactory.IdentifierName("a")).ToFullString());
+        SyntaxFactory.Interpolation(SyntaxFactory.IdentifierName("a")).ToFullString().Should().Be("{a}");
     }
 
     [Fact]
     public void APIBackCompatTest2()
     {
-        Assert.Equal("{a,b:c}", SyntaxFactory.Interpolation(
+        SyntaxFactory.Interpolation(
             SyntaxFactory.IdentifierName("a"),
             SyntaxFactory.InterpolationAlignmentClause(
                 SyntaxFactory.Token(SyntaxKind.CommaToken),
                 SyntaxFactory.IdentifierName("b")),
             SyntaxFactory.InterpolationFormatClause(
                 SyntaxFactory.Token(SyntaxKind.ColonToken),
-                SyntaxFactory.Token(default, SyntaxKind.InterpolatedStringTextToken, "c", "c", default))).ToFullString());
+                SyntaxFactory.Token(default, SyntaxKind.InterpolatedStringTextToken, "c", "c", default))).ToFullString().Should().Be("{a,b:c}");
     }
 }

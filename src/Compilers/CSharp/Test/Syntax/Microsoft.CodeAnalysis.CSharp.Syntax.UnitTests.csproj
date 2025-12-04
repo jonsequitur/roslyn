@@ -21,6 +21,9 @@
     <ProjectReference Include="..\..\..\..\Test\PdbUtilities\Roslyn.Test.PdbUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AwesomeAssertions" Version="9.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="Resources.resx" GenerateSource="true" />
   </ItemGroup>
   <ItemGroup>

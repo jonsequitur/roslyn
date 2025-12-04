@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
 using Microsoft.CodeAnalysis.Test.Utilities;
 using System;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -52,131 +53,131 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var list = SyntaxFactory.ParseLeadingTrivia("/*A*//*B*//*C*/");
 
-            Assert.Equal(3, list.Count);
-            Assert.Equal("/*A*/", list[0].ToString());
-            Assert.Equal("/*B*/", list[1].ToString());
-            Assert.Equal("/*C*/", list[2].ToString());
-            Assert.Equal("/*A*//*B*//*C*/", list.ToFullString());
+            list.Count.Should().Be(3);
+            list[0].ToString().Should().Be("/*A*/");
+            list[1].ToString().Should().Be("/*B*/");
+            list[2].ToString().Should().Be("/*C*/");
+            list.ToFullString().Should().Be("/*A*//*B*//*C*/");
 
             var elementA = list[0];
             var elementB = list[1];
             var elementC = list[2];
 
-            Assert.Equal(0, list.IndexOf(elementA));
-            Assert.Equal(1, list.IndexOf(elementB));
-            Assert.Equal(2, list.IndexOf(elementC));
+            list.IndexOf(elementA).Should().Be(0);
+            list.IndexOf(elementB).Should().Be(1);
+            list.IndexOf(elementC).Should().Be(2);
 
             var triviaD = SyntaxFactory.ParseLeadingTrivia("/*D*/")[0];
             var triviaE = SyntaxFactory.ParseLeadingTrivia("/*E*/")[0];
 
             var newList = list.Add(triviaD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*B*//*C*//*D*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*B*//*C*//*D*/");
 
             newList = list.AddRange(new[] { triviaD, triviaE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("/*A*//*B*//*C*//*D*//*E*/", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("/*A*//*B*//*C*//*D*//*E*/");
 
             newList = list.Insert(0, triviaD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*D*//*A*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*D*//*A*//*B*//*C*/");
 
             newList = list.Insert(1, triviaD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*D*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*D*//*B*//*C*/");
 
             newList = list.Insert(2, triviaD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*B*//*D*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*B*//*D*//*C*/");
 
             newList = list.Insert(3, triviaD);
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*B*//*C*//*D*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*B*//*C*//*D*/");
 
             newList = list.InsertRange(0, new[] { triviaD, triviaE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("/*D*//*E*//*A*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("/*D*//*E*//*A*//*B*//*C*/");
 
             newList = list.InsertRange(1, new[] { triviaD, triviaE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("/*A*//*D*//*E*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("/*A*//*D*//*E*//*B*//*C*/");
 
             newList = list.InsertRange(2, new[] { triviaD, triviaE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("/*A*//*B*//*D*//*E*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("/*A*//*B*//*D*//*E*//*C*/");
 
             newList = list.InsertRange(3, new[] { triviaD, triviaE });
-            Assert.Equal(5, newList.Count);
-            Assert.Equal("/*A*//*B*//*C*//*D*//*E*/", newList.ToFullString());
+            newList.Count.Should().Be(5);
+            newList.ToFullString().Should().Be("/*A*//*B*//*C*//*D*//*E*/");
 
             newList = list.RemoveAt(0);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*B*//*C*/");
 
             newList = list.RemoveAt(list.Count - 1);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*A*//*B*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*A*//*B*/");
 
             newList = list.Remove(elementA);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*B*//*C*/");
 
             newList = list.Remove(elementB);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*A*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*A*//*C*/");
 
             newList = list.Remove(elementC);
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*A*//*B*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*A*//*B*/");
 
             newList = list.Replace(elementA, triviaD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("/*D*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("/*D*//*B*//*C*/");
 
             newList = list.Replace(elementB, triviaD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("/*A*//*D*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("/*A*//*D*//*C*/");
 
             newList = list.Replace(elementC, triviaD);
-            Assert.Equal(3, newList.Count);
-            Assert.Equal("/*A*//*B*//*D*/", newList.ToFullString());
+            newList.Count.Should().Be(3);
+            newList.ToFullString().Should().Be("/*A*//*B*//*D*/");
 
             newList = list.ReplaceRange(elementA, new[] { triviaD, triviaE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*D*//*E*//*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*D*//*E*//*B*//*C*/");
 
             newList = list.ReplaceRange(elementB, new[] { triviaD, triviaE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*D*//*E*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*D*//*E*//*C*/");
 
             newList = list.ReplaceRange(elementC, new[] { triviaD, triviaE });
-            Assert.Equal(4, newList.Count);
-            Assert.Equal("/*A*//*B*//*D*//*E*/", newList.ToFullString());
+            newList.Count.Should().Be(4);
+            newList.ToFullString().Should().Be("/*A*//*B*//*D*//*E*/");
 
             newList = list.ReplaceRange(elementA, new SyntaxTrivia[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*B*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*B*//*C*/");
 
             newList = list.ReplaceRange(elementB, new SyntaxTrivia[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*A*//*C*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*A*//*C*/");
 
             newList = list.ReplaceRange(elementC, new SyntaxTrivia[] { });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*A*//*B*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*A*//*B*/");
 
-            Assert.Equal(-1, list.IndexOf(triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(list.Count + 1, triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { triviaD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(list.Count + 1, new[] { triviaD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(-1));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(list.Count));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxTrivia)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxTrivia)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxTrivia>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxTrivia>)null));
-            Assert.Throws<ArgumentNullException>(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxTrivia>)null));
+            list.IndexOf(triviaD).Should().Be(-1);
+            FluentActions.Invoking(() => list.Insert(-1, triviaD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(list.Count + 1, triviaD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { triviaD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(list.Count + 1, new[] { triviaD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(-1)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.RemoveAt(list.Count)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxTrivia))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxTrivia))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxTrivia>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxTrivia>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.ReplaceRange(elementA, (IEnumerable<SyntaxTrivia>)null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -188,42 +189,42 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         private void DoTestAddInsertRemoveReplaceOnEmptyList(SyntaxTriviaList list)
         {
-            Assert.Equal(0, list.Count);
+            list.Count.Should().Be(0);
 
             var triviaD = SyntaxFactory.ParseLeadingTrivia("/*D*/")[0];
             var triviaE = SyntaxFactory.ParseLeadingTrivia("/*E*/")[0];
 
             var newList = list.Add(triviaD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("/*D*/", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("/*D*/");
 
             newList = list.AddRange(new[] { triviaD, triviaE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*D*//*E*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*D*//*E*/");
 
             newList = list.Insert(0, triviaD);
-            Assert.Equal(1, newList.Count);
-            Assert.Equal("/*D*/", newList.ToFullString());
+            newList.Count.Should().Be(1);
+            newList.ToFullString().Should().Be("/*D*/");
 
             newList = list.InsertRange(0, new[] { triviaD, triviaE });
-            Assert.Equal(2, newList.Count);
-            Assert.Equal("/*D*//*E*/", newList.ToFullString());
+            newList.Count.Should().Be(2);
+            newList.ToFullString().Should().Be("/*D*//*E*/");
 
             newList = list.Remove(triviaD);
-            Assert.Equal(0, newList.Count);
+            newList.Count.Should().Be(0);
 
-            Assert.Equal(-1, list.IndexOf(triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(1, triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, triviaD));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(1, new[] { triviaD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.InsertRange(-1, new[] { triviaD }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Replace(triviaD, triviaE));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.ReplaceRange(triviaD, new[] { triviaE }));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Add(default(SyntaxTrivia)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(0, default(SyntaxTrivia)));
-            Assert.Throws<ArgumentNullException>(() => list.AddRange((IEnumerable<SyntaxTrivia>)null));
-            Assert.Throws<ArgumentNullException>(() => list.InsertRange(0, (IEnumerable<SyntaxTrivia>)null));
+            list.IndexOf(triviaD).Should().Be(-1);
+            FluentActions.Invoking(() => list.RemoveAt(0)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(1, triviaD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(-1, triviaD)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(1, new[] { triviaD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.InsertRange(-1, new[] { triviaD })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Replace(triviaD, triviaE)).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.ReplaceRange(triviaD, new[] { triviaE })).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Add(default(SyntaxTrivia))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.Insert(0, default(SyntaxTrivia))).Should().Throw<ArgumentOutOfRangeException>();
+            FluentActions.Invoking(() => list.AddRange((IEnumerable<SyntaxTrivia>)null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => list.InsertRange(0, (IEnumerable<SyntaxTrivia>)null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -231,11 +232,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var list = SyntaxFactory.ParseLeadingTrivia("/*A*//*B*//*C*/");
 
-            Assert.Equal(0, list.IndexOf(SyntaxKind.MultiLineCommentTrivia));
-            Assert.True(list.Any(SyntaxKind.MultiLineCommentTrivia));
+            list.IndexOf(SyntaxKind.MultiLineCommentTrivia).Should().Be(0);
+            list.Any(SyntaxKind.MultiLineCommentTrivia).Should().BeTrue();
 
-            Assert.Equal(-1, list.IndexOf(SyntaxKind.SingleLineCommentTrivia));
-            Assert.False(list.Any(SyntaxKind.SingleLineCommentTrivia));
+            list.IndexOf(SyntaxKind.SingleLineCommentTrivia).Should().Be(-1);
+            list.Any(SyntaxKind.SingleLineCommentTrivia).Should().BeFalse();
         }
     }
 }

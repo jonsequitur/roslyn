@@ -7,6 +7,7 @@
 using Roslyn.Test.Utilities;
 using Xunit;
 using InternalSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -17,9 +18,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var nodeWithDiags = node.SetDiagnostics(new DiagnosticInfo[] { new CSDiagnosticInfo(ErrorCode.ERR_NoBaseClass) });
             var diags = nodeWithDiags.GetDiagnostics();
 
-            Assert.NotEqual(node, nodeWithDiags);
-            Assert.Equal(1, diags.Length);
-            Assert.Equal(ErrorCode.ERR_NoBaseClass, (ErrorCode)diags[0].Code);
+            nodeWithDiags.Should().NotBe(node);
+            diags.Length.Should().Be(1);
+            (ErrorCode)diags[0].Code.Should().Be(ErrorCode.ERR_NoBaseClass);
         }
 
         private class TokenDeleteRewriter : InternalSyntax.CSharpSyntaxRewriter
@@ -43,11 +44,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var expression = SyntaxFactory.ParseExpression("x");
             var sw1 = SyntaxFactory.SwitchStatement(expression);
-            Assert.Equal(SyntaxKind.OpenParenToken, sw1.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, sw1.CloseParenToken.Kind());
+            sw1.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            sw1.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var sw2 = SyntaxFactory.SwitchStatement(expression, default);
-            Assert.Equal(SyntaxKind.OpenParenToken, sw2.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, sw2.CloseParenToken.Kind());
+            sw2.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            sw2.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
         }
 
         [Fact, WorkItem(33685, "https://github.com/dotnet/roslyn/issues/33685")]
@@ -55,11 +56,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var expression = SyntaxFactory.ParseExpression("(x)");
             var sw1 = SyntaxFactory.SwitchStatement(expression);
-            Assert.Equal(SyntaxKind.OpenParenToken, sw1.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, sw1.CloseParenToken.Kind());
+            sw1.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            sw1.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var sw2 = SyntaxFactory.SwitchStatement(expression, default);
-            Assert.Equal(SyntaxKind.OpenParenToken, sw2.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, sw2.CloseParenToken.Kind());
+            sw2.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            sw2.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
         }
 
         [Fact, WorkItem(33685, "https://github.com/dotnet/roslyn/issues/33685")]
@@ -67,11 +68,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var expression = SyntaxFactory.ParseExpression("(1, 2)");
             var sw1 = SyntaxFactory.SwitchStatement(expression);
-            Assert.True(sw1.OpenParenToken == default);
-            Assert.True(sw1.CloseParenToken == default);
+            sw1.OpenParenToken == default.Should().BeTrue();
+            sw1.CloseParenToken == default.Should().BeTrue();
             var sw2 = SyntaxFactory.SwitchStatement(expression, default);
-            Assert.True(sw2.OpenParenToken == default);
-            Assert.True(sw2.CloseParenToken == default);
+            sw2.OpenParenToken == default.Should().BeTrue();
+            sw2.CloseParenToken == default.Should().BeTrue();
         }
     }
 }

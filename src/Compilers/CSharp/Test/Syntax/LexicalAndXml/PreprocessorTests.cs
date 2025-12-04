@@ -103,24 +103,24 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         private void TestRoundTripping(CompilationUnitSyntax node, string text, bool disallowErrors = true)
         {
-            Assert.NotNull(node);
+            node.Should().NotBeNull();
             var fullText = node.ToFullString();
-            Assert.Equal(text, fullText);
+            fullText.Should().Be(text);
 
             if (disallowErrors)
             {
-                Assert.Empty(node.GetDiagnostics());
+                node.GetDiagnostics().Should().BeEmpty();
             }
             else
             {
-                Assert.NotEmpty(node.GetDiagnostics());
+                node.GetDiagnostics().Should().NotBeEmpty();
             }
         }
 
         private void VerifyDirectives(CSharpSyntaxNode node, params SyntaxKind[] expected)
         {
             var directives = node.GetDirectives();
-            Assert.Equal(expected.Length, directives.Count);
+            directives.Count.Should().Be(expected.Length);
             if (expected.Length == 0)
             {
                 return;
@@ -135,15 +135,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             int idx = 0;
             foreach (var ek in expected)
             {
-                // Assert.True(actualKinds.Contains(kind)); // no order 
-                Assert.Equal(ek, actual[idx++]); // exact order
+                // actualKinds.Contains(kind).Should().BeTrue(); // no order 
+                actual[idx++].Should().Be(ek); // exact order
             }
         }
 
         private void VerifyDirectivesSpecial(CSharpSyntaxNode node, params DirectiveInfo[] expected)
         {
             var directives = node.GetDirectives();
-            Assert.Equal(expected.Length, directives.Count);
+            directives.Count.Should().Be(expected.Length);
 
             List<SyntaxKind> actual = new List<SyntaxKind>();
             foreach (var dt in directives)
@@ -154,36 +154,36 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             int idx = 0;
             foreach (var exp in expected)
             {
-                Assert.Equal(exp.Kind, actual[idx]); // exact order
+                actual[idx].Should().Be(exp.Kind); // exact order
 
                 // need to know what to expected here
                 var dt = directives[idx++];
 
                 if (NodeStatus.IsActive == (exp.Status & NodeStatus.IsActive))
                 {
-                    Assert.True(dt.IsActive);
+                    dt.IsActive.Should().BeTrue();
                 }
                 else if (NodeStatus.IsNotActive == (exp.Status & NodeStatus.IsNotActive))
                 {
-                    Assert.False(dt.IsActive);
+                    dt.IsActive.Should().BeFalse();
                 }
 
                 if (NodeStatus.BranchTaken == (exp.Status & NodeStatus.BranchTaken))
                 {
-                    Assert.True(((BranchingDirectiveTriviaSyntax)dt).BranchTaken);
+                    ((BranchingDirectiveTriviaSyntax)dt).BranchTaken.Should().BeTrue();
                 }
                 else if (NodeStatus.NotBranchTaken == (exp.Status & NodeStatus.NotBranchTaken))
                 {
-                    Assert.False(((BranchingDirectiveTriviaSyntax)dt).BranchTaken);
+                    ((BranchingDirectiveTriviaSyntax)dt).BranchTaken.Should().BeFalse();
                 }
 
                 if (NodeStatus.TrueValue == (exp.Status & NodeStatus.TrueValue))
                 {
-                    Assert.True(((ConditionalDirectiveTriviaSyntax)dt).ConditionValue);
+                    ((ConditionalDirectiveTriviaSyntax)dt).ConditionValue.Should().BeTrue();
                 }
                 else if (NodeStatus.FalseValue == (exp.Status & NodeStatus.FalseValue))
                 {
-                    Assert.False(((ConditionalDirectiveTriviaSyntax)dt).ConditionValue);
+                    ((ConditionalDirectiveTriviaSyntax)dt).ConditionValue.Should().BeFalse();
                 }
 
                 switch (exp.Kind)
@@ -191,31 +191,31 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     case SyntaxKind.DefineDirectiveTrivia:
                         if (null != exp.Text)
                         {
-                            Assert.Equal(exp.Text, ((DefineDirectiveTriviaSyntax)dt).Name.ValueText); // Text
+                            ((DefineDirectiveTriviaSyntax)dt).Name.ValueText.Should().Be(exp.Text); // Text
                         }
                         break;
                     case SyntaxKind.ErrorDirectiveTrivia:
                         if (null != exp.Text)
                         {
-                            Assert.Equal(exp.Text, ((ErrorDirectiveTriviaSyntax)dt).EndOfDirectiveToken.ToFullString());
+                            ((ErrorDirectiveTriviaSyntax)dt).EndOfDirectiveToken.ToFullString().Should().Be(exp.Text);
                         }
                         break;
                     case SyntaxKind.LoadDirectiveTrivia:
                         if (null != exp.Text)
                         {
-                            Assert.Equal(exp.Text, ((LoadDirectiveTriviaSyntax)dt).File.ValueText);
+                            ((LoadDirectiveTriviaSyntax)dt).File.ValueText.Should().Be(exp.Text);
                         }
                         break;
                     case SyntaxKind.UndefDirectiveTrivia:
                         if (null != exp.Text)
                         {
-                            Assert.Equal(exp.Text, ((UndefDirectiveTriviaSyntax)dt).Name.ValueText);
+                            ((UndefDirectiveTriviaSyntax)dt).Name.ValueText.Should().Be(exp.Text);
                         }
                         break;
                     case SyntaxKind.ReferenceDirectiveTrivia:
                         if (null != exp.Text)
                         {
-                            Assert.Equal(exp.Text, ((ReferenceDirectiveTriviaSyntax)dt).File.ValueText);
+                            ((ReferenceDirectiveTriviaSyntax)dt).File.ValueText.Should().Be(exp.Text);
                         }
                         break;
                     case SyntaxKind.LineDirectiveTrivia:
@@ -224,32 +224,32 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                         // default number = 0 - no number
                         if (exp.Number == -1)
                         {
-                            Assert.Equal(SyntaxKind.LineKeyword, ld.LineKeyword.Kind());
-                            Assert.Equal(SyntaxKind.DefaultKeyword, ld.Line.Kind());
+                            ld.LineKeyword.Kind().Should().Be(SyntaxKind.LineKeyword);
+                            ld.Line.Kind().Should().Be(SyntaxKind.DefaultKeyword);
                         }
                         else if (exp.Number == -2)
                         {
-                            Assert.Equal(SyntaxKind.LineKeyword, ld.LineKeyword.Kind());
-                            Assert.Equal(SyntaxKind.HiddenKeyword, ld.Line.Kind());
+                            ld.LineKeyword.Kind().Should().Be(SyntaxKind.LineKeyword);
+                            ld.Line.Kind().Should().Be(SyntaxKind.HiddenKeyword);
                         }
                         else if (exp.Number == 0)
                         {
-                            Assert.Equal(String.Empty, ld.Line.Text);
+                            ld.Line.Text.Should().Be(String.Empty);
                         }
                         else if (exp.Number > 0)
                         {
-                            Assert.Equal(exp.Number, ld.Line.Value); // Number
-                            Assert.Equal(exp.Number, Int32.Parse(ld.Line.Text));
+                            ld.Line.Value.Should().Be(exp.Number); // Number
+                            Int32.Parse(ld.Line.Text).Should().Be(exp.Number);
                         }
 
                         if (null == exp.Text)
                         {
-                            Assert.Equal(SyntaxKind.None, ld.File.Kind());
+                            ld.File.Kind().Should().Be(SyntaxKind.None);
                         }
                         else
                         {
-                            Assert.NotEqual(SyntaxKind.None, ld.File.Kind());
-                            Assert.Equal(exp.Text, ld.File.Value);
+                            ld.File.Kind().Should().NotBe(SyntaxKind.None);
+                            ld.File.Value.Should().Be(exp.Text);
                         }
                         break;
                     case SyntaxKind.NullableDirectiveTrivia:
@@ -258,8 +258,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                         var target = nn.TargetToken;
                         if (null == exp.Text)
                         {
-                            Assert.True(setting.IsMissing);
-                            Assert.True(target.IsMissing);
+                            setting.IsMissing.Should().BeTrue();
+                            target.IsMissing.Should().BeTrue();
                         }
                         else
                         {
@@ -269,21 +269,21 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                                 actualText += " " + target.ValueText;
                             }
 
-                            Assert.Equal(exp.Text, actualText);
-                            Assert.True(target.Kind() == SyntaxKind.WarningsKeyword || target.Kind() == SyntaxKind.AnnotationsKeyword ||
-                                        target.Kind() == SyntaxKind.None);
+                            actualText.Should().Be(exp.Text);
+                            target.Kind() == SyntaxKind.WarningsKeyword || target.Kind() == SyntaxKind.AnnotationsKeyword ||
+                                        target.Kind() == SyntaxKind.None.Should().BeTrue();
 
-                            Assert.True(setting.Kind() == SyntaxKind.EnableKeyword || setting.Kind() == SyntaxKind.DisableKeyword ||
-                                        setting.Kind() == SyntaxKind.RestoreKeyword);
+                            setting.Kind() == SyntaxKind.EnableKeyword || setting.Kind() == SyntaxKind.DisableKeyword ||
+                                        setting.Kind() == SyntaxKind.RestoreKeyword.Should().BeTrue();
                         }
-                        Assert.Equal(SyntaxKind.NullableKeyword, nn.DirectiveNameToken.Kind());
-                        Assert.True(SyntaxFacts.IsPreprocessorDirective(SyntaxKind.NullableDirectiveTrivia));
-                        Assert.True(SyntaxFacts.IsPreprocessorKeyword(SyntaxKind.NullableKeyword));
+                        nn.DirectiveNameToken.Kind().Should().Be(SyntaxKind.NullableKeyword);
+                        SyntaxFacts.IsPreprocessorDirective(SyntaxKind.NullableDirectiveTrivia).Should().BeTrue();
+                        SyntaxFacts.IsPreprocessorKeyword(SyntaxKind.NullableKeyword).Should().BeTrue();
                         break;
                     default:
                         if (null != exp.Text)
                         {
-                            Assert.True(false, String.Format("You are expecting some text in the directive, but this method doesn't know how to verify it for `{0}`.", exp.Kind));
+                            false.Should().BeTrue(String.Format("You are expecting some text in the directive, but this method doesn't know how to verify it for `{0}`.", exp.Kind));
                         }
                         break;
                 } // switch
@@ -293,44 +293,44 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         private void VerifyDirectivePragma(CSharpSyntaxNode node, PragmaInfo expected)
         {
             var directives = node.GetDirectives();
-            Assert.Equal(1, directives.Count);
+            directives.Count.Should().Be(1);
             var dt = directives[0];
             VerifyDirectivePragma(dt, expected);
         }
 
         private void VerifyDirectivePragma(DirectiveTriviaSyntax dt, PragmaInfo expected)
         {
-            Assert.Equal(expected.PragmaKind, dt.Kind());
+            dt.Kind().Should().Be(expected.PragmaKind);
 
             if (dt is PragmaWarningDirectiveTriviaSyntax)
             {
                 var pwd = (PragmaWarningDirectiveTriviaSyntax)dt;
-                Assert.Equal(SyntaxKind.PragmaKeyword, pwd.PragmaKeyword.Kind());
+                pwd.PragmaKeyword.Kind().Should().Be(SyntaxKind.PragmaKeyword);
                 if (SyntaxKind.None == expected.WarningOrChecksumKind)
                 {
-                    Assert.True(pwd.WarningKeyword.IsMissing);
+                    pwd.WarningKeyword.IsMissing.Should().BeTrue();
                 }
                 else
                 {
-                    Assert.Equal(SyntaxKind.WarningKeyword, pwd.WarningKeyword.Kind());
+                    pwd.WarningKeyword.Kind().Should().Be(SyntaxKind.WarningKeyword);
                 }
 
                 if (SyntaxKind.None == expected.DisableOrRestoreKind)
                 {
-                    Assert.True(pwd.DisableOrRestoreKeyword.IsMissing);
+                    pwd.DisableOrRestoreKeyword.IsMissing.Should().BeTrue();
                 }
                 else
                 {
-                    Assert.Equal(expected.DisableOrRestoreKind, pwd.DisableOrRestoreKeyword.Kind());
+                    pwd.DisableOrRestoreKeyword.Kind().Should().Be(expected.DisableOrRestoreKind);
                 }
 
                 if (expected.WarningList == null || expected.WarningList.Length == 0)
                 {
-                    Assert.Equal(0, pwd.ErrorCodes.Count);
+                    pwd.ErrorCodes.Count.Should().Be(0);
                 }
                 else
                 {
-                    Assert.Equal(expected.WarningList.Length, pwd.ErrorCodes.Count);
+                    pwd.ErrorCodes.Count.Should().Be(expected.WarningList.Length);
                     int idx = 0;
                     foreach (var warningNumber in expected.WarningList)
                     {
@@ -338,16 +338,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                         if (actualWarningNumber.Kind() == SyntaxKind.NumericLiteralExpression)
                         {
                             var token = (actualWarningNumber as LiteralExpressionSyntax).Token;
-                            Assert.Equal(warningNumber, token.ValueText);
+                            token.ValueText.Should().Be(warningNumber);
                         }
                         else if (actualWarningNumber.Kind() == SyntaxKind.IdentifierName)
                         {
                             var token = (actualWarningNumber as IdentifierNameSyntax).Identifier;
-                            Assert.Equal(warningNumber, token.ValueText);
+                            token.ValueText.Should().Be(warningNumber);
                         }
                         else
                         {
-                            Assert.True(false, "Warning ID must be an identifier or numeric literal");
+                            false.Should().BeTrue("Warning ID must be an identifier or numeric literal");
                         }
                     }
                 }
@@ -355,28 +355,28 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             else if (dt is PragmaChecksumDirectiveTriviaSyntax)
             {
                 var pcd = (PragmaChecksumDirectiveTriviaSyntax)dt;
-                Assert.Equal(SyntaxKind.PragmaKeyword, pcd.PragmaKeyword.Kind());
-                Assert.Equal(SyntaxKind.ChecksumKeyword, pcd.ChecksumKeyword.Kind()); // no missing
+                pcd.PragmaKeyword.Kind().Should().Be(SyntaxKind.PragmaKeyword);
+                pcd.ChecksumKeyword.Kind().Should().Be(SyntaxKind.ChecksumKeyword); // no missing
                 // always 3
-                Assert.Equal(3, expected.FileGuidByte.Length);
+                expected.FileGuidByte.Length.Should().Be(3);
                 if (expected.FileGuidByte[0] == null)
                 {
-                    Assert.True(pcd.File.IsMissing);
+                    pcd.File.IsMissing.Should().BeTrue();
                 }
 
-                Assert.Equal(expected.FileGuidByte[0], pcd.File.Value);
+                pcd.File.Value.Should().Be(expected.FileGuidByte[0]);
                 if (expected.FileGuidByte[1] == null)
                 {
-                    Assert.True(pcd.Guid.IsMissing);
+                    pcd.Guid.IsMissing.Should().BeTrue();
                 }
 
-                Assert.Equal(expected.FileGuidByte[1], pcd.Guid.Value);
+                pcd.Guid.Value.Should().Be(expected.FileGuidByte[1]);
                 if (expected.FileGuidByte[2] == null)
                 {
-                    Assert.True(pcd.Bytes.IsMissing);
+                    pcd.Bytes.IsMissing.Should().BeTrue();
                 }
 
-                Assert.Equal(expected.FileGuidByte[2], pcd.Bytes.Value);
+                pcd.Bytes.Value.Should().Be(expected.FileGuidByte[2]);
             }
             else
             {
@@ -395,7 +395,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             }
 
             // Parser might give more errors than expected & that's fine
-            Assert.InRange(actual.Count, expected.Length, int.MaxValue);
+            actual.Count.Should().BeInRange(expected.Length, int.MaxValue);
 
             // necessary?
             if (actual.Count < expected.Length)
@@ -405,27 +405,27 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             foreach (int i in expected)
             {
-                Assert.Contains(i, actual); // no order
+                actual.Should().Contain(i); // no order
             }
         }
 
         private void VerifyErrorSpecial(CSharpSyntaxNode node, DirectiveInfo expected)
         {
             var diags = node.ErrorsAndWarnings();
-            Assert.Equal(1, diags.Length);
+            diags.Length.Should().Be(1);
             var actual = diags[0];
-            Assert.Equal(expected.Number, actual.Code);
+            actual.Code.Should().Be(expected.Number);
 
             // warning or not
             if (NodeStatus.IsWarning == (expected.Status & NodeStatus.IsWarning))
             {
-                Assert.Equal(DiagnosticSeverity.Warning, actual.Severity);
+                actual.Severity.Should().Be(DiagnosticSeverity.Warning);
             }
 
             // error message
             if (expected.Text != null)
             {
-                Assert.Equal(expected.Text, actual.GetMessage(CultureInfo.InvariantCulture));
+                actual.GetMessage(CultureInfo.InvariantCulture).Should().Be(expected.Text);
             }
         }
 
@@ -435,45 +435,45 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         /// <param name="memberInfo"></param>
         private void VerifyMembers(CompilationUnitSyntax node, params MemberInfo[] memberInfo)
         {
-            Assert.Equal(memberInfo.Length, node.Members.Count);
+            node.Members.Count.Should().Be(memberInfo.Length);
             var actual = node.Members;
             int idx = 0;
             foreach (var exp in memberInfo)
             {
                 var mem = actual[idx++];
-                Assert.Equal(exp.Kind, mem.Kind());
+                mem.Kind().Should().Be(exp.Kind);
 
 #if false
                 var td = (TypeDeclarationSyntax)mem;
                 // #define/undef
                 if ((exp.Status & NodeStatus.Defined) == NodeStatus.Defined)
                 {
-                    Assert.Equal(DefineState.Defined, td.IsDefined(exp.Text));
+                    td.IsDefined(exp.Text).Should().Be(DefineState.Defined);
                 }
                 else if ((exp.Status & NodeStatus.Undefined) == NodeStatus.Undefined)
                 {
-                    Assert.Equal(DefineState.Undefined, td.IsDefined(exp.Text));
+                    td.IsDefined(exp.Text).Should().Be(DefineState.Undefined);
                 }
                 else if ((exp.Status & NodeStatus.Unspecified) == NodeStatus.Unspecified)
                 {
-                    Assert.Equal(DefineState.Unspecified, td.IsDefined(exp.Text));
+                    td.IsDefined(exp.Text).Should().Be(DefineState.Unspecified);
                 }
                 else
                 {
-                    Assert.Equal(exp.Text, td.Name.GetText());
+                    td.Name.GetText().Should().Be(exp.Text);
                 }
                 // check cond-symbol in Member
                 if ((exp.Status2 & NodeStatus.TrueValue) == NodeStatus.TrueValue)
                 {
-                    Assert.Equal(DefineState.Defined, td.Name.IsDefined(exp.Text));
+                    td.Name.IsDefined(exp.Text).Should().Be(DefineState.Defined);
                 }
                 else if ((exp.Status2 & NodeStatus.FalseValue) == NodeStatus.FalseValue)
                 {
-                    Assert.Equal(DefineState.Undefined, td.Name.IsDefined(exp.Text));
+                    td.Name.IsDefined(exp.Text).Should().Be(DefineState.Undefined);
                 }
                 else if ((exp.Status2 & NodeStatus.IsNotActive) == NodeStatus.IsNotActive) // reuse same flag for different meaning:(
                 {
-                    Assert.Equal(DefineState.Unspecified, td.Name.IsDefined(exp.Text));
+                    td.Name.IsDefined(exp.Text).Should().Be(DefineState.Unspecified);
                 }
 #endif
             }
@@ -1447,7 +1447,7 @@ class A
 ";
             var node = Parse(text, "YES");
             TestRoundTripping(node, text);
-            Assert.True(node.DescendantTrivia().All(trivia => trivia.Width > 0));
+            node.DescendantTrivia().All(trivia => trivia.Width > 0).Should().BeTrue();
         }
 
         [Fact]
@@ -1681,10 +1681,10 @@ class A
             TestRoundTripping(node, text);
 
             // TODO
-            Assert.Equal(1, node.Members.Count);
-            Assert.Equal(SyntaxKind.ClassDeclaration, node.Members[0].Kind());
+            node.Members.Count.Should().Be(1);
+            node.Members[0].Kind().Should().Be(SyntaxKind.ClassDeclaration);
             var td = (TypeDeclarationSyntax)node.Members[0];
-            Assert.Equal("A", td.Identifier.ToString());
+            td.Identifier.ToString().Should().Be("A");
         }
 
         [Fact]
@@ -1732,6 +1732,7 @@ aeu";
 #undef False2
 
 using System;
+using AwesomeAssertions;
 
 public class Test
 {
@@ -2101,10 +2102,10 @@ return (i);
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region A//B{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region A//B{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("A//B", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("A//B");
         }
 
         [WorkItem(2958, "DevDiv_Projects/Roslyn")]
@@ -2123,10 +2124,10 @@ return (i);
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region A/\\B{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region A/\\B{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("A/\\B", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("A/\\B");
         }
 
         [Fact]
@@ -2211,10 +2212,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2232,10 +2233,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \" {Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \" {Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\" ", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\" ");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2253,10 +2254,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"goo\"{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"goo\"{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"goo\"", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"goo\"");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2274,10 +2275,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"goo\" {Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"goo\" {Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"goo\" ", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"goo\" ");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2295,10 +2296,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"\"{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"\"{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"\"", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"\"");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2316,10 +2317,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"\" {Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"\" {Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"\" ", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"\" ");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2337,10 +2338,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"\"\"{Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"\"\"{Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"\"\"", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"\"\"");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -2358,10 +2359,10 @@ class Test
                 new DirectiveInfo { Kind = SyntaxKind.EndRegionDirectiveTrivia, Status = NodeStatus.IsActive });
 
             var regionDirective = (RegionDirectiveTriviaSyntax)node.GetFirstDirective();
-            Assert.Equal($"#region \"\"\" {Environment.NewLine}", regionDirective.ToFullString());
+            regionDirective.ToFullString().Should().Be($"#region \"\"\" {Environment.NewLine}");
             var regionText = regionDirective.EndOfDirectiveToken.LeadingTrivia.Single();
-            Assert.Equal(SyntaxKind.PreprocessingMessageTrivia, regionText.Kind());
-            Assert.Equal("\"\"\" ", regionText.ToFullString());
+            regionText.Kind().Should().Be(SyntaxKind.PreprocessingMessageTrivia);
+            regionText.ToFullString().Should().Be("\"\"\" ");
         }
 
         [Fact, WorkItem(1549726, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1549726")]
@@ -3213,10 +3214,10 @@ class A { }
             var tree = SyntaxFactory.ParseSyntaxTree(text, path: compilationFileName);
             TestRoundTripping(tree.GetCompilationUnitRoot(), text, false);
             var error = tree.GetDiagnostics().Single();
-            Assert.Equal((int)ErrorCode.ERR_ErrorDirective, error.Code);
+            error.Code.Should().Be((int)ErrorCode.ERR_ErrorDirective);
             string errorString = error.ToString();
             string actualErrorStringFileName = errorString.Substring(0, errorString.IndexOf('('));
-            Assert.Equal(expectedErrorStringFileName, actualErrorStringFileName);
+            actualErrorStringFileName.Should().Be(expectedErrorStringFileName);
         }
 
         [Theory]
@@ -3555,10 +3556,10 @@ x = 1;
             VerifyDirectivesSpecial(tree.GetCompilationUnitRoot(), new DirectiveInfo { Kind = SyntaxKind.LineDirectiveTrivia, Status = NodeStatus.IsActive, Number = 100, Text = "test.cs" });
 
             var diagnostics = tree.GetDiagnostics();
-            Assert.Contains("100", diagnostics.First().ToString(), StringComparison.Ordinal); // one-based line number
+            diagnostics.First().ToString().Should().Contain("100"); // one-based line number
 
             var lineSpan = diagnostics.First().Location.GetMappedLineSpan();
-            Assert.Equal(99, lineSpan.StartLinePosition.Line); // zero-based line number
+            lineSpan.StartLinePosition.Line.Should().Be(99); // zero-based line number
         }
 
         [Fact]
@@ -3873,8 +3874,8 @@ class A
             // verify that error still appears in GetDiagnostics
             var tree = SyntaxFactory.ParseSyntaxTree(text);
             var diagnostic = tree.GetDiagnostics().Single();
-            Assert.Equal(DiagnosticSeverity.Warning, diagnostic.Severity);
-            Assert.Equal(1633, diagnostic.Code);
+            diagnostic.Severity.Should().Be(DiagnosticSeverity.Warning);
+            diagnostic.Code.Should().Be(1633);
 
             // verify pragma information
             var node = tree.GetCompilationUnitRoot();
@@ -3888,7 +3889,7 @@ class A
 
             // verify that GetParseDiagnostics filters disabled warning
             var comp = CSharpCompilation.Create("Test", syntaxTrees: new[] { tree });
-            Assert.Empty(comp.GetParseDiagnostics());
+            comp.GetParseDiagnostics().Should().BeEmpty();
         }
 
         [WorkItem(908125, "DevDiv/Personal")]
@@ -4422,7 +4423,7 @@ class A
                 Kind = SyntaxKind.LoadDirectiveTrivia,
                 Status = NodeStatus.IsActive,
             });
-            Assert.True(node.GetLoadDirectives().Single().File.IsMissing);
+            node.GetLoadDirectives().Single().File.IsMissing.Should().BeTrue();
         }
 
         [Fact]
@@ -4565,10 +4566,10 @@ class enable
             VerifyDirectivesSpecial(root, new DirectiveInfo { Kind = SyntaxKind.NullableDirectiveTrivia, Status = NodeStatus.IsActive, Text = "enable" });
             var nodes = root.DescendantNodes(descendIntoTrivia: true);
             SyntaxToken token = nodes.OfType<NullableDirectiveTriviaSyntax>().Single().SettingToken;
-            Assert.Equal(SyntaxKind.EnableKeyword, token.Kind());
+            token.Kind().Should().Be(SyntaxKind.EnableKeyword);
             token = nodes.OfType<ClassDeclarationSyntax>().Single().Identifier;
-            Assert.Equal(SyntaxKind.IdentifierToken, token.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, token.ContextualKind());
+            token.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            token.ContextualKind().Should().Be(SyntaxKind.IdentifierToken);
         }
 
         [Fact]

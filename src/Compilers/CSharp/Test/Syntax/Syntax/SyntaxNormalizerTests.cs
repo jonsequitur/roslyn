@@ -411,7 +411,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = SyntaxFactory.ParseExpression(text.NormalizeLineEndings());
             var actual = node.NormalizeWhitespace("  ").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact]
@@ -883,7 +883,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = SyntaxFactory.ParseStatement(text.NormalizeLineEndings());
             var actual = node.NormalizeWhitespace("  ").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact]
@@ -946,6 +946,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 namespace a
                 {
                   using b;
+using AwesomeAssertions;
                 }
                 """);
             TestNormalizeDeclaration(
@@ -2546,9 +2547,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         private static void TestNormalizeDeclaration(string text, string expected)
         {
             var node = SyntaxFactory.ParseCompilationUnit(text.NormalizeLineEndings());
-            Assert.Equal(text.NormalizeLineEndings(), node.ToFullString().NormalizeLineEndings());
+            node.ToFullString().NormalizeLineEndings().Should().Be(text.NormalizeLineEndings());
             var actual = node.NormalizeWhitespace("  ").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact]
@@ -2693,7 +2694,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var token = SyntaxFactory.ParseToken(text.NormalizeLineEndings());
             var actual = token.NormalizeWhitespace().ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact, WorkItem(1066, "github")]
@@ -2938,7 +2939,7 @@ $"  ///  </summary>{Environment.NewLine}" +
             var code = "class c{}";
             var expected = "class c\n{\n}";
             var actual = SyntaxFactory.ParseCompilationUnit(code).NormalizeWhitespace(indentation: "  ", eol: "\n").ToFullString();
-            Assert.Equal(expected, actual);
+            actual.Should().Be(expected);
         }
 
         [Fact]
@@ -2954,7 +2955,7 @@ $"  ///  </summary>{Environment.NewLine}" +
                 }
                 """;
             var actual = SyntaxFactory.ParseCompilationUnit(code).NormalizeWhitespace(indentation: "	").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual);
+            actual.Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact, WorkItem(29390, "https://github.com/dotnet/roslyn/issues/29390")]
@@ -3120,7 +3121,7 @@ $"  ///  </summary>{Environment.NewLine}" +
         private static void TestNormalize(CSharpSyntaxNode node, string expected)
         {
             var actual = node.NormalizeWhitespace("  ").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         private static void TestNormalizeTrivia(string text, string expected)
@@ -3132,7 +3133,7 @@ $"  ///  </summary>{Environment.NewLine}" +
         private static void TestNormalize(SyntaxTriviaList trivia, string expected)
         {
             var actual = trivia.NormalizeWhitespace("    ").ToFullString();
-            Assert.Equal(expected.NormalizeLineEndings(), actual.NormalizeLineEndings());
+            actual.NormalizeLineEndings().Should().Be(expected.NormalizeLineEndings());
         }
 
         [Fact, WorkItem(60884, "https://github.com/dotnet/roslyn/issues/60884")]

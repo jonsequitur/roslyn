@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslyn.Utilities;
 using Xunit;
 using InternalSyntaxFactory = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.SyntaxFactory;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -731,7 +732,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIdentifierName();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -741,9 +742,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQualifiedName();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind);
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.DotToken.Kind.Should().Be(SyntaxKind.DotToken);
+            node.Right.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -753,8 +754,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGenericName();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.NotNull(node.TypeArgumentList);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -764,9 +765,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeArgumentList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind);
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind);
+            node.LessThanToken.Kind.Should().Be(SyntaxKind.LessThanToken);
+            node.Arguments.Should().Be(default);
+            node.GreaterThanToken.Kind.Should().Be(SyntaxKind.GreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -776,9 +777,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAliasQualifiedName();
 
-            Assert.NotNull(node.Alias);
-            Assert.Equal(SyntaxKind.ColonColonToken, node.ColonColonToken.Kind);
-            Assert.NotNull(node.Name);
+            node.Alias.Should().NotBeNull();
+            node.ColonColonToken.Kind.Should().Be(SyntaxKind.ColonColonToken);
+            node.Name.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -788,7 +789,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePredefinedType();
 
-            Assert.Equal(SyntaxKind.BoolKeyword, node.Keyword.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.BoolKeyword);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -798,8 +799,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(default, node.RankSpecifiers);
+            node.ElementType.Should().NotBeNull();
+            node.RankSpecifiers.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -809,9 +810,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayRankSpecifier();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Sizes);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Sizes.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -821,8 +822,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePointerType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(SyntaxKind.AsteriskToken, node.AsteriskToken.Kind);
+            node.ElementType.Should().NotBeNull();
+            node.AsteriskToken.Kind.Should().Be(SyntaxKind.AsteriskToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -832,10 +833,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerType();
 
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind);
-            Assert.Equal(SyntaxKind.AsteriskToken, node.AsteriskToken.Kind);
-            Assert.Null(node.CallingConvention);
-            Assert.NotNull(node.ParameterList);
+            node.DelegateKeyword.Kind.Should().Be(SyntaxKind.DelegateKeyword);
+            node.AsteriskToken.Kind.Should().Be(SyntaxKind.AsteriskToken);
+            node.CallingConvention.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -845,9 +846,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerParameterList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind);
+            node.LessThanToken.Kind.Should().Be(SyntaxKind.LessThanToken);
+            node.Parameters.Should().Be(default);
+            node.GreaterThanToken.Kind.Should().Be(SyntaxKind.GreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -857,8 +858,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerCallingConvention();
 
-            Assert.Equal(SyntaxKind.ManagedKeyword, node.ManagedOrUnmanagedKeyword.Kind);
-            Assert.Null(node.UnmanagedCallingConventionList);
+            node.ManagedOrUnmanagedKeyword.Kind.Should().Be(SyntaxKind.ManagedKeyword);
+            node.UnmanagedCallingConventionList.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -868,9 +869,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerUnmanagedCallingConventionList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.CallingConventions);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.CallingConventions.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -880,7 +881,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerUnmanagedCallingConvention();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind);
+            node.Name.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -890,8 +891,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNullableType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(SyntaxKind.QuestionToken, node.QuestionToken.Kind);
+            node.ElementType.Should().NotBeNull();
+            node.QuestionToken.Kind.Should().Be(SyntaxKind.QuestionToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -901,9 +902,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleType();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Elements);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Elements.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -913,8 +914,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleElement();
 
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Identifier);
+            node.Type.Should().NotBeNull();
+            node.Identifier.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -924,7 +925,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOmittedTypeArgument();
 
-            Assert.Equal(SyntaxKind.OmittedTypeArgumentToken, node.OmittedTypeArgumentToken.Kind);
+            node.OmittedTypeArgumentToken.Kind.Should().Be(SyntaxKind.OmittedTypeArgumentToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -934,9 +935,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefType();
 
-            Assert.Equal(SyntaxKind.RefKeyword, node.RefKeyword.Kind);
-            Assert.Null(node.ReadOnlyKeyword);
-            Assert.NotNull(node.Type);
+            node.RefKeyword.Kind.Should().Be(SyntaxKind.RefKeyword);
+            node.ReadOnlyKeyword.Should().BeNull();
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -946,8 +947,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateScopedType();
 
-            Assert.Equal(SyntaxKind.ScopedKeyword, node.ScopedKeyword.Kind);
-            Assert.NotNull(node.Type);
+            node.ScopedKeyword.Kind.Should().Be(SyntaxKind.ScopedKeyword);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -957,9 +958,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -969,9 +970,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -981,8 +982,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePrefixUnaryExpression();
 
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Operand);
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.PlusToken);
+            node.Operand.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -992,8 +993,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAwaitExpression();
 
-            Assert.Equal(SyntaxKind.AwaitKeyword, node.AwaitKeyword.Kind);
-            Assert.NotNull(node.Expression);
+            node.AwaitKeyword.Kind.Should().Be(SyntaxKind.AwaitKeyword);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1003,8 +1004,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePostfixUnaryExpression();
 
-            Assert.NotNull(node.Operand);
-            Assert.Equal(SyntaxKind.PlusPlusToken, node.OperatorToken.Kind);
+            node.Operand.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.PlusPlusToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1014,9 +1015,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMemberAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.DotToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Name);
+            node.Expression.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.DotToken);
+            node.Name.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1026,9 +1027,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConditionalAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.QuestionToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.WhenNotNull);
+            node.Expression.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.QuestionToken);
+            node.WhenNotNull.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1038,8 +1039,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMemberBindingExpression();
 
-            Assert.Equal(SyntaxKind.DotToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Name);
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.DotToken);
+            node.Name.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1049,7 +1050,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElementBindingExpression();
 
-            Assert.NotNull(node.ArgumentList);
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1059,9 +1060,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRangeExpression();
 
-            Assert.Null(node.LeftOperand);
-            Assert.Equal(SyntaxKind.DotDotToken, node.OperatorToken.Kind);
-            Assert.Null(node.RightOperand);
+            node.LeftOperand.Should().BeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.DotDotToken);
+            node.RightOperand.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1071,7 +1072,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitElementAccess();
 
-            Assert.NotNull(node.ArgumentList);
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1081,9 +1082,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBinaryExpression();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.PlusToken);
+            node.Right.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1093,9 +1094,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAssignmentExpression();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.EqualsToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.Right.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1105,11 +1106,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConditionalExpression();
 
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.QuestionToken, node.QuestionToken.Kind);
-            Assert.NotNull(node.WhenTrue);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
-            Assert.NotNull(node.WhenFalse);
+            node.Condition.Should().NotBeNull();
+            node.QuestionToken.Kind.Should().Be(SyntaxKind.QuestionToken);
+            node.WhenTrue.Should().NotBeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
+            node.WhenFalse.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1119,7 +1120,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThisExpression();
 
-            Assert.Equal(SyntaxKind.ThisKeyword, node.Token.Kind);
+            node.Token.Kind.Should().Be(SyntaxKind.ThisKeyword);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1129,7 +1130,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBaseExpression();
 
-            Assert.Equal(SyntaxKind.BaseKeyword, node.Token.Kind);
+            node.Token.Kind.Should().Be(SyntaxKind.BaseKeyword);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1139,7 +1140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLiteralExpression();
 
-            Assert.Equal(SyntaxKind.ArgListKeyword, node.Token.Kind);
+            node.Token.Kind.Should().Be(SyntaxKind.ArgListKeyword);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1149,10 +1150,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMakeRefExpression();
 
-            Assert.Equal(SyntaxKind.MakeRefKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.MakeRefKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1162,10 +1163,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefTypeExpression();
 
-            Assert.Equal(SyntaxKind.RefTypeKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.RefTypeKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1175,12 +1176,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefValueExpression();
 
-            Assert.Equal(SyntaxKind.RefValueKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CommaToken, node.Comma.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.RefValueKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.Comma.Kind.Should().Be(SyntaxKind.CommaToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1190,10 +1191,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCheckedExpression();
 
-            Assert.Equal(SyntaxKind.CheckedKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.CheckedKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1203,10 +1204,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultExpression();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.DefaultKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1216,10 +1217,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeOfExpression();
 
-            Assert.Equal(SyntaxKind.TypeOfKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.TypeOfKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1229,10 +1230,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSizeOfExpression();
 
-            Assert.Equal(SyntaxKind.SizeOfKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.SizeOfKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1242,8 +1243,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInvocationExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.NotNull(node.ArgumentList);
+            node.Expression.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1253,8 +1254,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElementAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.NotNull(node.ArgumentList);
+            node.Expression.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1264,9 +1265,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1276,9 +1277,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBracketedArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Arguments.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1288,9 +1289,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArgument();
 
-            Assert.Null(node.NameColon);
-            Assert.Null(node.RefKindKeyword);
-            Assert.NotNull(node.Expression);
+            node.NameColon.Should().BeNull();
+            node.RefKindKeyword.Should().BeNull();
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1300,8 +1301,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExpressionColon();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Expression.Should().NotBeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1311,8 +1312,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameColon();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1322,8 +1323,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDeclarationExpression();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.Designation);
+            node.Type.Should().NotBeNull();
+            node.Designation.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1333,10 +1334,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCastExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Expression);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1346,11 +1347,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousMethodExpression();
 
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind);
-            Assert.Null(node.ParameterList);
-            Assert.NotNull(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.Modifiers.Should().Be(default);
+            node.DelegateKeyword.Kind.Should().Be(SyntaxKind.DelegateKeyword);
+            node.ParameterList.Should().BeNull();
+            node.Block.Should().NotBeNull();
+            node.ExpressionBody.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1360,12 +1361,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSimpleLambdaExpression();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Parameter);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind);
-            Assert.Null(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Parameter.Should().NotBeNull();
+            node.ArrowToken.Kind.Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Block.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1375,8 +1376,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefExpression();
 
-            Assert.Equal(SyntaxKind.RefKeyword, node.RefKeyword.Kind);
-            Assert.NotNull(node.Expression);
+            node.RefKeyword.Kind.Should().Be(SyntaxKind.RefKeyword);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1386,13 +1387,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedLambdaExpression();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.ReturnType);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind);
-            Assert.Null(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ArrowToken.Kind.Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Block.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1402,9 +1403,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInitializerExpression();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Expressions);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Expressions.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1414,9 +1415,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.NotNull(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.ArgumentList.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1426,10 +1427,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.Type.Should().NotBeNull();
+            node.ArgumentList.Should().BeNull();
+            node.Initializer.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1439,9 +1440,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWithExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.WithKeyword, node.WithKeyword.Kind);
-            Assert.NotNull(node.Initializer);
+            node.Expression.Should().NotBeNull();
+            node.WithKeyword.Kind.Should().Be(SyntaxKind.WithKeyword);
+            node.Initializer.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1451,8 +1452,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousObjectMemberDeclarator();
 
-            Assert.Null(node.NameEquals);
-            Assert.NotNull(node.Expression);
+            node.NameEquals.Should().BeNull();
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1462,10 +1463,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Initializers);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Initializers.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1475,9 +1476,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.Type.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1487,11 +1488,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Commas);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
-            Assert.NotNull(node.Initializer);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Commas.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
+            node.Initializer.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1501,9 +1502,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateStackAllocArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.StackAllocKeyword, node.StackAllocKeyword.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Initializer);
+            node.StackAllocKeyword.Kind.Should().Be(SyntaxKind.StackAllocKeyword);
+            node.Type.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1513,10 +1514,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitStackAllocArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.StackAllocKeyword, node.StackAllocKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
-            Assert.NotNull(node.Initializer);
+            node.StackAllocKeyword.Kind.Should().Be(SyntaxKind.StackAllocKeyword);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
+            node.Initializer.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1526,8 +1527,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryExpression();
 
-            Assert.NotNull(node.FromClause);
-            Assert.NotNull(node.Body);
+            node.FromClause.Should().NotBeNull();
+            node.Body.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1537,9 +1538,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryBody();
 
-            Assert.Equal(default, node.Clauses);
-            Assert.NotNull(node.SelectOrGroup);
-            Assert.Null(node.Continuation);
+            node.Clauses.Should().Be(default);
+            node.SelectOrGroup.Should().NotBeNull();
+            node.Continuation.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1549,11 +1550,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFromClause();
 
-            Assert.Equal(SyntaxKind.FromKeyword, node.FromKeyword.Kind);
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind);
-            Assert.NotNull(node.Expression);
+            node.FromKeyword.Kind.Should().Be(SyntaxKind.FromKeyword);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind.Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1563,10 +1564,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLetClause();
 
-            Assert.Equal(SyntaxKind.LetKeyword, node.LetKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
-            Assert.NotNull(node.Expression);
+            node.LetKeyword.Kind.Should().Be(SyntaxKind.LetKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1576,16 +1577,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateJoinClause();
 
-            Assert.Equal(SyntaxKind.JoinKeyword, node.JoinKeyword.Kind);
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind);
-            Assert.NotNull(node.InExpression);
-            Assert.Equal(SyntaxKind.OnKeyword, node.OnKeyword.Kind);
-            Assert.NotNull(node.LeftExpression);
-            Assert.Equal(SyntaxKind.EqualsKeyword, node.EqualsKeyword.Kind);
-            Assert.NotNull(node.RightExpression);
-            Assert.Null(node.Into);
+            node.JoinKeyword.Kind.Should().Be(SyntaxKind.JoinKeyword);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind.Should().Be(SyntaxKind.InKeyword);
+            node.InExpression.Should().NotBeNull();
+            node.OnKeyword.Kind.Should().Be(SyntaxKind.OnKeyword);
+            node.LeftExpression.Should().NotBeNull();
+            node.EqualsKeyword.Kind.Should().Be(SyntaxKind.EqualsKeyword);
+            node.RightExpression.Should().NotBeNull();
+            node.Into.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1595,8 +1596,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateJoinIntoClause();
 
-            Assert.Equal(SyntaxKind.IntoKeyword, node.IntoKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
+            node.IntoKeyword.Kind.Should().Be(SyntaxKind.IntoKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1606,8 +1607,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhereClause();
 
-            Assert.Equal(SyntaxKind.WhereKeyword, node.WhereKeyword.Kind);
-            Assert.NotNull(node.Condition);
+            node.WhereKeyword.Kind.Should().Be(SyntaxKind.WhereKeyword);
+            node.Condition.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1617,8 +1618,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOrderByClause();
 
-            Assert.Equal(SyntaxKind.OrderByKeyword, node.OrderByKeyword.Kind);
-            Assert.Equal(default, node.Orderings);
+            node.OrderByKeyword.Kind.Should().Be(SyntaxKind.OrderByKeyword);
+            node.Orderings.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1628,8 +1629,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOrdering();
 
-            Assert.NotNull(node.Expression);
-            Assert.Null(node.AscendingOrDescendingKeyword);
+            node.Expression.Should().NotBeNull();
+            node.AscendingOrDescendingKeyword.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1639,8 +1640,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSelectClause();
 
-            Assert.Equal(SyntaxKind.SelectKeyword, node.SelectKeyword.Kind);
-            Assert.NotNull(node.Expression);
+            node.SelectKeyword.Kind.Should().Be(SyntaxKind.SelectKeyword);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1650,10 +1651,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGroupClause();
 
-            Assert.Equal(SyntaxKind.GroupKeyword, node.GroupKeyword.Kind);
-            Assert.NotNull(node.GroupExpression);
-            Assert.Equal(SyntaxKind.ByKeyword, node.ByKeyword.Kind);
-            Assert.NotNull(node.ByExpression);
+            node.GroupKeyword.Kind.Should().Be(SyntaxKind.GroupKeyword);
+            node.GroupExpression.Should().NotBeNull();
+            node.ByKeyword.Kind.Should().Be(SyntaxKind.ByKeyword);
+            node.ByExpression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1663,9 +1664,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryContinuation();
 
-            Assert.Equal(SyntaxKind.IntoKeyword, node.IntoKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.NotNull(node.Body);
+            node.IntoKeyword.Kind.Should().Be(SyntaxKind.IntoKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.Body.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1675,7 +1676,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOmittedArraySizeExpression();
 
-            Assert.Equal(SyntaxKind.OmittedArraySizeExpressionToken, node.OmittedArraySizeExpressionToken.Kind);
+            node.OmittedArraySizeExpressionToken.Kind.Should().Be(SyntaxKind.OmittedArraySizeExpressionToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1685,9 +1686,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolatedStringExpression();
 
-            Assert.Equal(SyntaxKind.InterpolatedStringStartToken, node.StringStartToken.Kind);
-            Assert.Equal(default, node.Contents);
-            Assert.Equal(SyntaxKind.InterpolatedStringEndToken, node.StringEndToken.Kind);
+            node.StringStartToken.Kind.Should().Be(SyntaxKind.InterpolatedStringStartToken);
+            node.Contents.Should().Be(default);
+            node.StringEndToken.Kind.Should().Be(SyntaxKind.InterpolatedStringEndToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1697,9 +1698,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIsPatternExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.IsKeyword, node.IsKeyword.Kind);
-            Assert.NotNull(node.Pattern);
+            node.Expression.Should().NotBeNull();
+            node.IsKeyword.Kind.Should().Be(SyntaxKind.IsKeyword);
+            node.Pattern.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1709,8 +1710,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThrowExpression();
 
-            Assert.Equal(SyntaxKind.ThrowKeyword, node.ThrowKeyword.Kind);
-            Assert.NotNull(node.Expression);
+            node.ThrowKeyword.Kind.Should().Be(SyntaxKind.ThrowKeyword);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1720,8 +1721,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhenClause();
 
-            Assert.Equal(SyntaxKind.WhenKeyword, node.WhenKeyword.Kind);
-            Assert.NotNull(node.Condition);
+            node.WhenKeyword.Kind.Should().Be(SyntaxKind.WhenKeyword);
+            node.Condition.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1731,7 +1732,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDiscardPattern();
 
-            Assert.Equal(SyntaxKind.UnderscoreToken, node.UnderscoreToken.Kind);
+            node.UnderscoreToken.Kind.Should().Be(SyntaxKind.UnderscoreToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1741,8 +1742,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDeclarationPattern();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.Designation);
+            node.Type.Should().NotBeNull();
+            node.Designation.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1752,8 +1753,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVarPattern();
 
-            Assert.Equal(SyntaxKind.VarKeyword, node.VarKeyword.Kind);
-            Assert.NotNull(node.Designation);
+            node.VarKeyword.Kind.Should().Be(SyntaxKind.VarKeyword);
+            node.Designation.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1763,10 +1764,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRecursivePattern();
 
-            Assert.Null(node.Type);
-            Assert.Null(node.PositionalPatternClause);
-            Assert.Null(node.PropertyPatternClause);
-            Assert.Null(node.Designation);
+            node.Type.Should().BeNull();
+            node.PositionalPatternClause.Should().BeNull();
+            node.PropertyPatternClause.Should().BeNull();
+            node.Designation.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1776,9 +1777,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePositionalPatternClause();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Subpatterns);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Subpatterns.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1788,9 +1789,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePropertyPatternClause();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Subpatterns);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Subpatterns.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1800,8 +1801,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSubpattern();
 
-            Assert.Null(node.ExpressionColon);
-            Assert.NotNull(node.Pattern);
+            node.ExpressionColon.Should().BeNull();
+            node.Pattern.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1811,7 +1812,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstantPattern();
 
-            Assert.NotNull(node.Expression);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1821,9 +1822,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedPattern();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Pattern);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Pattern.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1833,8 +1834,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRelationalPattern();
 
-            Assert.Equal(SyntaxKind.EqualsEqualsToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.Expression);
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.EqualsEqualsToken);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1844,7 +1845,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypePattern();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1854,9 +1855,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBinaryPattern();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.OrKeyword, node.OperatorToken.Kind);
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.OrKeyword);
+            node.Right.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1866,8 +1867,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUnaryPattern();
 
-            Assert.Equal(SyntaxKind.NotKeyword, node.OperatorToken.Kind);
-            Assert.NotNull(node.Pattern);
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.NotKeyword);
+            node.Pattern.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1877,10 +1878,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateListPattern();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Patterns);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
-            Assert.Null(node.Designation);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Patterns.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
+            node.Designation.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1890,8 +1891,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSlicePattern();
 
-            Assert.Equal(SyntaxKind.DotDotToken, node.DotDotToken.Kind);
-            Assert.Null(node.Pattern);
+            node.DotDotToken.Kind.Should().Be(SyntaxKind.DotDotToken);
+            node.Pattern.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1901,7 +1902,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolatedStringText();
 
-            Assert.Equal(SyntaxKind.InterpolatedStringTextToken, node.TextToken.Kind);
+            node.TextToken.Kind.Should().Be(SyntaxKind.InterpolatedStringTextToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1911,11 +1912,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolation();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Null(node.AlignmentClause);
-            Assert.Null(node.FormatClause);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Expression.Should().NotBeNull();
+            node.AlignmentClause.Should().BeNull();
+            node.FormatClause.Should().BeNull();
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1925,8 +1926,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolationAlignmentClause();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.CommaToken.Kind);
-            Assert.NotNull(node.Value);
+            node.CommaToken.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.Value.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1936,8 +1937,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolationFormatClause();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.ColonToken.Kind);
-            Assert.Equal(SyntaxKind.InterpolatedStringTextToken, node.FormatStringToken.Kind);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.FormatStringToken.Kind.Should().Be(SyntaxKind.InterpolatedStringTextToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1947,9 +1948,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGlobalStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1959,10 +1960,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBlock();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Statements);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Statements.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1972,16 +1973,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLocalFunctionStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -1991,12 +1992,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLocalDeclarationStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Null(node.AwaitKeyword);
-            Assert.Null(node.UsingKeyword);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Should().BeNull();
+            node.UsingKeyword.Should().BeNull();
+            node.Modifiers.Should().Be(default);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2006,8 +2007,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVariableDeclaration();
 
-            Assert.NotNull(node.Type);
-            Assert.Equal(default, node.Variables);
+            node.Type.Should().NotBeNull();
+            node.Variables.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2017,9 +2018,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVariableDeclarator();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ArgumentList.Should().BeNull();
+            node.Initializer.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2029,8 +2030,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEqualsValueClause();
 
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
-            Assert.NotNull(node.Value);
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.Value.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2040,7 +2041,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSingleVariableDesignation();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2050,7 +2051,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDiscardDesignation();
 
-            Assert.Equal(SyntaxKind.UnderscoreToken, node.UnderscoreToken.Kind);
+            node.UnderscoreToken.Kind.Should().Be(SyntaxKind.UnderscoreToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2060,9 +2061,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedVariableDesignation();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Variables);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Variables.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2072,9 +2073,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExpressionStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.Expression.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2084,8 +2085,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEmptyStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2095,10 +2096,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLabeledStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2108,11 +2109,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGotoStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.GotoKeyword, node.GotoKeyword.Kind);
-            Assert.Null(node.CaseOrDefaultKeyword);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.GotoKeyword.Kind.Should().Be(SyntaxKind.GotoKeyword);
+            node.CaseOrDefaultKeyword.Should().BeNull();
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2122,9 +2123,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBreakStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.BreakKeyword, node.BreakKeyword.Kind);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.BreakKeyword.Kind.Should().Be(SyntaxKind.BreakKeyword);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2134,9 +2135,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateContinueStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ContinueKeyword, node.ContinueKeyword.Kind);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.ContinueKeyword.Kind.Should().Be(SyntaxKind.ContinueKeyword);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2146,10 +2147,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateReturnStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ReturnKeyword, node.ReturnKeyword.Kind);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.ReturnKeyword.Kind.Should().Be(SyntaxKind.ReturnKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2159,10 +2160,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThrowStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ThrowKeyword, node.ThrowKeyword.Kind);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.ThrowKeyword.Kind.Should().Be(SyntaxKind.ThrowKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2172,11 +2173,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateYieldStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.YieldKeyword, node.YieldKeyword.Kind);
-            Assert.Equal(SyntaxKind.ReturnKeyword, node.ReturnOrBreakKeyword.Kind);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.YieldKeyword.Kind.Should().Be(SyntaxKind.YieldKeyword);
+            node.ReturnOrBreakKeyword.Kind.Should().Be(SyntaxKind.ReturnKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2186,12 +2187,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhileStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.WhileKeyword, node.WhileKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.WhileKeyword.Kind.Should().Be(SyntaxKind.WhileKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2201,14 +2202,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDoStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.DoKeyword, node.DoKeyword.Kind);
-            Assert.NotNull(node.Statement);
-            Assert.Equal(SyntaxKind.WhileKeyword, node.WhileKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.DoKeyword.Kind.Should().Be(SyntaxKind.DoKeyword);
+            node.Statement.Should().NotBeNull();
+            node.WhileKeyword.Kind.Should().Be(SyntaxKind.WhileKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2218,17 +2219,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ForKeyword, node.ForKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Null(node.Declaration);
-            Assert.Equal(default, node.Initializers);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.FirstSemicolonToken.Kind);
-            Assert.Null(node.Condition);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SecondSemicolonToken.Kind);
-            Assert.Equal(default, node.Incrementors);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.ForKeyword.Kind.Should().Be(SyntaxKind.ForKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().BeNull();
+            node.Initializers.Should().Be(default);
+            node.FirstSemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
+            node.Condition.Should().BeNull();
+            node.SecondSemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
+            node.Incrementors.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2238,16 +2239,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForEachStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Null(node.AwaitKeyword);
-            Assert.Equal(SyntaxKind.ForEachKeyword, node.ForEachKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Should().BeNull();
+            node.ForEachKeyword.Kind.Should().Be(SyntaxKind.ForEachKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind.Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2257,15 +2258,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForEachVariableStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Null(node.AwaitKeyword);
-            Assert.Equal(SyntaxKind.ForEachKeyword, node.ForEachKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Variable);
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Should().BeNull();
+            node.ForEachKeyword.Kind.Should().Be(SyntaxKind.ForEachKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Variable.Should().NotBeNull();
+            node.InKeyword.Kind.Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2275,14 +2276,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUsingStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Null(node.AwaitKeyword);
-            Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Null(node.Declaration);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Should().BeNull();
+            node.UsingKeyword.Kind.Should().Be(SyntaxKind.UsingKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().BeNull();
+            node.Expression.Should().BeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2292,12 +2293,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFixedStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.FixedKeyword, node.FixedKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.FixedKeyword.Kind.Should().Be(SyntaxKind.FixedKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2307,9 +2308,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCheckedStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.CheckedKeyword, node.Keyword.Kind);
-            Assert.NotNull(node.Block);
+            node.AttributeLists.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.CheckedKeyword);
+            node.Block.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2319,9 +2320,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUnsafeStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.UnsafeKeyword, node.UnsafeKeyword.Kind);
-            Assert.NotNull(node.Block);
+            node.AttributeLists.Should().Be(default);
+            node.UnsafeKeyword.Kind.Should().Be(SyntaxKind.UnsafeKeyword);
+            node.Block.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2331,12 +2332,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLockStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.LockKeyword, node.LockKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.LockKeyword.Kind.Should().Be(SyntaxKind.LockKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2346,13 +2347,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIfStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.IfKeyword, node.IfKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
-            Assert.NotNull(node.Statement);
-            Assert.Null(node.Else);
+            node.AttributeLists.Should().Be(default);
+            node.IfKeyword.Kind.Should().Be(SyntaxKind.IfKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
+            node.Else.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2362,8 +2363,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElseClause();
 
-            Assert.Equal(SyntaxKind.ElseKeyword, node.ElseKeyword.Kind);
-            Assert.NotNull(node.Statement);
+            node.ElseKeyword.Kind.Should().Be(SyntaxKind.ElseKeyword);
+            node.Statement.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2373,14 +2374,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.SwitchKeyword, node.SwitchKeyword.Kind);
-            Assert.Null(node.OpenParenToken);
-            Assert.NotNull(node.Expression);
-            Assert.Null(node.CloseParenToken);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Sections);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.SwitchKeyword.Kind.Should().Be(SyntaxKind.SwitchKeyword);
+            node.OpenParenToken.Should().BeNull();
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Should().BeNull();
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Sections.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2390,8 +2391,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchSection();
 
-            Assert.Equal(default, node.Labels);
-            Assert.Equal(default, node.Statements);
+            node.Labels.Should().Be(default);
+            node.Statements.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2401,10 +2402,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCasePatternSwitchLabel();
 
-            Assert.Equal(SyntaxKind.CaseKeyword, node.Keyword.Kind);
-            Assert.NotNull(node.Pattern);
-            Assert.Null(node.WhenClause);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.CaseKeyword);
+            node.Pattern.Should().NotBeNull();
+            node.WhenClause.Should().BeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2414,9 +2415,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCaseSwitchLabel();
 
-            Assert.Equal(SyntaxKind.CaseKeyword, node.Keyword.Kind);
-            Assert.NotNull(node.Value);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.CaseKeyword);
+            node.Value.Should().NotBeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2426,8 +2427,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultSwitchLabel();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Keyword.Kind.Should().Be(SyntaxKind.DefaultKeyword);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2437,11 +2438,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchExpression();
 
-            Assert.NotNull(node.GoverningExpression);
-            Assert.Equal(SyntaxKind.SwitchKeyword, node.SwitchKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Arms);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.GoverningExpression.Should().NotBeNull();
+            node.SwitchKeyword.Kind.Should().Be(SyntaxKind.SwitchKeyword);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Arms.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2451,10 +2452,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchExpressionArm();
 
-            Assert.NotNull(node.Pattern);
-            Assert.Null(node.WhenClause);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.EqualsGreaterThanToken.Kind);
-            Assert.NotNull(node.Expression);
+            node.Pattern.Should().NotBeNull();
+            node.WhenClause.Should().BeNull();
+            node.EqualsGreaterThanToken.Kind.Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2464,11 +2465,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTryStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.TryKeyword, node.TryKeyword.Kind);
-            Assert.NotNull(node.Block);
-            Assert.Equal(default, node.Catches);
-            Assert.Null(node.Finally);
+            node.AttributeLists.Should().Be(default);
+            node.TryKeyword.Kind.Should().Be(SyntaxKind.TryKeyword);
+            node.Block.Should().NotBeNull();
+            node.Catches.Should().Be(default);
+            node.Finally.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2478,10 +2479,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchClause();
 
-            Assert.Equal(SyntaxKind.CatchKeyword, node.CatchKeyword.Kind);
-            Assert.Null(node.Declaration);
-            Assert.Null(node.Filter);
-            Assert.NotNull(node.Block);
+            node.CatchKeyword.Kind.Should().Be(SyntaxKind.CatchKeyword);
+            node.Declaration.Should().BeNull();
+            node.Filter.Should().BeNull();
+            node.Block.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2491,10 +2492,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchDeclaration();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Identifier);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.Identifier.Should().BeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2504,10 +2505,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchFilterClause();
 
-            Assert.Equal(SyntaxKind.WhenKeyword, node.WhenKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.NotNull(node.FilterExpression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.WhenKeyword.Kind.Should().Be(SyntaxKind.WhenKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.FilterExpression.Should().NotBeNull();
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2517,8 +2518,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFinallyClause();
 
-            Assert.Equal(SyntaxKind.FinallyKeyword, node.FinallyKeyword.Kind);
-            Assert.NotNull(node.Block);
+            node.FinallyKeyword.Kind.Should().Be(SyntaxKind.FinallyKeyword);
+            node.Block.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2528,11 +2529,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCompilationUnit();
 
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.EndOfFileToken, node.EndOfFileToken.Kind);
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.AttributeLists.Should().Be(default);
+            node.Members.Should().Be(default);
+            node.EndOfFileToken.Kind.Should().Be(SyntaxKind.EndOfFileToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2542,10 +2543,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExternAliasDirective();
 
-            Assert.Equal(SyntaxKind.ExternKeyword, node.ExternKeyword.Kind);
-            Assert.Equal(SyntaxKind.AliasKeyword, node.AliasKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.ExternKeyword.Kind.Should().Be(SyntaxKind.ExternKeyword);
+            node.AliasKeyword.Kind.Should().Be(SyntaxKind.AliasKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2555,12 +2556,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUsingDirective();
 
-            Assert.Null(node.GlobalKeyword);
-            Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind);
-            Assert.Null(node.StaticKeyword);
-            Assert.Null(node.Alias);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.GlobalKeyword.Should().BeNull();
+            node.UsingKeyword.Kind.Should().Be(SyntaxKind.UsingKeyword);
+            node.StaticKeyword.Should().BeNull();
+            node.Alias.Should().BeNull();
+            node.Name.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2570,16 +2571,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNamespaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.NamespaceKeyword, node.NamespaceKeyword.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.NamespaceKeyword.Kind.Should().Be(SyntaxKind.NamespaceKeyword);
+            node.Name.Should().NotBeNull();
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2589,14 +2590,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFileScopedNamespaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.NamespaceKeyword, node.NamespaceKeyword.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.Members);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.NamespaceKeyword.Kind.Should().Be(SyntaxKind.NamespaceKeyword);
+            node.Name.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.Members.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2606,10 +2607,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Null(node.Target);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Target.Should().BeNull();
+            node.Attributes.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2619,8 +2620,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeTargetSpecifier();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2630,8 +2631,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Null(node.ArgumentList);
+            node.Name.Should().NotBeNull();
+            node.ArgumentList.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2641,9 +2642,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2653,9 +2654,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeArgument();
 
-            Assert.Null(node.NameEquals);
-            Assert.Null(node.NameColon);
-            Assert.NotNull(node.Expression);
+            node.NameEquals.Should().BeNull();
+            node.NameColon.Should().BeNull();
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2665,8 +2666,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameEquals();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2676,9 +2677,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameterList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind);
+            node.LessThanToken.Kind.Should().Be(SyntaxKind.LessThanToken);
+            node.Parameters.Should().Be(default);
+            node.GreaterThanToken.Kind.Should().Be(SyntaxKind.GreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2688,9 +2689,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Null(node.VarianceKeyword);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.VarianceKeyword.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2700,17 +2701,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateClassDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.ClassKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.ClassKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2720,17 +2721,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateStructDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.StructKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.StructKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2740,17 +2741,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterfaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.InterfaceKeyword, node.Keyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.InterfaceKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2760,19 +2761,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRecordDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Keyword.Kind);
-            Assert.Null(node.ClassOrStructKeyword);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.ParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Null(node.OpenBraceToken);
-            Assert.Equal(default, node.Members);
-            Assert.Null(node.CloseBraceToken);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ClassOrStructKeyword.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Should().BeNull();
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2782,15 +2783,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEnumDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EnumKeyword, node.EnumKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.BaseList);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EnumKeyword.Kind.Should().Be(SyntaxKind.EnumKeyword);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.BaseList.Should().BeNull();
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2800,15 +2801,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDelegateDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind);
-            Assert.NotNull(node.ReturnType);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.DelegateKeyword.Kind.Should().Be(SyntaxKind.DelegateKeyword);
+            node.ReturnType.Should().NotBeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2818,10 +2819,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEnumMemberDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.EqualsValue);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.EqualsValue.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2831,8 +2832,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBaseList();
 
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
-            Assert.Equal(default, node.Types);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
+            node.Types.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2842,7 +2843,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSimpleBaseType();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2852,8 +2853,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePrimaryConstructorBaseType();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.ArgumentList);
+            node.Type.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2863,10 +2864,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameterConstraintClause();
 
-            Assert.Equal(SyntaxKind.WhereKeyword, node.WhereKeyword.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
-            Assert.Equal(default, node.Constraints);
+            node.WhereKeyword.Kind.Should().Be(SyntaxKind.WhereKeyword);
+            node.Name.Should().NotBeNull();
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
+            node.Constraints.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2876,9 +2877,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorConstraint();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind);
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.NewKeyword.Kind.Should().Be(SyntaxKind.NewKeyword);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2888,8 +2889,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateClassOrStructConstraint();
 
-            Assert.Equal(SyntaxKind.ClassKeyword, node.ClassOrStructKeyword.Kind);
-            Assert.Null(node.QuestionToken);
+            node.ClassOrStructKeyword.Kind.Should().Be(SyntaxKind.ClassKeyword);
+            node.QuestionToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2899,7 +2900,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeConstraint();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2909,7 +2910,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultConstraint();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.DefaultKeyword.Kind);
+            node.DefaultKeyword.Kind.Should().Be(SyntaxKind.DefaultKeyword);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2919,10 +2920,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFieldDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2932,11 +2933,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEventFieldDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EventKeyword, node.EventKeyword.Kind);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EventKeyword.Kind.Should().Be(SyntaxKind.EventKeyword);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind.Should().Be(SyntaxKind.SemicolonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2946,8 +2947,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExplicitInterfaceSpecifier();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.DotToken.Kind.Should().Be(SyntaxKind.DotToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2957,17 +2958,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMethodDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2977,17 +2978,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOperatorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind);
-            Assert.Null(node.CheckedKeyword);
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.OperatorKeyword.Kind.Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Should().BeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.PlusToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2997,17 +2998,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConversionOperatorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.ImplicitKeyword, node.ImplicitOrExplicitKeyword.Kind);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind);
-            Assert.Null(node.CheckedKeyword);
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ImplicitOrExplicitKeyword.Kind.Should().Be(SyntaxKind.ImplicitKeyword);
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.OperatorKeyword.Kind.Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Should().BeNull();
+            node.Type.Should().NotBeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3017,14 +3018,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Initializer);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3034,9 +3035,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorInitializer();
 
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
-            Assert.Equal(SyntaxKind.BaseKeyword, node.ThisOrBaseKeyword.Kind);
-            Assert.NotNull(node.ArgumentList);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
+            node.ThisOrBaseKeyword.Kind.Should().Be(SyntaxKind.BaseKeyword);
+            node.ArgumentList.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3046,14 +3047,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDestructorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.TildeToken, node.TildeToken.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.TildeToken.Kind.Should().Be(SyntaxKind.TildeToken);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3063,15 +3064,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePropertyDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.AccessorList);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.Initializer);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.AccessorList.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.Initializer.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3081,8 +3082,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrowExpressionClause();
 
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind);
-            Assert.NotNull(node.Expression);
+            node.ArrowToken.Kind.Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Expression.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3092,14 +3093,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEventDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EventKeyword, node.EventKeyword.Kind);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.AccessorList);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EventKeyword.Kind.Should().Be(SyntaxKind.EventKeyword);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.AccessorList.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3109,15 +3110,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIndexerDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.ThisKeyword, node.ThisKeyword.Kind);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.AccessorList);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.ThisKeyword.Kind.Should().Be(SyntaxKind.ThisKeyword);
+            node.ParameterList.Should().NotBeNull();
+            node.AccessorList.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3127,9 +3128,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAccessorList();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind);
-            Assert.Equal(default, node.Accessors);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind);
+            node.OpenBraceToken.Kind.Should().Be(SyntaxKind.OpenBraceToken);
+            node.Accessors.Should().Be(default);
+            node.CloseBraceToken.Kind.Should().Be(SyntaxKind.CloseBraceToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3139,12 +3140,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAccessorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.GetKeyword, node.Keyword.Kind);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.SemicolonToken);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind.Should().Be(SyntaxKind.GetKeyword);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3154,9 +3155,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParameterList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Parameters.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3166,9 +3167,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBracketedParameterList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Parameters.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3178,11 +3179,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Null(node.Default);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.Default.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3192,9 +3193,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3204,9 +3205,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIncompleteMember();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.Type);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3216,7 +3217,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSkippedTokensTrivia();
 
-            Assert.Equal(default, node.Tokens);
+            node.Tokens.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3226,8 +3227,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDocumentationCommentTrivia();
 
-            Assert.Equal(default, node.Content);
-            Assert.Equal(SyntaxKind.EndOfDocumentationCommentToken, node.EndOfComment.Kind);
+            node.Content.Should().Be(default);
+            node.EndOfComment.Kind.Should().Be(SyntaxKind.EndOfDocumentationCommentToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3237,7 +3238,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeCref();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3247,9 +3248,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQualifiedCref();
 
-            Assert.NotNull(node.Container);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind);
-            Assert.NotNull(node.Member);
+            node.Container.Should().NotBeNull();
+            node.DotToken.Kind.Should().Be(SyntaxKind.DotToken);
+            node.Member.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3259,8 +3260,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameMemberCref();
 
-            Assert.NotNull(node.Name);
-            Assert.Null(node.Parameters);
+            node.Name.Should().NotBeNull();
+            node.Parameters.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3270,8 +3271,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIndexerMemberCref();
 
-            Assert.Equal(SyntaxKind.ThisKeyword, node.ThisKeyword.Kind);
-            Assert.Null(node.Parameters);
+            node.ThisKeyword.Kind.Should().Be(SyntaxKind.ThisKeyword);
+            node.Parameters.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3281,10 +3282,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOperatorMemberCref();
 
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind);
-            Assert.Null(node.CheckedKeyword);
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind);
-            Assert.Null(node.Parameters);
+            node.OperatorKeyword.Kind.Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Should().BeNull();
+            node.OperatorToken.Kind.Should().Be(SyntaxKind.PlusToken);
+            node.Parameters.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3294,11 +3295,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConversionOperatorMemberCref();
 
-            Assert.Equal(SyntaxKind.ImplicitKeyword, node.ImplicitOrExplicitKeyword.Kind);
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind);
-            Assert.Null(node.CheckedKeyword);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Parameters);
+            node.ImplicitOrExplicitKeyword.Kind.Should().Be(SyntaxKind.ImplicitKeyword);
+            node.OperatorKeyword.Kind.Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Should().BeNull();
+            node.Type.Should().NotBeNull();
+            node.Parameters.Should().BeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3308,9 +3309,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefParameterList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Parameters.Should().Be(default);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3320,9 +3321,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefBracketedParameterList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+            node.OpenBracketToken.Kind.Should().Be(SyntaxKind.OpenBracketToken);
+            node.Parameters.Should().Be(default);
+            node.CloseBracketToken.Kind.Should().Be(SyntaxKind.CloseBracketToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3332,8 +3333,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefParameter();
 
-            Assert.Null(node.RefKindKeyword);
-            Assert.NotNull(node.Type);
+            node.RefKindKeyword.Should().BeNull();
+            node.Type.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3343,9 +3344,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElement();
 
-            Assert.NotNull(node.StartTag);
-            Assert.Equal(default, node.Content);
-            Assert.NotNull(node.EndTag);
+            node.StartTag.Should().NotBeNull();
+            node.Content.Should().Be(default);
+            node.EndTag.Should().NotBeNull();
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3355,10 +3356,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElementStartTag();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind);
+            node.LessThanToken.Kind.Should().Be(SyntaxKind.LessThanToken);
+            node.Name.Should().NotBeNull();
+            node.Attributes.Should().Be(default);
+            node.GreaterThanToken.Kind.Should().Be(SyntaxKind.GreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3368,9 +3369,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElementEndTag();
 
-            Assert.Equal(SyntaxKind.LessThanSlashToken, node.LessThanSlashToken.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind);
+            node.LessThanSlashToken.Kind.Should().Be(SyntaxKind.LessThanSlashToken);
+            node.Name.Should().NotBeNull();
+            node.GreaterThanToken.Kind.Should().Be(SyntaxKind.GreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3380,10 +3381,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlEmptyElement();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.SlashGreaterThanToken, node.SlashGreaterThanToken.Kind);
+            node.LessThanToken.Kind.Should().Be(SyntaxKind.LessThanToken);
+            node.Name.Should().NotBeNull();
+            node.Attributes.Should().Be(default);
+            node.SlashGreaterThanToken.Kind.Should().Be(SyntaxKind.SlashGreaterThanToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3393,8 +3394,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlName();
 
-            Assert.Null(node.Prefix);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.LocalName.Kind);
+            node.Prefix.Should().BeNull();
+            node.LocalName.Kind.Should().Be(SyntaxKind.IdentifierToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3404,8 +3405,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlPrefix();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Prefix.Kind);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind);
+            node.Prefix.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind.Should().Be(SyntaxKind.ColonToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3415,11 +3416,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlTextAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind);
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
+            node.TextTokens.Should().Be(default);
+            node.EndQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3429,11 +3430,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlCrefAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind);
-            Assert.NotNull(node.Cref);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
+            node.Cref.Should().NotBeNull();
+            node.EndQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3443,11 +3444,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlNameAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind);
-            Assert.NotNull(node.Identifier);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind);
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind.Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
+            node.Identifier.Should().NotBeNull();
+            node.EndQuoteToken.Kind.Should().Be(SyntaxKind.SingleQuoteToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3457,7 +3458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlText();
 
-            Assert.Equal(default, node.TextTokens);
+            node.TextTokens.Should().Be(default);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3467,9 +3468,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlCDataSection();
 
-            Assert.Equal(SyntaxKind.XmlCDataStartToken, node.StartCDataToken.Kind);
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlCDataEndToken, node.EndCDataToken.Kind);
+            node.StartCDataToken.Kind.Should().Be(SyntaxKind.XmlCDataStartToken);
+            node.TextTokens.Should().Be(default);
+            node.EndCDataToken.Kind.Should().Be(SyntaxKind.XmlCDataEndToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3479,10 +3480,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlProcessingInstruction();
 
-            Assert.Equal(SyntaxKind.XmlProcessingInstructionStartToken, node.StartProcessingInstructionToken.Kind);
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlProcessingInstructionEndToken, node.EndProcessingInstructionToken.Kind);
+            node.StartProcessingInstructionToken.Kind.Should().Be(SyntaxKind.XmlProcessingInstructionStartToken);
+            node.Name.Should().NotBeNull();
+            node.TextTokens.Should().Be(default);
+            node.EndProcessingInstructionToken.Kind.Should().Be(SyntaxKind.XmlProcessingInstructionEndToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3492,9 +3493,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlComment();
 
-            Assert.Equal(SyntaxKind.XmlCommentStartToken, node.LessThanExclamationMinusMinusToken.Kind);
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlCommentEndToken, node.MinusMinusGreaterThanToken.Kind);
+            node.LessThanExclamationMinusMinusToken.Kind.Should().Be(SyntaxKind.XmlCommentStartToken);
+            node.TextTokens.Should().Be(default);
+            node.MinusMinusGreaterThanToken.Kind.Should().Be(SyntaxKind.XmlCommentEndToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3504,13 +3505,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIfDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.IfKeyword, node.IfKeyword.Kind);
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
-            Assert.Equal(new bool(), node.ConditionValue);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.IfKeyword.Kind.Should().Be(SyntaxKind.IfKeyword);
+            node.Condition.Should().NotBeNull();
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
+            node.ConditionValue.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3520,13 +3521,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElifDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.ElifKeyword, node.ElifKeyword.Kind);
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
-            Assert.Equal(new bool(), node.ConditionValue);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.ElifKeyword.Kind.Should().Be(SyntaxKind.ElifKeyword);
+            node.Condition.Should().NotBeNull();
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
+            node.ConditionValue.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3536,11 +3537,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElseDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.ElseKeyword, node.ElseKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.ElseKeyword.Kind.Should().Be(SyntaxKind.ElseKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3550,10 +3551,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEndIfDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.EndIfKeyword, node.EndIfKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.EndIfKeyword.Kind.Should().Be(SyntaxKind.EndIfKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3563,10 +3564,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRegionDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.RegionKeyword, node.RegionKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.RegionKeyword.Kind.Should().Be(SyntaxKind.RegionKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3576,10 +3577,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEndRegionDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.EndRegionKeyword, node.EndRegionKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.EndRegionKeyword.Kind.Should().Be(SyntaxKind.EndRegionKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3589,10 +3590,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateErrorDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.ErrorKeyword, node.ErrorKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.ErrorKeyword.Kind.Should().Be(SyntaxKind.ErrorKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3602,10 +3603,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWarningDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.WarningKeyword, node.WarningKeyword.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.WarningKeyword.Kind.Should().Be(SyntaxKind.WarningKeyword);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3615,10 +3616,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBadDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.Identifier.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3628,11 +3629,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefineDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.DefineKeyword, node.DefineKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.DefineKeyword.Kind.Should().Be(SyntaxKind.DefineKeyword);
+            node.Name.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3642,11 +3643,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUndefDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.UndefKeyword, node.UndefKeyword.Kind);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.UndefKeyword.Kind.Should().Be(SyntaxKind.UndefKeyword);
+            node.Name.Kind.Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3656,12 +3657,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.LineKeyword, node.LineKeyword.Kind);
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Line.Kind);
-            Assert.Null(node.File);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.LineKeyword.Kind.Should().Be(SyntaxKind.LineKeyword);
+            node.Line.Kind.Should().Be(SyntaxKind.NumericLiteralToken);
+            node.File.Should().BeNull();
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3671,11 +3672,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineDirectivePosition();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind);
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Line.Kind);
-            Assert.Equal(SyntaxKind.CommaToken, node.CommaToken.Kind);
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Character.Kind);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind);
+            node.OpenParenToken.Kind.Should().Be(SyntaxKind.OpenParenToken);
+            node.Line.Kind.Should().Be(SyntaxKind.NumericLiteralToken);
+            node.CommaToken.Kind.Should().Be(SyntaxKind.CommaToken);
+            node.Character.Kind.Should().Be(SyntaxKind.NumericLiteralToken);
+            node.CloseParenToken.Kind.Should().Be(SyntaxKind.CloseParenToken);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3685,15 +3686,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineSpanDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.LineKeyword, node.LineKeyword.Kind);
-            Assert.NotNull(node.Start);
-            Assert.Equal(SyntaxKind.MinusToken, node.MinusToken.Kind);
-            Assert.NotNull(node.End);
-            Assert.Null(node.CharacterOffset);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.LineKeyword.Kind.Should().Be(SyntaxKind.LineKeyword);
+            node.Start.Should().NotBeNull();
+            node.MinusToken.Kind.Should().Be(SyntaxKind.MinusToken);
+            node.End.Should().NotBeNull();
+            node.CharacterOffset.Should().BeNull();
+            node.File.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3703,13 +3704,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePragmaWarningDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.PragmaKeyword, node.PragmaKeyword.Kind);
-            Assert.Equal(SyntaxKind.WarningKeyword, node.WarningKeyword.Kind);
-            Assert.Equal(SyntaxKind.DisableKeyword, node.DisableOrRestoreKeyword.Kind);
-            Assert.Equal(default, node.ErrorCodes);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.PragmaKeyword.Kind.Should().Be(SyntaxKind.PragmaKeyword);
+            node.WarningKeyword.Kind.Should().Be(SyntaxKind.WarningKeyword);
+            node.DisableOrRestoreKeyword.Kind.Should().Be(SyntaxKind.DisableKeyword);
+            node.ErrorCodes.Should().Be(default);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3719,14 +3720,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePragmaChecksumDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.PragmaKeyword, node.PragmaKeyword.Kind);
-            Assert.Equal(SyntaxKind.ChecksumKeyword, node.ChecksumKeyword.Kind);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.Guid.Kind);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.Bytes.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.PragmaKeyword.Kind.Should().Be(SyntaxKind.PragmaKeyword);
+            node.ChecksumKeyword.Kind.Should().Be(SyntaxKind.ChecksumKeyword);
+            node.File.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.Guid.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.Bytes.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3736,11 +3737,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateReferenceDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.ReferenceKeyword, node.ReferenceKeyword.Kind);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.ReferenceKeyword.Kind.Should().Be(SyntaxKind.ReferenceKeyword);
+            node.File.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3750,11 +3751,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLoadDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.LoadKeyword, node.LoadKeyword.Kind);
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.LoadKeyword.Kind.Should().Be(SyntaxKind.LoadKeyword);
+            node.File.Kind.Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3764,10 +3765,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateShebangDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.ExclamationToken, node.ExclamationToken.Kind);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.ExclamationToken.Kind.Should().Be(SyntaxKind.ExclamationToken);
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3777,12 +3778,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNullableDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind);
-            Assert.Equal(SyntaxKind.NullableKeyword, node.NullableKeyword.Kind);
-            Assert.Equal(SyntaxKind.EnableKeyword, node.SettingToken.Kind);
-            Assert.Null(node.TargetToken);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind);
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind.Should().Be(SyntaxKind.HashToken);
+            node.NullableKeyword.Kind.Should().Be(SyntaxKind.NullableKeyword);
+            node.SettingToken.Kind.Should().Be(SyntaxKind.EnableKeyword);
+            node.TargetToken.Should().BeNull();
+            node.EndOfDirectiveToken.Kind.Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
 
             AttachAndCheckDiagnostics(node);
         }
@@ -3798,11 +3799,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3812,7 +3813,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3824,11 +3825,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3838,7 +3839,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3850,11 +3851,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3864,7 +3865,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3876,11 +3877,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3890,7 +3891,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3902,11 +3903,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3916,7 +3917,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3928,11 +3929,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3942,7 +3943,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3954,11 +3955,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3968,7 +3969,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -3980,11 +3981,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -3994,7 +3995,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4006,11 +4007,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4020,7 +4021,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4032,11 +4033,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4046,7 +4047,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4058,11 +4059,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4072,7 +4073,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4084,11 +4085,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4098,7 +4099,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4110,11 +4111,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4124,7 +4125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4136,11 +4137,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4150,7 +4151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4162,11 +4163,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4176,7 +4177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4188,11 +4189,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4202,7 +4203,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4214,11 +4215,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4228,7 +4229,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4240,11 +4241,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4254,7 +4255,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4266,11 +4267,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4280,7 +4281,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4292,11 +4293,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4306,7 +4307,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4318,11 +4319,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4332,7 +4333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4344,11 +4345,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4358,7 +4359,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4370,11 +4371,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4384,7 +4385,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4396,11 +4397,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4410,7 +4411,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4422,11 +4423,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4436,7 +4437,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4448,11 +4449,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4462,7 +4463,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4474,11 +4475,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4488,7 +4489,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4500,11 +4501,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4514,7 +4515,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4526,11 +4527,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4540,7 +4541,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4552,11 +4553,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4566,7 +4567,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4578,11 +4579,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4592,7 +4593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4604,11 +4605,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4618,7 +4619,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4630,11 +4631,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4644,7 +4645,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4656,11 +4657,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4670,7 +4671,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4682,11 +4683,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4696,7 +4697,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4708,11 +4709,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4722,7 +4723,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4734,11 +4735,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4748,7 +4749,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4760,11 +4761,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4774,7 +4775,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4786,11 +4787,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4800,7 +4801,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4812,11 +4813,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4826,7 +4827,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4838,11 +4839,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4852,7 +4853,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4864,11 +4865,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4878,7 +4879,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4890,11 +4891,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4904,7 +4905,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4916,11 +4917,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4930,7 +4931,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4942,11 +4943,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4956,7 +4957,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4968,11 +4969,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -4982,7 +4983,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -4994,11 +4995,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5008,7 +5009,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5020,11 +5021,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5034,7 +5035,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5046,11 +5047,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5060,7 +5061,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5072,11 +5073,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5086,7 +5087,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5098,11 +5099,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5112,7 +5113,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5124,11 +5125,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5138,7 +5139,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5150,11 +5151,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5164,7 +5165,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5176,11 +5177,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5190,7 +5191,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5202,11 +5203,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5216,7 +5217,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5228,11 +5229,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5242,7 +5243,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5254,11 +5255,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5268,7 +5269,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5280,11 +5281,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5294,7 +5295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5306,11 +5307,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5320,7 +5321,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5332,11 +5333,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5346,7 +5347,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5358,11 +5359,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5372,7 +5373,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5384,11 +5385,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5398,7 +5399,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5410,11 +5411,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5424,7 +5425,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5436,11 +5437,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5450,7 +5451,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5462,11 +5463,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5476,7 +5477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5488,11 +5489,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5502,7 +5503,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5514,11 +5515,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5528,7 +5529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5540,11 +5541,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5554,7 +5555,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5566,11 +5567,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5580,7 +5581,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5592,11 +5593,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5606,7 +5607,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5618,11 +5619,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5632,7 +5633,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5644,11 +5645,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5658,7 +5659,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5670,11 +5671,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5684,7 +5685,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5696,11 +5697,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5710,7 +5711,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5722,11 +5723,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5736,7 +5737,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5748,11 +5749,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5762,7 +5763,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5774,11 +5775,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5788,7 +5789,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5800,11 +5801,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5814,7 +5815,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5826,11 +5827,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5840,7 +5841,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5852,11 +5853,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5866,7 +5867,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5878,11 +5879,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5892,7 +5893,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5904,11 +5905,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5918,7 +5919,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5930,11 +5931,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5944,7 +5945,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5956,11 +5957,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5970,7 +5971,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -5982,11 +5983,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -5996,7 +5997,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6008,11 +6009,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6022,7 +6023,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6034,11 +6035,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6048,7 +6049,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6060,11 +6061,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6074,7 +6075,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6086,11 +6087,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6100,7 +6101,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6112,11 +6113,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6126,7 +6127,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6138,11 +6139,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6152,7 +6153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6164,11 +6165,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6178,7 +6179,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6190,11 +6191,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6204,7 +6205,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6216,11 +6217,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6230,7 +6231,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6242,11 +6243,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6256,7 +6257,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6268,11 +6269,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6282,7 +6283,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6294,11 +6295,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6308,7 +6309,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6320,11 +6321,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6334,7 +6335,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6346,11 +6347,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6360,7 +6361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6372,11 +6373,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6386,7 +6387,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6398,11 +6399,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6412,7 +6413,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6424,11 +6425,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6438,7 +6439,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6450,11 +6451,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6464,7 +6465,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6476,11 +6477,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6490,7 +6491,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6502,11 +6503,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6516,7 +6517,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6528,11 +6529,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6542,7 +6543,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6554,11 +6555,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6568,7 +6569,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6580,11 +6581,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6594,7 +6595,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6606,11 +6607,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6620,7 +6621,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6632,11 +6633,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6646,7 +6647,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6658,11 +6659,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6672,7 +6673,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6684,11 +6685,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6698,7 +6699,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6710,11 +6711,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6724,7 +6725,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6736,11 +6737,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6750,7 +6751,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6762,11 +6763,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6776,7 +6777,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6788,11 +6789,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6802,7 +6803,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6814,11 +6815,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6828,7 +6829,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6840,11 +6841,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6854,7 +6855,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6866,11 +6867,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6880,7 +6881,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6892,11 +6893,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6906,7 +6907,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6918,11 +6919,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6932,7 +6933,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6944,11 +6945,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6958,7 +6959,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6970,11 +6971,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -6984,7 +6985,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -6996,11 +6997,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7010,7 +7011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7022,11 +7023,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7036,7 +7037,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7048,11 +7049,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7062,7 +7063,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7074,11 +7075,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7088,7 +7089,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7100,11 +7101,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7114,7 +7115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7126,11 +7127,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7140,7 +7141,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7152,11 +7153,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7166,7 +7167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7178,11 +7179,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7192,7 +7193,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7204,11 +7205,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7218,7 +7219,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7230,11 +7231,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7244,7 +7245,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7256,11 +7257,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7270,7 +7271,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7282,11 +7283,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7296,7 +7297,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7308,11 +7309,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7322,7 +7323,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7334,11 +7335,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7348,7 +7349,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7360,11 +7361,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7374,7 +7375,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7386,11 +7387,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7400,7 +7401,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7412,11 +7413,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7426,7 +7427,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7438,11 +7439,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7452,7 +7453,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7464,11 +7465,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7478,7 +7479,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7490,11 +7491,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7504,7 +7505,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7516,11 +7517,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7530,7 +7531,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7542,11 +7543,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7556,7 +7557,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7568,11 +7569,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7582,7 +7583,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7594,11 +7595,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7608,7 +7609,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7620,11 +7621,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7634,7 +7635,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7646,11 +7647,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7660,7 +7661,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7672,11 +7673,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7686,7 +7687,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7698,11 +7699,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7712,7 +7713,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7724,11 +7725,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7738,7 +7739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7750,11 +7751,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7764,7 +7765,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7776,11 +7777,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7790,7 +7791,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7802,11 +7803,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7816,7 +7817,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7828,11 +7829,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7842,7 +7843,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7854,11 +7855,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7868,7 +7869,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7880,11 +7881,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7894,7 +7895,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7906,11 +7907,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7920,7 +7921,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7932,11 +7933,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7946,7 +7947,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7958,11 +7959,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7972,7 +7973,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -7984,11 +7985,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -7998,7 +7999,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8010,11 +8011,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8024,7 +8025,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8036,11 +8037,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8050,7 +8051,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8062,11 +8063,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8076,7 +8077,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8088,11 +8089,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8102,7 +8103,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8114,11 +8115,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8128,7 +8129,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8140,11 +8141,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8154,7 +8155,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8166,11 +8167,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8180,7 +8181,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8192,11 +8193,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8206,7 +8207,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8218,11 +8219,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8232,7 +8233,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8244,11 +8245,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8258,7 +8259,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8270,11 +8271,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8284,7 +8285,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8296,11 +8297,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8310,7 +8311,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8322,11 +8323,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8336,7 +8337,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8348,11 +8349,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8362,7 +8363,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8374,11 +8375,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8388,7 +8389,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8400,11 +8401,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8414,7 +8415,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8426,11 +8427,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8440,7 +8441,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8452,11 +8453,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8466,7 +8467,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8478,11 +8479,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8492,7 +8493,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8504,11 +8505,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8518,7 +8519,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8530,11 +8531,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8544,7 +8545,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8556,11 +8557,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8570,7 +8571,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8582,11 +8583,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8596,7 +8597,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8608,11 +8609,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8622,7 +8623,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8634,11 +8635,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8648,7 +8649,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8660,11 +8661,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8674,7 +8675,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8686,11 +8687,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8700,7 +8701,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8712,11 +8713,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8726,7 +8727,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8738,11 +8739,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8752,7 +8753,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8764,11 +8765,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8778,7 +8779,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8790,11 +8791,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8804,7 +8805,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8816,11 +8817,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8830,7 +8831,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8842,11 +8843,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8856,7 +8857,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8868,11 +8869,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8882,7 +8883,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8894,11 +8895,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8908,7 +8909,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8920,11 +8921,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8934,7 +8935,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8946,11 +8947,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8960,7 +8961,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8972,11 +8973,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -8986,7 +8987,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -8998,11 +8999,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9012,7 +9013,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9024,11 +9025,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9038,7 +9039,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9050,11 +9051,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9064,7 +9065,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9076,11 +9077,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9090,7 +9091,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9102,11 +9103,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9116,7 +9117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9128,11 +9129,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9142,7 +9143,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9154,11 +9155,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9168,7 +9169,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9180,11 +9181,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9194,7 +9195,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9206,11 +9207,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9220,7 +9221,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9232,11 +9233,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9246,7 +9247,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9258,11 +9259,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9272,7 +9273,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9284,11 +9285,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9298,7 +9299,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9310,11 +9311,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9324,7 +9325,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9336,11 +9337,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9350,7 +9351,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9362,11 +9363,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9376,7 +9377,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9388,11 +9389,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9402,7 +9403,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9414,11 +9415,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9428,7 +9429,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9440,11 +9441,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9454,7 +9455,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9466,11 +9467,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9480,7 +9481,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9492,11 +9493,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9506,7 +9507,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9518,11 +9519,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9532,7 +9533,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9544,11 +9545,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9558,7 +9559,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9570,11 +9571,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9584,7 +9585,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9596,11 +9597,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9610,7 +9611,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9622,11 +9623,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9636,7 +9637,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9648,11 +9649,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9662,7 +9663,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9674,11 +9675,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9688,7 +9689,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9700,11 +9701,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9714,7 +9715,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9726,11 +9727,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9740,7 +9741,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9752,11 +9753,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9766,7 +9767,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9778,11 +9779,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9792,7 +9793,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9804,11 +9805,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9818,7 +9819,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9830,11 +9831,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9844,7 +9845,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9856,11 +9857,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9870,7 +9871,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9882,11 +9883,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9896,7 +9897,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9908,11 +9909,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9922,7 +9923,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9934,11 +9935,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9948,7 +9949,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -9960,11 +9961,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -9974,7 +9975,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
         #endregion Green Rewriters
     }
@@ -10703,9 +10704,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIdentifierName();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithIdentifier(node.Identifier);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10713,11 +10714,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQualifiedName();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind());
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.DotToken.Kind().Should().Be(SyntaxKind.DotToken);
+            node.Right.Should().NotBeNull();
             var newNode = node.WithLeft(node.Left).WithDotToken(node.DotToken).WithRight(node.Right);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10725,10 +10726,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGenericName();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.NotNull(node.TypeArgumentList);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeArgumentList.Should().NotBeNull();
             var newNode = node.WithIdentifier(node.Identifier).WithTypeArgumentList(node.TypeArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10736,11 +10737,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeArgumentList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind());
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind());
+            node.LessThanToken.Kind().Should().Be(SyntaxKind.LessThanToken);
+            node.Arguments.Should().Be(default);
+            node.GreaterThanToken.Kind().Should().Be(SyntaxKind.GreaterThanToken);
             var newNode = node.WithLessThanToken(node.LessThanToken).WithArguments(node.Arguments).WithGreaterThanToken(node.GreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10748,11 +10749,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAliasQualifiedName();
 
-            Assert.NotNull(node.Alias);
-            Assert.Equal(SyntaxKind.ColonColonToken, node.ColonColonToken.Kind());
-            Assert.NotNull(node.Name);
+            node.Alias.Should().NotBeNull();
+            node.ColonColonToken.Kind().Should().Be(SyntaxKind.ColonColonToken);
+            node.Name.Should().NotBeNull();
             var newNode = node.WithAlias(node.Alias).WithColonColonToken(node.ColonColonToken).WithName(node.Name);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10760,9 +10761,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePredefinedType();
 
-            Assert.Equal(SyntaxKind.BoolKeyword, node.Keyword.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.BoolKeyword);
             var newNode = node.WithKeyword(node.Keyword);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10770,10 +10771,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(default, node.RankSpecifiers);
+            node.ElementType.Should().NotBeNull();
+            node.RankSpecifiers.Should().Be(default);
             var newNode = node.WithElementType(node.ElementType).WithRankSpecifiers(node.RankSpecifiers);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10781,11 +10782,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayRankSpecifier();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Sizes);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Sizes.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithSizes(node.Sizes).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10793,10 +10794,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePointerType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(SyntaxKind.AsteriskToken, node.AsteriskToken.Kind());
+            node.ElementType.Should().NotBeNull();
+            node.AsteriskToken.Kind().Should().Be(SyntaxKind.AsteriskToken);
             var newNode = node.WithElementType(node.ElementType).WithAsteriskToken(node.AsteriskToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10804,12 +10805,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerType();
 
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind());
-            Assert.Equal(SyntaxKind.AsteriskToken, node.AsteriskToken.Kind());
-            Assert.Null(node.CallingConvention);
-            Assert.NotNull(node.ParameterList);
+            node.DelegateKeyword.Kind().Should().Be(SyntaxKind.DelegateKeyword);
+            node.AsteriskToken.Kind().Should().Be(SyntaxKind.AsteriskToken);
+            node.CallingConvention.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
             var newNode = node.WithDelegateKeyword(node.DelegateKeyword).WithAsteriskToken(node.AsteriskToken).WithCallingConvention(node.CallingConvention).WithParameterList(node.ParameterList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10817,11 +10818,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerParameterList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind());
+            node.LessThanToken.Kind().Should().Be(SyntaxKind.LessThanToken);
+            node.Parameters.Should().Be(default);
+            node.GreaterThanToken.Kind().Should().Be(SyntaxKind.GreaterThanToken);
             var newNode = node.WithLessThanToken(node.LessThanToken).WithParameters(node.Parameters).WithGreaterThanToken(node.GreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10829,10 +10830,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerCallingConvention();
 
-            Assert.Equal(SyntaxKind.ManagedKeyword, node.ManagedOrUnmanagedKeyword.Kind());
-            Assert.Null(node.UnmanagedCallingConventionList);
+            node.ManagedOrUnmanagedKeyword.Kind().Should().Be(SyntaxKind.ManagedKeyword);
+            node.UnmanagedCallingConventionList.Should().BeNull();
             var newNode = node.WithManagedOrUnmanagedKeyword(node.ManagedOrUnmanagedKeyword).WithUnmanagedCallingConventionList(node.UnmanagedCallingConventionList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10840,11 +10841,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerUnmanagedCallingConventionList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.CallingConventions);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.CallingConventions.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithCallingConventions(node.CallingConventions).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10852,9 +10853,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerUnmanagedCallingConvention();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind());
+            node.Name.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithName(node.Name);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10862,10 +10863,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNullableType();
 
-            Assert.NotNull(node.ElementType);
-            Assert.Equal(SyntaxKind.QuestionToken, node.QuestionToken.Kind());
+            node.ElementType.Should().NotBeNull();
+            node.QuestionToken.Kind().Should().Be(SyntaxKind.QuestionToken);
             var newNode = node.WithElementType(node.ElementType).WithQuestionToken(node.QuestionToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10873,11 +10874,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleType();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Elements);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Elements.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithElements(node.Elements).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10885,10 +10886,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleElement();
 
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.None, node.Identifier.Kind());
+            node.Type.Should().NotBeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithType(node.Type).WithIdentifier(node.Identifier);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10896,9 +10897,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOmittedTypeArgument();
 
-            Assert.Equal(SyntaxKind.OmittedTypeArgumentToken, node.OmittedTypeArgumentToken.Kind());
+            node.OmittedTypeArgumentToken.Kind().Should().Be(SyntaxKind.OmittedTypeArgumentToken);
             var newNode = node.WithOmittedTypeArgumentToken(node.OmittedTypeArgumentToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10906,11 +10907,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefType();
 
-            Assert.Equal(SyntaxKind.RefKeyword, node.RefKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.ReadOnlyKeyword.Kind());
-            Assert.NotNull(node.Type);
+            node.RefKeyword.Kind().Should().Be(SyntaxKind.RefKeyword);
+            node.ReadOnlyKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithRefKeyword(node.RefKeyword).WithReadOnlyKeyword(node.ReadOnlyKeyword).WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10918,10 +10919,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateScopedType();
 
-            Assert.Equal(SyntaxKind.ScopedKeyword, node.ScopedKeyword.Kind());
-            Assert.NotNull(node.Type);
+            node.ScopedKeyword.Kind().Should().Be(SyntaxKind.ScopedKeyword);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithScopedKeyword(node.ScopedKeyword).WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10929,11 +10930,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10941,11 +10942,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTupleExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithArguments(node.Arguments).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10953,10 +10954,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePrefixUnaryExpression();
 
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Operand);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.PlusToken);
+            node.Operand.Should().NotBeNull();
             var newNode = node.WithOperatorToken(node.OperatorToken).WithOperand(node.Operand);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10964,10 +10965,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAwaitExpression();
 
-            Assert.Equal(SyntaxKind.AwaitKeyword, node.AwaitKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.AwaitKeyword.Kind().Should().Be(SyntaxKind.AwaitKeyword);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithAwaitKeyword(node.AwaitKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10975,10 +10976,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePostfixUnaryExpression();
 
-            Assert.NotNull(node.Operand);
-            Assert.Equal(SyntaxKind.PlusPlusToken, node.OperatorToken.Kind());
+            node.Operand.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.PlusPlusToken);
             var newNode = node.WithOperand(node.Operand).WithOperatorToken(node.OperatorToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10986,11 +10987,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMemberAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.DotToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Name);
+            node.Expression.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.DotToken);
+            node.Name.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithOperatorToken(node.OperatorToken).WithName(node.Name);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -10998,11 +10999,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConditionalAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.QuestionToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.WhenNotNull);
+            node.Expression.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.QuestionToken);
+            node.WhenNotNull.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithOperatorToken(node.OperatorToken).WithWhenNotNull(node.WhenNotNull);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11010,10 +11011,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMemberBindingExpression();
 
-            Assert.Equal(SyntaxKind.DotToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Name);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.DotToken);
+            node.Name.Should().NotBeNull();
             var newNode = node.WithOperatorToken(node.OperatorToken).WithName(node.Name);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11021,9 +11022,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElementBindingExpression();
 
-            Assert.NotNull(node.ArgumentList);
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11031,11 +11032,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRangeExpression();
 
-            Assert.Null(node.LeftOperand);
-            Assert.Equal(SyntaxKind.DotDotToken, node.OperatorToken.Kind());
-            Assert.Null(node.RightOperand);
+            node.LeftOperand.Should().BeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.DotDotToken);
+            node.RightOperand.Should().BeNull();
             var newNode = node.WithLeftOperand(node.LeftOperand).WithOperatorToken(node.OperatorToken).WithRightOperand(node.RightOperand);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11043,9 +11044,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitElementAccess();
 
-            Assert.NotNull(node.ArgumentList);
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11053,11 +11054,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBinaryExpression();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.PlusToken);
+            node.Right.Should().NotBeNull();
             var newNode = node.WithLeft(node.Left).WithOperatorToken(node.OperatorToken).WithRight(node.Right);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11065,11 +11066,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAssignmentExpression();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.EqualsToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.Right.Should().NotBeNull();
             var newNode = node.WithLeft(node.Left).WithOperatorToken(node.OperatorToken).WithRight(node.Right);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11077,13 +11078,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConditionalExpression();
 
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.QuestionToken, node.QuestionToken.Kind());
-            Assert.NotNull(node.WhenTrue);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
-            Assert.NotNull(node.WhenFalse);
+            node.Condition.Should().NotBeNull();
+            node.QuestionToken.Kind().Should().Be(SyntaxKind.QuestionToken);
+            node.WhenTrue.Should().NotBeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            node.WhenFalse.Should().NotBeNull();
             var newNode = node.WithCondition(node.Condition).WithQuestionToken(node.QuestionToken).WithWhenTrue(node.WhenTrue).WithColonToken(node.ColonToken).WithWhenFalse(node.WhenFalse);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11091,9 +11092,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThisExpression();
 
-            Assert.Equal(SyntaxKind.ThisKeyword, node.Token.Kind());
+            node.Token.Kind().Should().Be(SyntaxKind.ThisKeyword);
             var newNode = node.WithToken(node.Token);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11101,9 +11102,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBaseExpression();
 
-            Assert.Equal(SyntaxKind.BaseKeyword, node.Token.Kind());
+            node.Token.Kind().Should().Be(SyntaxKind.BaseKeyword);
             var newNode = node.WithToken(node.Token);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11111,9 +11112,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLiteralExpression();
 
-            Assert.Equal(SyntaxKind.ArgListKeyword, node.Token.Kind());
+            node.Token.Kind().Should().Be(SyntaxKind.ArgListKeyword);
             var newNode = node.WithToken(node.Token);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11121,12 +11122,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMakeRefExpression();
 
-            Assert.Equal(SyntaxKind.MakeRefKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.MakeRefKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11134,12 +11135,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefTypeExpression();
 
-            Assert.Equal(SyntaxKind.RefTypeKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.RefTypeKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11147,14 +11148,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefValueExpression();
 
-            Assert.Equal(SyntaxKind.RefValueKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CommaToken, node.Comma.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.RefValueKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.Comma.Kind().Should().Be(SyntaxKind.CommaToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithComma(node.Comma).WithType(node.Type).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11162,12 +11163,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCheckedExpression();
 
-            Assert.Equal(SyntaxKind.CheckedKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.CheckedKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11175,12 +11176,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultExpression();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.DefaultKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11188,12 +11189,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeOfExpression();
 
-            Assert.Equal(SyntaxKind.TypeOfKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.TypeOfKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11201,12 +11202,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSizeOfExpression();
 
-            Assert.Equal(SyntaxKind.SizeOfKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.SizeOfKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithKeyword(node.Keyword).WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11214,10 +11215,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInvocationExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.NotNull(node.ArgumentList);
+            node.Expression.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11225,10 +11226,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElementAccessExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.NotNull(node.ArgumentList);
+            node.Expression.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11236,11 +11237,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithArguments(node.Arguments).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11248,11 +11249,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBracketedArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Arguments.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithArguments(node.Arguments).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11260,11 +11261,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArgument();
 
-            Assert.Null(node.NameColon);
-            Assert.Equal(SyntaxKind.None, node.RefKindKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.NameColon.Should().BeNull();
+            node.RefKindKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithNameColon(node.NameColon).WithRefKindKeyword(node.RefKindKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11272,10 +11273,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExpressionColon();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Expression.Should().NotBeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithExpression(node.Expression).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11283,10 +11284,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameColon();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithName(node.Name).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11294,10 +11295,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDeclarationExpression();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.Designation);
+            node.Type.Should().NotBeNull();
+            node.Designation.Should().NotBeNull();
             var newNode = node.WithType(node.Type).WithDesignation(node.Designation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11305,12 +11306,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCastExpression();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Expression);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithCloseParenToken(node.CloseParenToken).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11318,13 +11319,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousMethodExpression();
 
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind());
-            Assert.Null(node.ParameterList);
-            Assert.NotNull(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.Modifiers.Should().Be(default);
+            node.DelegateKeyword.Kind().Should().Be(SyntaxKind.DelegateKeyword);
+            node.ParameterList.Should().BeNull();
+            node.Block.Should().NotBeNull();
+            node.ExpressionBody.Should().BeNull();
             var newNode = node.WithModifiers(node.Modifiers).WithDelegateKeyword(node.DelegateKeyword).WithParameterList(node.ParameterList).WithBlock(node.Block).WithExpressionBody(node.ExpressionBody);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11332,14 +11333,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSimpleLambdaExpression();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Parameter);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind());
-            Assert.Null(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Parameter.Should().NotBeNull();
+            node.ArrowToken.Kind().Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Block.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithParameter(node.Parameter).WithArrowToken(node.ArrowToken).WithBlock(node.Block).WithExpressionBody(node.ExpressionBody);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11347,10 +11348,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRefExpression();
 
-            Assert.Equal(SyntaxKind.RefKeyword, node.RefKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.RefKeyword.Kind().Should().Be(SyntaxKind.RefKeyword);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithRefKeyword(node.RefKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11358,15 +11359,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedLambdaExpression();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.ReturnType);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind());
-            Assert.Null(node.Block);
-            Assert.Null(node.ExpressionBody);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ArrowToken.Kind().Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Block.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithReturnType(node.ReturnType).WithParameterList(node.ParameterList).WithArrowToken(node.ArrowToken).WithBlock(node.Block).WithExpressionBody(node.ExpressionBody);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11374,11 +11375,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInitializerExpression();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Expressions);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Expressions.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithOpenBraceToken(node.OpenBraceToken).WithExpressions(node.Expressions).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11386,11 +11387,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.NotNull(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.ArgumentList.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
             var newNode = node.WithNewKeyword(node.NewKeyword).WithArgumentList(node.ArgumentList).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11398,12 +11399,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.Type.Should().NotBeNull();
+            node.ArgumentList.Should().BeNull();
+            node.Initializer.Should().BeNull();
             var newNode = node.WithNewKeyword(node.NewKeyword).WithType(node.Type).WithArgumentList(node.ArgumentList).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11411,11 +11412,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWithExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.WithKeyword, node.WithKeyword.Kind());
-            Assert.NotNull(node.Initializer);
+            node.Expression.Should().NotBeNull();
+            node.WithKeyword.Kind().Should().Be(SyntaxKind.WithKeyword);
+            node.Initializer.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithWithKeyword(node.WithKeyword).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11423,10 +11424,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousObjectMemberDeclarator();
 
-            Assert.Null(node.NameEquals);
-            Assert.NotNull(node.Expression);
+            node.NameEquals.Should().BeNull();
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithNameEquals(node.NameEquals).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11434,12 +11435,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAnonymousObjectCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Initializers);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Initializers.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithNewKeyword(node.NewKeyword).WithOpenBraceToken(node.OpenBraceToken).WithInitializers(node.Initializers).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11447,11 +11448,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Initializer);
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.Type.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
             var newNode = node.WithNewKeyword(node.NewKeyword).WithType(node.Type).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11459,13 +11460,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Commas);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
-            Assert.NotNull(node.Initializer);
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Commas.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
+            node.Initializer.Should().NotBeNull();
             var newNode = node.WithNewKeyword(node.NewKeyword).WithOpenBracketToken(node.OpenBracketToken).WithCommas(node.Commas).WithCloseBracketToken(node.CloseBracketToken).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11473,11 +11474,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateStackAllocArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.StackAllocKeyword, node.StackAllocKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Initializer);
+            node.StackAllocKeyword.Kind().Should().Be(SyntaxKind.StackAllocKeyword);
+            node.Type.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
             var newNode = node.WithStackAllocKeyword(node.StackAllocKeyword).WithType(node.Type).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11485,12 +11486,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateImplicitStackAllocArrayCreationExpression();
 
-            Assert.Equal(SyntaxKind.StackAllocKeyword, node.StackAllocKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
-            Assert.NotNull(node.Initializer);
+            node.StackAllocKeyword.Kind().Should().Be(SyntaxKind.StackAllocKeyword);
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
+            node.Initializer.Should().NotBeNull();
             var newNode = node.WithStackAllocKeyword(node.StackAllocKeyword).WithOpenBracketToken(node.OpenBracketToken).WithCloseBracketToken(node.CloseBracketToken).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11498,10 +11499,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryExpression();
 
-            Assert.NotNull(node.FromClause);
-            Assert.NotNull(node.Body);
+            node.FromClause.Should().NotBeNull();
+            node.Body.Should().NotBeNull();
             var newNode = node.WithFromClause(node.FromClause).WithBody(node.Body);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11509,11 +11510,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryBody();
 
-            Assert.Equal(default, node.Clauses);
-            Assert.NotNull(node.SelectOrGroup);
-            Assert.Null(node.Continuation);
+            node.Clauses.Should().Be(default);
+            node.SelectOrGroup.Should().NotBeNull();
+            node.Continuation.Should().BeNull();
             var newNode = node.WithClauses(node.Clauses).WithSelectOrGroup(node.SelectOrGroup).WithContinuation(node.Continuation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11521,13 +11522,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFromClause();
 
-            Assert.Equal(SyntaxKind.FromKeyword, node.FromKeyword.Kind());
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.FromKeyword.Kind().Should().Be(SyntaxKind.FromKeyword);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind().Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithFromKeyword(node.FromKeyword).WithType(node.Type).WithIdentifier(node.Identifier).WithInKeyword(node.InKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11535,12 +11536,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLetClause();
 
-            Assert.Equal(SyntaxKind.LetKeyword, node.LetKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
-            Assert.NotNull(node.Expression);
+            node.LetKeyword.Kind().Should().Be(SyntaxKind.LetKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithLetKeyword(node.LetKeyword).WithIdentifier(node.Identifier).WithEqualsToken(node.EqualsToken).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11548,18 +11549,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateJoinClause();
 
-            Assert.Equal(SyntaxKind.JoinKeyword, node.JoinKeyword.Kind());
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind());
-            Assert.NotNull(node.InExpression);
-            Assert.Equal(SyntaxKind.OnKeyword, node.OnKeyword.Kind());
-            Assert.NotNull(node.LeftExpression);
-            Assert.Equal(SyntaxKind.EqualsKeyword, node.EqualsKeyword.Kind());
-            Assert.NotNull(node.RightExpression);
-            Assert.Null(node.Into);
+            node.JoinKeyword.Kind().Should().Be(SyntaxKind.JoinKeyword);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind().Should().Be(SyntaxKind.InKeyword);
+            node.InExpression.Should().NotBeNull();
+            node.OnKeyword.Kind().Should().Be(SyntaxKind.OnKeyword);
+            node.LeftExpression.Should().NotBeNull();
+            node.EqualsKeyword.Kind().Should().Be(SyntaxKind.EqualsKeyword);
+            node.RightExpression.Should().NotBeNull();
+            node.Into.Should().BeNull();
             var newNode = node.WithJoinKeyword(node.JoinKeyword).WithType(node.Type).WithIdentifier(node.Identifier).WithInKeyword(node.InKeyword).WithInExpression(node.InExpression).WithOnKeyword(node.OnKeyword).WithLeftExpression(node.LeftExpression).WithEqualsKeyword(node.EqualsKeyword).WithRightExpression(node.RightExpression).WithInto(node.Into);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11567,10 +11568,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateJoinIntoClause();
 
-            Assert.Equal(SyntaxKind.IntoKeyword, node.IntoKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
+            node.IntoKeyword.Kind().Should().Be(SyntaxKind.IntoKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithIntoKeyword(node.IntoKeyword).WithIdentifier(node.Identifier);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11578,10 +11579,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhereClause();
 
-            Assert.Equal(SyntaxKind.WhereKeyword, node.WhereKeyword.Kind());
-            Assert.NotNull(node.Condition);
+            node.WhereKeyword.Kind().Should().Be(SyntaxKind.WhereKeyword);
+            node.Condition.Should().NotBeNull();
             var newNode = node.WithWhereKeyword(node.WhereKeyword).WithCondition(node.Condition);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11589,10 +11590,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOrderByClause();
 
-            Assert.Equal(SyntaxKind.OrderByKeyword, node.OrderByKeyword.Kind());
-            Assert.Equal(default, node.Orderings);
+            node.OrderByKeyword.Kind().Should().Be(SyntaxKind.OrderByKeyword);
+            node.Orderings.Should().Be(default);
             var newNode = node.WithOrderByKeyword(node.OrderByKeyword).WithOrderings(node.Orderings);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11600,10 +11601,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOrdering();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.None, node.AscendingOrDescendingKeyword.Kind());
+            node.Expression.Should().NotBeNull();
+            node.AscendingOrDescendingKeyword.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithExpression(node.Expression).WithAscendingOrDescendingKeyword(node.AscendingOrDescendingKeyword);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11611,10 +11612,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSelectClause();
 
-            Assert.Equal(SyntaxKind.SelectKeyword, node.SelectKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.SelectKeyword.Kind().Should().Be(SyntaxKind.SelectKeyword);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithSelectKeyword(node.SelectKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11622,12 +11623,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGroupClause();
 
-            Assert.Equal(SyntaxKind.GroupKeyword, node.GroupKeyword.Kind());
-            Assert.NotNull(node.GroupExpression);
-            Assert.Equal(SyntaxKind.ByKeyword, node.ByKeyword.Kind());
-            Assert.NotNull(node.ByExpression);
+            node.GroupKeyword.Kind().Should().Be(SyntaxKind.GroupKeyword);
+            node.GroupExpression.Should().NotBeNull();
+            node.ByKeyword.Kind().Should().Be(SyntaxKind.ByKeyword);
+            node.ByExpression.Should().NotBeNull();
             var newNode = node.WithGroupKeyword(node.GroupKeyword).WithGroupExpression(node.GroupExpression).WithByKeyword(node.ByKeyword).WithByExpression(node.ByExpression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11635,11 +11636,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQueryContinuation();
 
-            Assert.Equal(SyntaxKind.IntoKeyword, node.IntoKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.NotNull(node.Body);
+            node.IntoKeyword.Kind().Should().Be(SyntaxKind.IntoKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.Body.Should().NotBeNull();
             var newNode = node.WithIntoKeyword(node.IntoKeyword).WithIdentifier(node.Identifier).WithBody(node.Body);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11647,9 +11648,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOmittedArraySizeExpression();
 
-            Assert.Equal(SyntaxKind.OmittedArraySizeExpressionToken, node.OmittedArraySizeExpressionToken.Kind());
+            node.OmittedArraySizeExpressionToken.Kind().Should().Be(SyntaxKind.OmittedArraySizeExpressionToken);
             var newNode = node.WithOmittedArraySizeExpressionToken(node.OmittedArraySizeExpressionToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11657,11 +11658,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolatedStringExpression();
 
-            Assert.Equal(SyntaxKind.InterpolatedStringStartToken, node.StringStartToken.Kind());
-            Assert.Equal(default, node.Contents);
-            Assert.Equal(SyntaxKind.InterpolatedStringEndToken, node.StringEndToken.Kind());
+            node.StringStartToken.Kind().Should().Be(SyntaxKind.InterpolatedStringStartToken);
+            node.Contents.Should().Be(default);
+            node.StringEndToken.Kind().Should().Be(SyntaxKind.InterpolatedStringEndToken);
             var newNode = node.WithStringStartToken(node.StringStartToken).WithContents(node.Contents).WithStringEndToken(node.StringEndToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11669,11 +11670,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIsPatternExpression();
 
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.IsKeyword, node.IsKeyword.Kind());
-            Assert.NotNull(node.Pattern);
+            node.Expression.Should().NotBeNull();
+            node.IsKeyword.Kind().Should().Be(SyntaxKind.IsKeyword);
+            node.Pattern.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression).WithIsKeyword(node.IsKeyword).WithPattern(node.Pattern);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11681,10 +11682,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThrowExpression();
 
-            Assert.Equal(SyntaxKind.ThrowKeyword, node.ThrowKeyword.Kind());
-            Assert.NotNull(node.Expression);
+            node.ThrowKeyword.Kind().Should().Be(SyntaxKind.ThrowKeyword);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithThrowKeyword(node.ThrowKeyword).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11692,10 +11693,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhenClause();
 
-            Assert.Equal(SyntaxKind.WhenKeyword, node.WhenKeyword.Kind());
-            Assert.NotNull(node.Condition);
+            node.WhenKeyword.Kind().Should().Be(SyntaxKind.WhenKeyword);
+            node.Condition.Should().NotBeNull();
             var newNode = node.WithWhenKeyword(node.WhenKeyword).WithCondition(node.Condition);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11703,9 +11704,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDiscardPattern();
 
-            Assert.Equal(SyntaxKind.UnderscoreToken, node.UnderscoreToken.Kind());
+            node.UnderscoreToken.Kind().Should().Be(SyntaxKind.UnderscoreToken);
             var newNode = node.WithUnderscoreToken(node.UnderscoreToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11713,10 +11714,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDeclarationPattern();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.Designation);
+            node.Type.Should().NotBeNull();
+            node.Designation.Should().NotBeNull();
             var newNode = node.WithType(node.Type).WithDesignation(node.Designation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11724,10 +11725,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVarPattern();
 
-            Assert.Equal(SyntaxKind.VarKeyword, node.VarKeyword.Kind());
-            Assert.NotNull(node.Designation);
+            node.VarKeyword.Kind().Should().Be(SyntaxKind.VarKeyword);
+            node.Designation.Should().NotBeNull();
             var newNode = node.WithVarKeyword(node.VarKeyword).WithDesignation(node.Designation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11735,12 +11736,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRecursivePattern();
 
-            Assert.Null(node.Type);
-            Assert.Null(node.PositionalPatternClause);
-            Assert.Null(node.PropertyPatternClause);
-            Assert.Null(node.Designation);
+            node.Type.Should().BeNull();
+            node.PositionalPatternClause.Should().BeNull();
+            node.PropertyPatternClause.Should().BeNull();
+            node.Designation.Should().BeNull();
             var newNode = node.WithType(node.Type).WithPositionalPatternClause(node.PositionalPatternClause).WithPropertyPatternClause(node.PropertyPatternClause).WithDesignation(node.Designation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11748,11 +11749,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePositionalPatternClause();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Subpatterns);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Subpatterns.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithSubpatterns(node.Subpatterns).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11760,11 +11761,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePropertyPatternClause();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Subpatterns);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Subpatterns.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithOpenBraceToken(node.OpenBraceToken).WithSubpatterns(node.Subpatterns).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11772,10 +11773,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSubpattern();
 
-            Assert.Null(node.ExpressionColon);
-            Assert.NotNull(node.Pattern);
+            node.ExpressionColon.Should().BeNull();
+            node.Pattern.Should().NotBeNull();
             var newNode = node.WithExpressionColon(node.ExpressionColon).WithPattern(node.Pattern);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11783,9 +11784,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstantPattern();
 
-            Assert.NotNull(node.Expression);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11793,11 +11794,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedPattern();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Pattern);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Pattern.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithPattern(node.Pattern).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11805,10 +11806,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRelationalPattern();
 
-            Assert.Equal(SyntaxKind.EqualsEqualsToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.Expression);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.EqualsEqualsToken);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithOperatorToken(node.OperatorToken).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11816,9 +11817,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypePattern();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11826,11 +11827,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBinaryPattern();
 
-            Assert.NotNull(node.Left);
-            Assert.Equal(SyntaxKind.OrKeyword, node.OperatorToken.Kind());
-            Assert.NotNull(node.Right);
+            node.Left.Should().NotBeNull();
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.OrKeyword);
+            node.Right.Should().NotBeNull();
             var newNode = node.WithLeft(node.Left).WithOperatorToken(node.OperatorToken).WithRight(node.Right);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11838,10 +11839,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUnaryPattern();
 
-            Assert.Equal(SyntaxKind.NotKeyword, node.OperatorToken.Kind());
-            Assert.NotNull(node.Pattern);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.NotKeyword);
+            node.Pattern.Should().NotBeNull();
             var newNode = node.WithOperatorToken(node.OperatorToken).WithPattern(node.Pattern);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11849,12 +11850,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateListPattern();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Patterns);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
-            Assert.Null(node.Designation);
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Patterns.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
+            node.Designation.Should().BeNull();
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithPatterns(node.Patterns).WithCloseBracketToken(node.CloseBracketToken).WithDesignation(node.Designation);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11862,10 +11863,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSlicePattern();
 
-            Assert.Equal(SyntaxKind.DotDotToken, node.DotDotToken.Kind());
-            Assert.Null(node.Pattern);
+            node.DotDotToken.Kind().Should().Be(SyntaxKind.DotDotToken);
+            node.Pattern.Should().BeNull();
             var newNode = node.WithDotDotToken(node.DotDotToken).WithPattern(node.Pattern);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11873,9 +11874,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolatedStringText();
 
-            Assert.Equal(SyntaxKind.InterpolatedStringTextToken, node.TextToken.Kind());
+            node.TextToken.Kind().Should().Be(SyntaxKind.InterpolatedStringTextToken);
             var newNode = node.WithTextToken(node.TextToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11883,13 +11884,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolation();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Null(node.AlignmentClause);
-            Assert.Null(node.FormatClause);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Expression.Should().NotBeNull();
+            node.AlignmentClause.Should().BeNull();
+            node.FormatClause.Should().BeNull();
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithOpenBraceToken(node.OpenBraceToken).WithExpression(node.Expression).WithAlignmentClause(node.AlignmentClause).WithFormatClause(node.FormatClause).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11897,10 +11898,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolationAlignmentClause();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.CommaToken.Kind());
-            Assert.NotNull(node.Value);
+            node.CommaToken.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.Value.Should().NotBeNull();
             var newNode = node.WithCommaToken(node.CommaToken).WithValue(node.Value);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11908,10 +11909,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterpolationFormatClause();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.ColonToken.Kind());
-            Assert.Equal(SyntaxKind.InterpolatedStringTextToken, node.FormatStringToken.Kind());
+            node.ColonToken.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.FormatStringToken.Kind().Should().Be(SyntaxKind.InterpolatedStringTextToken);
             var newNode = node.WithColonToken(node.ColonToken).WithFormatStringToken(node.FormatStringToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11919,11 +11920,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGlobalStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11931,12 +11932,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBlock();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Statements);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Statements.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithOpenBraceToken(node.OpenBraceToken).WithStatements(node.Statements).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11944,18 +11945,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLocalFunctionStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithReturnType(node.ReturnType).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithParameterList(node.ParameterList).WithConstraintClauses(node.ConstraintClauses).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11963,14 +11964,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLocalDeclarationStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.None, node.AwaitKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.UsingKeyword.Kind());
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.UsingKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Modifiers.Should().Be(default);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithAwaitKeyword(node.AwaitKeyword).WithUsingKeyword(node.UsingKeyword).WithModifiers(node.Modifiers).WithDeclaration(node.Declaration).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11978,10 +11979,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVariableDeclaration();
 
-            Assert.NotNull(node.Type);
-            Assert.Equal(default, node.Variables);
+            node.Type.Should().NotBeNull();
+            node.Variables.Should().Be(default);
             var newNode = node.WithType(node.Type).WithVariables(node.Variables);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -11989,11 +11990,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateVariableDeclarator();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.ArgumentList);
-            Assert.Null(node.Initializer);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ArgumentList.Should().BeNull();
+            node.Initializer.Should().BeNull();
             var newNode = node.WithIdentifier(node.Identifier).WithArgumentList(node.ArgumentList).WithInitializer(node.Initializer);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12001,10 +12002,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEqualsValueClause();
 
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
-            Assert.NotNull(node.Value);
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.Value.Should().NotBeNull();
             var newNode = node.WithEqualsToken(node.EqualsToken).WithValue(node.Value);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12012,9 +12013,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSingleVariableDesignation();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithIdentifier(node.Identifier);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12022,9 +12023,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDiscardDesignation();
 
-            Assert.Equal(SyntaxKind.UnderscoreToken, node.UnderscoreToken.Kind());
+            node.UnderscoreToken.Kind().Should().Be(SyntaxKind.UnderscoreToken);
             var newNode = node.WithUnderscoreToken(node.UnderscoreToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12032,11 +12033,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParenthesizedVariableDesignation();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Variables);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Variables.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithVariables(node.Variables).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12044,11 +12045,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExpressionStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Expression.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithExpression(node.Expression).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12056,10 +12057,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEmptyStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12067,12 +12068,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLabeledStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithIdentifier(node.Identifier).WithColonToken(node.ColonToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12080,13 +12081,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateGotoStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.GotoKeyword, node.GotoKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.CaseOrDefaultKeyword.Kind());
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.GotoKeyword.Kind().Should().Be(SyntaxKind.GotoKeyword);
+            node.CaseOrDefaultKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithGotoKeyword(node.GotoKeyword).WithCaseOrDefaultKeyword(node.CaseOrDefaultKeyword).WithExpression(node.Expression).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12094,11 +12095,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBreakStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.BreakKeyword, node.BreakKeyword.Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.BreakKeyword.Kind().Should().Be(SyntaxKind.BreakKeyword);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithBreakKeyword(node.BreakKeyword).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12106,11 +12107,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateContinueStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ContinueKeyword, node.ContinueKeyword.Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.ContinueKeyword.Kind().Should().Be(SyntaxKind.ContinueKeyword);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithContinueKeyword(node.ContinueKeyword).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12118,12 +12119,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateReturnStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ReturnKeyword, node.ReturnKeyword.Kind());
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.ReturnKeyword.Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithReturnKeyword(node.ReturnKeyword).WithExpression(node.Expression).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12131,12 +12132,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateThrowStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ThrowKeyword, node.ThrowKeyword.Kind());
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.ThrowKeyword.Kind().Should().Be(SyntaxKind.ThrowKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithThrowKeyword(node.ThrowKeyword).WithExpression(node.Expression).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12144,13 +12145,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateYieldStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.YieldKeyword, node.YieldKeyword.Kind());
-            Assert.Equal(SyntaxKind.ReturnKeyword, node.ReturnOrBreakKeyword.Kind());
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.YieldKeyword.Kind().Should().Be(SyntaxKind.YieldKeyword);
+            node.ReturnOrBreakKeyword.Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            node.Expression.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithYieldKeyword(node.YieldKeyword).WithReturnOrBreakKeyword(node.ReturnOrBreakKeyword).WithExpression(node.Expression).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12158,14 +12159,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWhileStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.WhileKeyword, node.WhileKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.WhileKeyword.Kind().Should().Be(SyntaxKind.WhileKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithWhileKeyword(node.WhileKeyword).WithOpenParenToken(node.OpenParenToken).WithCondition(node.Condition).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12173,16 +12174,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDoStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.DoKeyword, node.DoKeyword.Kind());
-            Assert.NotNull(node.Statement);
-            Assert.Equal(SyntaxKind.WhileKeyword, node.WhileKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.DoKeyword.Kind().Should().Be(SyntaxKind.DoKeyword);
+            node.Statement.Should().NotBeNull();
+            node.WhileKeyword.Kind().Should().Be(SyntaxKind.WhileKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithDoKeyword(node.DoKeyword).WithStatement(node.Statement).WithWhileKeyword(node.WhileKeyword).WithOpenParenToken(node.OpenParenToken).WithCondition(node.Condition).WithCloseParenToken(node.CloseParenToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12190,19 +12191,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.ForKeyword, node.ForKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Null(node.Declaration);
-            Assert.Equal(default, node.Initializers);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.FirstSemicolonToken.Kind());
-            Assert.Null(node.Condition);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SecondSemicolonToken.Kind());
-            Assert.Equal(default, node.Incrementors);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.ForKeyword.Kind().Should().Be(SyntaxKind.ForKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().BeNull();
+            node.Initializers.Should().Be(default);
+            node.FirstSemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
+            node.Condition.Should().BeNull();
+            node.SecondSemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
+            node.Incrementors.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithForKeyword(node.ForKeyword).WithOpenParenToken(node.OpenParenToken).WithDeclaration(node.Declaration).WithInitializers(node.Initializers).WithFirstSemicolonToken(node.FirstSemicolonToken).WithCondition(node.Condition).WithSecondSemicolonToken(node.SecondSemicolonToken).WithIncrementors(node.Incrementors).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12210,18 +12211,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForEachStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.None, node.AwaitKeyword.Kind());
-            Assert.Equal(SyntaxKind.ForEachKeyword, node.ForEachKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.ForEachKeyword.Kind().Should().Be(SyntaxKind.ForEachKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.InKeyword.Kind().Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithAwaitKeyword(node.AwaitKeyword).WithForEachKeyword(node.ForEachKeyword).WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithIdentifier(node.Identifier).WithInKeyword(node.InKeyword).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12229,17 +12230,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateForEachVariableStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.None, node.AwaitKeyword.Kind());
-            Assert.Equal(SyntaxKind.ForEachKeyword, node.ForEachKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Variable);
-            Assert.Equal(SyntaxKind.InKeyword, node.InKeyword.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.ForEachKeyword.Kind().Should().Be(SyntaxKind.ForEachKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Variable.Should().NotBeNull();
+            node.InKeyword.Kind().Should().Be(SyntaxKind.InKeyword);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithAwaitKeyword(node.AwaitKeyword).WithForEachKeyword(node.ForEachKeyword).WithOpenParenToken(node.OpenParenToken).WithVariable(node.Variable).WithInKeyword(node.InKeyword).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12247,16 +12248,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUsingStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.None, node.AwaitKeyword.Kind());
-            Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Null(node.Declaration);
-            Assert.Null(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.AwaitKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.UsingKeyword.Kind().Should().Be(SyntaxKind.UsingKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().BeNull();
+            node.Expression.Should().BeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithAwaitKeyword(node.AwaitKeyword).WithUsingKeyword(node.UsingKeyword).WithOpenParenToken(node.OpenParenToken).WithDeclaration(node.Declaration).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12264,14 +12265,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFixedStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.FixedKeyword, node.FixedKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.FixedKeyword.Kind().Should().Be(SyntaxKind.FixedKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Declaration.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithFixedKeyword(node.FixedKeyword).WithOpenParenToken(node.OpenParenToken).WithDeclaration(node.Declaration).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12279,11 +12280,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCheckedStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.CheckedKeyword, node.Keyword.Kind());
-            Assert.NotNull(node.Block);
+            node.AttributeLists.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.CheckedKeyword);
+            node.Block.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithKeyword(node.Keyword).WithBlock(node.Block);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12291,11 +12292,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUnsafeStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.UnsafeKeyword, node.UnsafeKeyword.Kind());
-            Assert.NotNull(node.Block);
+            node.AttributeLists.Should().Be(default);
+            node.UnsafeKeyword.Kind().Should().Be(SyntaxKind.UnsafeKeyword);
+            node.Block.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithUnsafeKeyword(node.UnsafeKeyword).WithBlock(node.Block);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12303,14 +12304,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLockStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.LockKeyword, node.LockKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
+            node.AttributeLists.Should().Be(default);
+            node.LockKeyword.Kind().Should().Be(SyntaxKind.LockKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithLockKeyword(node.LockKeyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12318,15 +12319,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIfStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.IfKeyword, node.IfKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
-            Assert.NotNull(node.Statement);
-            Assert.Null(node.Else);
+            node.AttributeLists.Should().Be(default);
+            node.IfKeyword.Kind().Should().Be(SyntaxKind.IfKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Condition.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
+            node.Statement.Should().NotBeNull();
+            node.Else.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithIfKeyword(node.IfKeyword).WithOpenParenToken(node.OpenParenToken).WithCondition(node.Condition).WithCloseParenToken(node.CloseParenToken).WithStatement(node.Statement).WithElse(node.Else);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12334,10 +12335,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElseClause();
 
-            Assert.Equal(SyntaxKind.ElseKeyword, node.ElseKeyword.Kind());
-            Assert.NotNull(node.Statement);
+            node.ElseKeyword.Kind().Should().Be(SyntaxKind.ElseKeyword);
+            node.Statement.Should().NotBeNull();
             var newNode = node.WithElseKeyword(node.ElseKeyword).WithStatement(node.Statement);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12345,16 +12346,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.SwitchKeyword, node.SwitchKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Expression);
-            Assert.Equal(SyntaxKind.None, node.CloseParenToken.Kind());
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Sections);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.SwitchKeyword.Kind().Should().Be(SyntaxKind.SwitchKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.None);
+            node.Expression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.None);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Sections.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithSwitchKeyword(node.SwitchKeyword).WithOpenParenToken(node.OpenParenToken).WithExpression(node.Expression).WithCloseParenToken(node.CloseParenToken).WithOpenBraceToken(node.OpenBraceToken).WithSections(node.Sections).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12362,10 +12363,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchSection();
 
-            Assert.Equal(default, node.Labels);
-            Assert.Equal(default, node.Statements);
+            node.Labels.Should().Be(default);
+            node.Statements.Should().Be(default);
             var newNode = node.WithLabels(node.Labels).WithStatements(node.Statements);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12373,12 +12374,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCasePatternSwitchLabel();
 
-            Assert.Equal(SyntaxKind.CaseKeyword, node.Keyword.Kind());
-            Assert.NotNull(node.Pattern);
-            Assert.Null(node.WhenClause);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.CaseKeyword);
+            node.Pattern.Should().NotBeNull();
+            node.WhenClause.Should().BeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithKeyword(node.Keyword).WithPattern(node.Pattern).WithWhenClause(node.WhenClause).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12386,11 +12387,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCaseSwitchLabel();
 
-            Assert.Equal(SyntaxKind.CaseKeyword, node.Keyword.Kind());
-            Assert.NotNull(node.Value);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.CaseKeyword);
+            node.Value.Should().NotBeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithKeyword(node.Keyword).WithValue(node.Value).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12398,10 +12399,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultSwitchLabel();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Keyword.Kind().Should().Be(SyntaxKind.DefaultKeyword);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithKeyword(node.Keyword).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12409,13 +12410,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchExpression();
 
-            Assert.NotNull(node.GoverningExpression);
-            Assert.Equal(SyntaxKind.SwitchKeyword, node.SwitchKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Arms);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.GoverningExpression.Should().NotBeNull();
+            node.SwitchKeyword.Kind().Should().Be(SyntaxKind.SwitchKeyword);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Arms.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithGoverningExpression(node.GoverningExpression).WithSwitchKeyword(node.SwitchKeyword).WithOpenBraceToken(node.OpenBraceToken).WithArms(node.Arms).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12423,12 +12424,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSwitchExpressionArm();
 
-            Assert.NotNull(node.Pattern);
-            Assert.Null(node.WhenClause);
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.EqualsGreaterThanToken.Kind());
-            Assert.NotNull(node.Expression);
+            node.Pattern.Should().NotBeNull();
+            node.WhenClause.Should().BeNull();
+            node.EqualsGreaterThanToken.Kind().Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithPattern(node.Pattern).WithWhenClause(node.WhenClause).WithEqualsGreaterThanToken(node.EqualsGreaterThanToken).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12436,13 +12437,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTryStatement();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.TryKeyword, node.TryKeyword.Kind());
-            Assert.NotNull(node.Block);
-            Assert.Equal(default, node.Catches);
-            Assert.Null(node.Finally);
+            node.AttributeLists.Should().Be(default);
+            node.TryKeyword.Kind().Should().Be(SyntaxKind.TryKeyword);
+            node.Block.Should().NotBeNull();
+            node.Catches.Should().Be(default);
+            node.Finally.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithTryKeyword(node.TryKeyword).WithBlock(node.Block).WithCatches(node.Catches).WithFinally(node.Finally);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12450,12 +12451,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchClause();
 
-            Assert.Equal(SyntaxKind.CatchKeyword, node.CatchKeyword.Kind());
-            Assert.Null(node.Declaration);
-            Assert.Null(node.Filter);
-            Assert.NotNull(node.Block);
+            node.CatchKeyword.Kind().Should().Be(SyntaxKind.CatchKeyword);
+            node.Declaration.Should().BeNull();
+            node.Filter.Should().BeNull();
+            node.Block.Should().NotBeNull();
             var newNode = node.WithCatchKeyword(node.CatchKeyword).WithDeclaration(node.Declaration).WithFilter(node.Filter).WithBlock(node.Block);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12463,12 +12464,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchDeclaration();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Equal(SyntaxKind.None, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Type.Should().NotBeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.None);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithType(node.Type).WithIdentifier(node.Identifier).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12476,12 +12477,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCatchFilterClause();
 
-            Assert.Equal(SyntaxKind.WhenKeyword, node.WhenKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.NotNull(node.FilterExpression);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.WhenKeyword.Kind().Should().Be(SyntaxKind.WhenKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.FilterExpression.Should().NotBeNull();
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithWhenKeyword(node.WhenKeyword).WithOpenParenToken(node.OpenParenToken).WithFilterExpression(node.FilterExpression).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12489,10 +12490,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFinallyClause();
 
-            Assert.Equal(SyntaxKind.FinallyKeyword, node.FinallyKeyword.Kind());
-            Assert.NotNull(node.Block);
+            node.FinallyKeyword.Kind().Should().Be(SyntaxKind.FinallyKeyword);
+            node.Block.Should().NotBeNull();
             var newNode = node.WithFinallyKeyword(node.FinallyKeyword).WithBlock(node.Block);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12500,13 +12501,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCompilationUnit();
 
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.EndOfFileToken, node.EndOfFileToken.Kind());
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.AttributeLists.Should().Be(default);
+            node.Members.Should().Be(default);
+            node.EndOfFileToken.Kind().Should().Be(SyntaxKind.EndOfFileToken);
             var newNode = node.WithExterns(node.Externs).WithUsings(node.Usings).WithAttributeLists(node.AttributeLists).WithMembers(node.Members).WithEndOfFileToken(node.EndOfFileToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12514,12 +12515,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExternAliasDirective();
 
-            Assert.Equal(SyntaxKind.ExternKeyword, node.ExternKeyword.Kind());
-            Assert.Equal(SyntaxKind.AliasKeyword, node.AliasKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.ExternKeyword.Kind().Should().Be(SyntaxKind.ExternKeyword);
+            node.AliasKeyword.Kind().Should().Be(SyntaxKind.AliasKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithExternKeyword(node.ExternKeyword).WithAliasKeyword(node.AliasKeyword).WithIdentifier(node.Identifier).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12527,14 +12528,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUsingDirective();
 
-            Assert.Equal(SyntaxKind.None, node.GlobalKeyword.Kind());
-            Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.StaticKeyword.Kind());
-            Assert.Null(node.Alias);
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.GlobalKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.UsingKeyword.Kind().Should().Be(SyntaxKind.UsingKeyword);
+            node.StaticKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Alias.Should().BeNull();
+            node.Name.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithGlobalKeyword(node.GlobalKeyword).WithUsingKeyword(node.UsingKeyword).WithStaticKeyword(node.StaticKeyword).WithAlias(node.Alias).WithName(node.Name).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12542,18 +12543,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNamespaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.NamespaceKeyword, node.NamespaceKeyword.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.NamespaceKeyword.Kind().Should().Be(SyntaxKind.NamespaceKeyword);
+            node.Name.Should().NotBeNull();
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithNamespaceKeyword(node.NamespaceKeyword).WithName(node.Name).WithOpenBraceToken(node.OpenBraceToken).WithExterns(node.Externs).WithUsings(node.Usings).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12561,16 +12562,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFileScopedNamespaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.NamespaceKeyword, node.NamespaceKeyword.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
-            Assert.Equal(default, node.Externs);
-            Assert.Equal(default, node.Usings);
-            Assert.Equal(default, node.Members);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.NamespaceKeyword.Kind().Should().Be(SyntaxKind.NamespaceKeyword);
+            node.Name.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
+            node.Externs.Should().Be(default);
+            node.Usings.Should().Be(default);
+            node.Members.Should().Be(default);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithNamespaceKeyword(node.NamespaceKeyword).WithName(node.Name).WithSemicolonToken(node.SemicolonToken).WithExterns(node.Externs).WithUsings(node.Usings).WithMembers(node.Members);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12578,12 +12579,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Null(node.Target);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Target.Should().BeNull();
+            node.Attributes.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithTarget(node.Target).WithAttributes(node.Attributes).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12591,10 +12592,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeTargetSpecifier();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithIdentifier(node.Identifier).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12602,10 +12603,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Null(node.ArgumentList);
+            node.Name.Should().NotBeNull();
+            node.ArgumentList.Should().BeNull();
             var newNode = node.WithName(node.Name).WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12613,11 +12614,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeArgumentList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Arguments);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Arguments.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithArguments(node.Arguments).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12625,11 +12626,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAttributeArgument();
 
-            Assert.Null(node.NameEquals);
-            Assert.Null(node.NameColon);
-            Assert.NotNull(node.Expression);
+            node.NameEquals.Should().BeNull();
+            node.NameColon.Should().BeNull();
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithNameEquals(node.NameEquals).WithNameColon(node.NameColon).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12637,10 +12638,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameEquals();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
             var newNode = node.WithName(node.Name).WithEqualsToken(node.EqualsToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12648,11 +12649,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameterList();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind());
+            node.LessThanToken.Kind().Should().Be(SyntaxKind.LessThanToken);
+            node.Parameters.Should().Be(default);
+            node.GreaterThanToken.Kind().Should().Be(SyntaxKind.GreaterThanToken);
             var newNode = node.WithLessThanToken(node.LessThanToken).WithParameters(node.Parameters).WithGreaterThanToken(node.GreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12660,11 +12661,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(SyntaxKind.None, node.VarianceKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.VarianceKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithVarianceKeyword(node.VarianceKeyword).WithIdentifier(node.Identifier);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12672,19 +12673,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateClassDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.ClassKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.ClassKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithKeyword(node.Keyword).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithBaseList(node.BaseList).WithConstraintClauses(node.ConstraintClauses).WithOpenBraceToken(node.OpenBraceToken).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12692,19 +12693,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateStructDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.StructKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.StructKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithKeyword(node.Keyword).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithBaseList(node.BaseList).WithConstraintClauses(node.ConstraintClauses).WithOpenBraceToken(node.OpenBraceToken).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12712,19 +12713,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateInterfaceDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.InterfaceKeyword, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.InterfaceKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithKeyword(node.Keyword).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithBaseList(node.BaseList).WithConstraintClauses(node.ConstraintClauses).WithOpenBraceToken(node.OpenBraceToken).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12732,21 +12733,21 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRecordDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Keyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.ClassOrStructKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.Null(node.ParameterList);
-            Assert.Null(node.BaseList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.None, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.None, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ClassOrStructKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().BeNull();
+            node.BaseList.Should().BeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.None);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.None);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithKeyword(node.Keyword).WithClassOrStructKeyword(node.ClassOrStructKeyword).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithParameterList(node.ParameterList).WithBaseList(node.BaseList).WithConstraintClauses(node.ConstraintClauses).WithOpenBraceToken(node.OpenBraceToken).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12754,17 +12755,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEnumDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EnumKeyword, node.EnumKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.BaseList);
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Members);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EnumKeyword.Kind().Should().Be(SyntaxKind.EnumKeyword);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.BaseList.Should().BeNull();
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Members.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithEnumKeyword(node.EnumKeyword).WithIdentifier(node.Identifier).WithBaseList(node.BaseList).WithOpenBraceToken(node.OpenBraceToken).WithMembers(node.Members).WithCloseBraceToken(node.CloseBraceToken).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12772,17 +12773,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDelegateDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.DelegateKeyword, node.DelegateKeyword.Kind());
-            Assert.NotNull(node.ReturnType);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.DelegateKeyword.Kind().Should().Be(SyntaxKind.DelegateKeyword);
+            node.ReturnType.Should().NotBeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithDelegateKeyword(node.DelegateKeyword).WithReturnType(node.ReturnType).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithParameterList(node.ParameterList).WithConstraintClauses(node.ConstraintClauses).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12790,12 +12791,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEnumMemberDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.EqualsValue);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.EqualsValue.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithIdentifier(node.Identifier).WithEqualsValue(node.EqualsValue);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12803,10 +12804,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBaseList();
 
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
-            Assert.Equal(default, node.Types);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            node.Types.Should().Be(default);
             var newNode = node.WithColonToken(node.ColonToken).WithTypes(node.Types);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12814,9 +12815,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSimpleBaseType();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12824,10 +12825,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePrimaryConstructorBaseType();
 
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.ArgumentList);
+            node.Type.Should().NotBeNull();
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithType(node.Type).WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12835,12 +12836,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeParameterConstraintClause();
 
-            Assert.Equal(SyntaxKind.WhereKeyword, node.WhereKeyword.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
-            Assert.Equal(default, node.Constraints);
+            node.WhereKeyword.Kind().Should().Be(SyntaxKind.WhereKeyword);
+            node.Name.Should().NotBeNull();
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            node.Constraints.Should().Be(default);
             var newNode = node.WithWhereKeyword(node.WhereKeyword).WithName(node.Name).WithColonToken(node.ColonToken).WithConstraints(node.Constraints);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12848,11 +12849,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorConstraint();
 
-            Assert.Equal(SyntaxKind.NewKeyword, node.NewKeyword.Kind());
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.NewKeyword.Kind().Should().Be(SyntaxKind.NewKeyword);
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithNewKeyword(node.NewKeyword).WithOpenParenToken(node.OpenParenToken).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12860,10 +12861,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateClassOrStructConstraint();
 
-            Assert.Equal(SyntaxKind.ClassKeyword, node.ClassOrStructKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.QuestionToken.Kind());
+            node.ClassOrStructKeyword.Kind().Should().Be(SyntaxKind.ClassKeyword);
+            node.QuestionToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithClassOrStructKeyword(node.ClassOrStructKeyword).WithQuestionToken(node.QuestionToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12871,9 +12872,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeConstraint();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12881,9 +12882,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefaultConstraint();
 
-            Assert.Equal(SyntaxKind.DefaultKeyword, node.DefaultKeyword.Kind());
+            node.DefaultKeyword.Kind().Should().Be(SyntaxKind.DefaultKeyword);
             var newNode = node.WithDefaultKeyword(node.DefaultKeyword);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12891,12 +12892,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFieldDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithDeclaration(node.Declaration).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12904,13 +12905,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEventFieldDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EventKeyword, node.EventKeyword.Kind());
-            Assert.NotNull(node.Declaration);
-            Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EventKeyword.Kind().Should().Be(SyntaxKind.EventKeyword);
+            node.Declaration.Should().NotBeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.SemicolonToken);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithEventKeyword(node.EventKeyword).WithDeclaration(node.Declaration).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12918,10 +12919,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateExplicitInterfaceSpecifier();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.DotToken.Kind().Should().Be(SyntaxKind.DotToken);
             var newNode = node.WithName(node.Name).WithDotToken(node.DotToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12929,19 +12930,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateMethodDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.TypeParameterList);
-            Assert.NotNull(node.ParameterList);
-            Assert.Equal(default, node.ConstraintClauses);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.TypeParameterList.Should().BeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.ConstraintClauses.Should().Be(default);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithReturnType(node.ReturnType).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithIdentifier(node.Identifier).WithTypeParameterList(node.TypeParameterList).WithParameterList(node.ParameterList).WithConstraintClauses(node.ConstraintClauses).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12949,19 +12950,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOperatorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.ReturnType);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.CheckedKeyword.Kind());
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind());
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ReturnType.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.OperatorKeyword.Kind().Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.PlusToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithReturnType(node.ReturnType).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithOperatorKeyword(node.OperatorKeyword).WithCheckedKeyword(node.CheckedKeyword).WithOperatorToken(node.OperatorToken).WithParameterList(node.ParameterList).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12969,19 +12970,19 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConversionOperatorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.ImplicitKeyword, node.ImplicitOrExplicitKeyword.Kind());
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.CheckedKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.ImplicitOrExplicitKeyword.Kind().Should().Be(SyntaxKind.ImplicitKeyword);
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.OperatorKeyword.Kind().Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Type.Should().NotBeNull();
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithImplicitOrExplicitKeyword(node.ImplicitOrExplicitKeyword).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithOperatorKeyword(node.OperatorKeyword).WithCheckedKeyword(node.CheckedKeyword).WithType(node.Type).WithParameterList(node.ParameterList).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -12989,16 +12990,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Initializer);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Initializer.Should().BeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithIdentifier(node.Identifier).WithParameterList(node.ParameterList).WithInitializer(node.Initializer).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13006,11 +13007,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConstructorInitializer();
 
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
-            Assert.Equal(SyntaxKind.BaseKeyword, node.ThisOrBaseKeyword.Kind());
-            Assert.NotNull(node.ArgumentList);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
+            node.ThisOrBaseKeyword.Kind().Should().Be(SyntaxKind.BaseKeyword);
+            node.ArgumentList.Should().NotBeNull();
             var newNode = node.WithColonToken(node.ColonToken).WithThisOrBaseKeyword(node.ThisOrBaseKeyword).WithArgumentList(node.ArgumentList);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13018,16 +13019,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDestructorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.TildeToken, node.TildeToken.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.TildeToken.Kind().Should().Be(SyntaxKind.TildeToken);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ParameterList.Should().NotBeNull();
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithTildeToken(node.TildeToken).WithIdentifier(node.Identifier).WithParameterList(node.ParameterList).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13035,17 +13036,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePropertyDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.AccessorList);
-            Assert.Null(node.ExpressionBody);
-            Assert.Null(node.Initializer);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.AccessorList.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.Initializer.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithType(node.Type).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithIdentifier(node.Identifier).WithAccessorList(node.AccessorList).WithExpressionBody(node.ExpressionBody).WithInitializer(node.Initializer).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13053,10 +13054,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateArrowExpressionClause();
 
-            Assert.Equal(SyntaxKind.EqualsGreaterThanToken, node.ArrowToken.Kind());
-            Assert.NotNull(node.Expression);
+            node.ArrowToken.Kind().Should().Be(SyntaxKind.EqualsGreaterThanToken);
+            node.Expression.Should().NotBeNull();
             var newNode = node.WithArrowToken(node.ArrowToken).WithExpression(node.Expression);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13064,16 +13065,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEventDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.EventKeyword, node.EventKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.AccessorList);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.EventKeyword.Kind().Should().Be(SyntaxKind.EventKeyword);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.AccessorList.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithEventKeyword(node.EventKeyword).WithType(node.Type).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithIdentifier(node.Identifier).WithAccessorList(node.AccessorList).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13081,17 +13082,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIndexerDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
-            Assert.Null(node.ExplicitInterfaceSpecifier);
-            Assert.Equal(SyntaxKind.ThisKeyword, node.ThisKeyword.Kind());
-            Assert.NotNull(node.ParameterList);
-            Assert.Null(node.AccessorList);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
+            node.ExplicitInterfaceSpecifier.Should().BeNull();
+            node.ThisKeyword.Kind().Should().Be(SyntaxKind.ThisKeyword);
+            node.ParameterList.Should().NotBeNull();
+            node.AccessorList.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithType(node.Type).WithExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier).WithThisKeyword(node.ThisKeyword).WithParameterList(node.ParameterList).WithAccessorList(node.AccessorList).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13099,11 +13100,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAccessorList();
 
-            Assert.Equal(SyntaxKind.OpenBraceToken, node.OpenBraceToken.Kind());
-            Assert.Equal(default, node.Accessors);
-            Assert.Equal(SyntaxKind.CloseBraceToken, node.CloseBraceToken.Kind());
+            node.OpenBraceToken.Kind().Should().Be(SyntaxKind.OpenBraceToken);
+            node.Accessors.Should().Be(default);
+            node.CloseBraceToken.Kind().Should().Be(SyntaxKind.CloseBraceToken);
             var newNode = node.WithOpenBraceToken(node.OpenBraceToken).WithAccessors(node.Accessors).WithCloseBraceToken(node.CloseBraceToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13111,14 +13112,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateAccessorDeclaration();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Equal(SyntaxKind.GetKeyword, node.Keyword.Kind());
-            Assert.Null(node.Body);
-            Assert.Null(node.ExpressionBody);
-            Assert.Equal(SyntaxKind.None, node.SemicolonToken.Kind());
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Keyword.Kind().Should().Be(SyntaxKind.GetKeyword);
+            node.Body.Should().BeNull();
+            node.ExpressionBody.Should().BeNull();
+            node.SemicolonToken.Kind().Should().Be(SyntaxKind.None);
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithKeyword(node.Keyword).WithBody(node.Body).WithExpressionBody(node.ExpressionBody).WithSemicolonToken(node.SemicolonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13126,11 +13127,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParameterList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Parameters.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithParameters(node.Parameters).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13138,11 +13139,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBracketedParameterList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Parameters.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithParameters(node.Parameters).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13150,13 +13151,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.Type);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Null(node.Default);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().BeNull();
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.Default.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithType(node.Type).WithIdentifier(node.Identifier).WithDefault(node.Default);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13164,11 +13165,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateFunctionPointerParameter();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.NotNull(node.Type);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13176,11 +13177,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIncompleteMember();
 
-            Assert.Equal(default, node.AttributeLists);
-            Assert.Equal(default, node.Modifiers);
-            Assert.Null(node.Type);
+            node.AttributeLists.Should().Be(default);
+            node.Modifiers.Should().Be(default);
+            node.Type.Should().BeNull();
             var newNode = node.WithAttributeLists(node.AttributeLists).WithModifiers(node.Modifiers).WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13188,9 +13189,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateSkippedTokensTrivia();
 
-            Assert.Equal(default, node.Tokens);
+            node.Tokens.Should().Be(default);
             var newNode = node.WithTokens(node.Tokens);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13198,10 +13199,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDocumentationCommentTrivia();
 
-            Assert.Equal(default, node.Content);
-            Assert.Equal(SyntaxKind.EndOfDocumentationCommentToken, node.EndOfComment.Kind());
+            node.Content.Should().Be(default);
+            node.EndOfComment.Kind().Should().Be(SyntaxKind.EndOfDocumentationCommentToken);
             var newNode = node.WithContent(node.Content).WithEndOfComment(node.EndOfComment);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13209,9 +13210,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateTypeCref();
 
-            Assert.NotNull(node.Type);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13219,11 +13220,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateQualifiedCref();
 
-            Assert.NotNull(node.Container);
-            Assert.Equal(SyntaxKind.DotToken, node.DotToken.Kind());
-            Assert.NotNull(node.Member);
+            node.Container.Should().NotBeNull();
+            node.DotToken.Kind().Should().Be(SyntaxKind.DotToken);
+            node.Member.Should().NotBeNull();
             var newNode = node.WithContainer(node.Container).WithDotToken(node.DotToken).WithMember(node.Member);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13231,10 +13232,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNameMemberCref();
 
-            Assert.NotNull(node.Name);
-            Assert.Null(node.Parameters);
+            node.Name.Should().NotBeNull();
+            node.Parameters.Should().BeNull();
             var newNode = node.WithName(node.Name).WithParameters(node.Parameters);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13242,10 +13243,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIndexerMemberCref();
 
-            Assert.Equal(SyntaxKind.ThisKeyword, node.ThisKeyword.Kind());
-            Assert.Null(node.Parameters);
+            node.ThisKeyword.Kind().Should().Be(SyntaxKind.ThisKeyword);
+            node.Parameters.Should().BeNull();
             var newNode = node.WithThisKeyword(node.ThisKeyword).WithParameters(node.Parameters);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13253,12 +13254,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateOperatorMemberCref();
 
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.CheckedKeyword.Kind());
-            Assert.Equal(SyntaxKind.PlusToken, node.OperatorToken.Kind());
-            Assert.Null(node.Parameters);
+            node.OperatorKeyword.Kind().Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.OperatorToken.Kind().Should().Be(SyntaxKind.PlusToken);
+            node.Parameters.Should().BeNull();
             var newNode = node.WithOperatorKeyword(node.OperatorKeyword).WithCheckedKeyword(node.CheckedKeyword).WithOperatorToken(node.OperatorToken).WithParameters(node.Parameters);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13266,13 +13267,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateConversionOperatorMemberCref();
 
-            Assert.Equal(SyntaxKind.ImplicitKeyword, node.ImplicitOrExplicitKeyword.Kind());
-            Assert.Equal(SyntaxKind.OperatorKeyword, node.OperatorKeyword.Kind());
-            Assert.Equal(SyntaxKind.None, node.CheckedKeyword.Kind());
-            Assert.NotNull(node.Type);
-            Assert.Null(node.Parameters);
+            node.ImplicitOrExplicitKeyword.Kind().Should().Be(SyntaxKind.ImplicitKeyword);
+            node.OperatorKeyword.Kind().Should().Be(SyntaxKind.OperatorKeyword);
+            node.CheckedKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Type.Should().NotBeNull();
+            node.Parameters.Should().BeNull();
             var newNode = node.WithImplicitOrExplicitKeyword(node.ImplicitOrExplicitKeyword).WithOperatorKeyword(node.OperatorKeyword).WithCheckedKeyword(node.CheckedKeyword).WithType(node.Type).WithParameters(node.Parameters);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13280,11 +13281,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefParameterList();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Parameters.Should().Be(default);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithParameters(node.Parameters).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13292,11 +13293,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefBracketedParameterList();
 
-            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
-            Assert.Equal(default, node.Parameters);
-            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            node.OpenBracketToken.Kind().Should().Be(SyntaxKind.OpenBracketToken);
+            node.Parameters.Should().Be(default);
+            node.CloseBracketToken.Kind().Should().Be(SyntaxKind.CloseBracketToken);
             var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithParameters(node.Parameters).WithCloseBracketToken(node.CloseBracketToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13304,10 +13305,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateCrefParameter();
 
-            Assert.Equal(SyntaxKind.None, node.RefKindKeyword.Kind());
-            Assert.NotNull(node.Type);
+            node.RefKindKeyword.Kind().Should().Be(SyntaxKind.None);
+            node.Type.Should().NotBeNull();
             var newNode = node.WithRefKindKeyword(node.RefKindKeyword).WithType(node.Type);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13315,11 +13316,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElement();
 
-            Assert.NotNull(node.StartTag);
-            Assert.Equal(default, node.Content);
-            Assert.NotNull(node.EndTag);
+            node.StartTag.Should().NotBeNull();
+            node.Content.Should().Be(default);
+            node.EndTag.Should().NotBeNull();
             var newNode = node.WithStartTag(node.StartTag).WithContent(node.Content).WithEndTag(node.EndTag);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13327,12 +13328,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElementStartTag();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind());
+            node.LessThanToken.Kind().Should().Be(SyntaxKind.LessThanToken);
+            node.Name.Should().NotBeNull();
+            node.Attributes.Should().Be(default);
+            node.GreaterThanToken.Kind().Should().Be(SyntaxKind.GreaterThanToken);
             var newNode = node.WithLessThanToken(node.LessThanToken).WithName(node.Name).WithAttributes(node.Attributes).WithGreaterThanToken(node.GreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13340,11 +13341,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlElementEndTag();
 
-            Assert.Equal(SyntaxKind.LessThanSlashToken, node.LessThanSlashToken.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.GreaterThanToken, node.GreaterThanToken.Kind());
+            node.LessThanSlashToken.Kind().Should().Be(SyntaxKind.LessThanSlashToken);
+            node.Name.Should().NotBeNull();
+            node.GreaterThanToken.Kind().Should().Be(SyntaxKind.GreaterThanToken);
             var newNode = node.WithLessThanSlashToken(node.LessThanSlashToken).WithName(node.Name).WithGreaterThanToken(node.GreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13352,12 +13353,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlEmptyElement();
 
-            Assert.Equal(SyntaxKind.LessThanToken, node.LessThanToken.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.Attributes);
-            Assert.Equal(SyntaxKind.SlashGreaterThanToken, node.SlashGreaterThanToken.Kind());
+            node.LessThanToken.Kind().Should().Be(SyntaxKind.LessThanToken);
+            node.Name.Should().NotBeNull();
+            node.Attributes.Should().Be(default);
+            node.SlashGreaterThanToken.Kind().Should().Be(SyntaxKind.SlashGreaterThanToken);
             var newNode = node.WithLessThanToken(node.LessThanToken).WithName(node.Name).WithAttributes(node.Attributes).WithSlashGreaterThanToken(node.SlashGreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13365,10 +13366,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlName();
 
-            Assert.Null(node.Prefix);
-            Assert.Equal(SyntaxKind.IdentifierToken, node.LocalName.Kind());
+            node.Prefix.Should().BeNull();
+            node.LocalName.Kind().Should().Be(SyntaxKind.IdentifierToken);
             var newNode = node.WithPrefix(node.Prefix).WithLocalName(node.LocalName);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13376,10 +13377,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlPrefix();
 
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Prefix.Kind());
-            Assert.Equal(SyntaxKind.ColonToken, node.ColonToken.Kind());
+            node.Prefix.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.ColonToken.Kind().Should().Be(SyntaxKind.ColonToken);
             var newNode = node.WithPrefix(node.Prefix).WithColonToken(node.ColonToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13387,13 +13388,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlTextAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind());
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
+            node.TextTokens.Should().Be(default);
+            node.EndQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
             var newNode = node.WithName(node.Name).WithEqualsToken(node.EqualsToken).WithStartQuoteToken(node.StartQuoteToken).WithTextTokens(node.TextTokens).WithEndQuoteToken(node.EndQuoteToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13401,13 +13402,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlCrefAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind());
-            Assert.NotNull(node.Cref);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
+            node.Cref.Should().NotBeNull();
+            node.EndQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
             var newNode = node.WithName(node.Name).WithEqualsToken(node.EqualsToken).WithStartQuoteToken(node.StartQuoteToken).WithCref(node.Cref).WithEndQuoteToken(node.EndQuoteToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13415,13 +13416,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlNameAttribute();
 
-            Assert.NotNull(node.Name);
-            Assert.Equal(SyntaxKind.EqualsToken, node.EqualsToken.Kind());
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.StartQuoteToken.Kind());
-            Assert.NotNull(node.Identifier);
-            Assert.Equal(SyntaxKind.SingleQuoteToken, node.EndQuoteToken.Kind());
+            node.Name.Should().NotBeNull();
+            node.EqualsToken.Kind().Should().Be(SyntaxKind.EqualsToken);
+            node.StartQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
+            node.Identifier.Should().NotBeNull();
+            node.EndQuoteToken.Kind().Should().Be(SyntaxKind.SingleQuoteToken);
             var newNode = node.WithName(node.Name).WithEqualsToken(node.EqualsToken).WithStartQuoteToken(node.StartQuoteToken).WithIdentifier(node.Identifier).WithEndQuoteToken(node.EndQuoteToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13429,9 +13430,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlText();
 
-            Assert.Equal(default, node.TextTokens);
+            node.TextTokens.Should().Be(default);
             var newNode = node.WithTextTokens(node.TextTokens);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13439,11 +13440,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlCDataSection();
 
-            Assert.Equal(SyntaxKind.XmlCDataStartToken, node.StartCDataToken.Kind());
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlCDataEndToken, node.EndCDataToken.Kind());
+            node.StartCDataToken.Kind().Should().Be(SyntaxKind.XmlCDataStartToken);
+            node.TextTokens.Should().Be(default);
+            node.EndCDataToken.Kind().Should().Be(SyntaxKind.XmlCDataEndToken);
             var newNode = node.WithStartCDataToken(node.StartCDataToken).WithTextTokens(node.TextTokens).WithEndCDataToken(node.EndCDataToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13451,12 +13452,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlProcessingInstruction();
 
-            Assert.Equal(SyntaxKind.XmlProcessingInstructionStartToken, node.StartProcessingInstructionToken.Kind());
-            Assert.NotNull(node.Name);
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlProcessingInstructionEndToken, node.EndProcessingInstructionToken.Kind());
+            node.StartProcessingInstructionToken.Kind().Should().Be(SyntaxKind.XmlProcessingInstructionStartToken);
+            node.Name.Should().NotBeNull();
+            node.TextTokens.Should().Be(default);
+            node.EndProcessingInstructionToken.Kind().Should().Be(SyntaxKind.XmlProcessingInstructionEndToken);
             var newNode = node.WithStartProcessingInstructionToken(node.StartProcessingInstructionToken).WithName(node.Name).WithTextTokens(node.TextTokens).WithEndProcessingInstructionToken(node.EndProcessingInstructionToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13464,11 +13465,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateXmlComment();
 
-            Assert.Equal(SyntaxKind.XmlCommentStartToken, node.LessThanExclamationMinusMinusToken.Kind());
-            Assert.Equal(default, node.TextTokens);
-            Assert.Equal(SyntaxKind.XmlCommentEndToken, node.MinusMinusGreaterThanToken.Kind());
+            node.LessThanExclamationMinusMinusToken.Kind().Should().Be(SyntaxKind.XmlCommentStartToken);
+            node.TextTokens.Should().Be(default);
+            node.MinusMinusGreaterThanToken.Kind().Should().Be(SyntaxKind.XmlCommentEndToken);
             var newNode = node.WithLessThanExclamationMinusMinusToken(node.LessThanExclamationMinusMinusToken).WithTextTokens(node.TextTokens).WithMinusMinusGreaterThanToken(node.MinusMinusGreaterThanToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13476,15 +13477,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateIfDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.IfKeyword, node.IfKeyword.Kind());
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
-            Assert.Equal(new bool(), node.ConditionValue);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.IfKeyword.Kind().Should().Be(SyntaxKind.IfKeyword);
+            node.Condition.Should().NotBeNull();
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
+            node.ConditionValue.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithIfKeyword(node.IfKeyword).WithCondition(node.Condition).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive).WithBranchTaken(node.BranchTaken).WithConditionValue(node.ConditionValue);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13492,15 +13493,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElifDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ElifKeyword, node.ElifKeyword.Kind());
-            Assert.NotNull(node.Condition);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
-            Assert.Equal(new bool(), node.ConditionValue);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.ElifKeyword.Kind().Should().Be(SyntaxKind.ElifKeyword);
+            node.Condition.Should().NotBeNull();
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
+            node.ConditionValue.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithElifKeyword(node.ElifKeyword).WithCondition(node.Condition).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive).WithBranchTaken(node.BranchTaken).WithConditionValue(node.ConditionValue);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13508,13 +13509,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateElseDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ElseKeyword, node.ElseKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
-            Assert.Equal(new bool(), node.BranchTaken);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.ElseKeyword.Kind().Should().Be(SyntaxKind.ElseKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
+            node.BranchTaken.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithElseKeyword(node.ElseKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive).WithBranchTaken(node.BranchTaken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13522,12 +13523,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEndIfDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.EndIfKeyword, node.EndIfKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.EndIfKeyword.Kind().Should().Be(SyntaxKind.EndIfKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithEndIfKeyword(node.EndIfKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13535,12 +13536,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateRegionDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.RegionKeyword, node.RegionKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.RegionKeyword.Kind().Should().Be(SyntaxKind.RegionKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithRegionKeyword(node.RegionKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13548,12 +13549,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateEndRegionDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.EndRegionKeyword, node.EndRegionKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.EndRegionKeyword.Kind().Should().Be(SyntaxKind.EndRegionKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithEndRegionKeyword(node.EndRegionKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13561,12 +13562,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateErrorDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ErrorKeyword, node.ErrorKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.ErrorKeyword.Kind().Should().Be(SyntaxKind.ErrorKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithErrorKeyword(node.ErrorKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13574,12 +13575,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateWarningDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.WarningKeyword, node.WarningKeyword.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.WarningKeyword.Kind().Should().Be(SyntaxKind.WarningKeyword);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithWarningKeyword(node.WarningKeyword).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13587,12 +13588,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateBadDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.Identifier.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithIdentifier(node.Identifier).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13600,13 +13601,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateDefineDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.DefineKeyword, node.DefineKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.DefineKeyword.Kind().Should().Be(SyntaxKind.DefineKeyword);
+            node.Name.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithDefineKeyword(node.DefineKeyword).WithName(node.Name).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13614,13 +13615,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateUndefDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.UndefKeyword, node.UndefKeyword.Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.UndefKeyword.Kind().Should().Be(SyntaxKind.UndefKeyword);
+            node.Name.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithUndefKeyword(node.UndefKeyword).WithName(node.Name).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13628,14 +13629,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.LineKeyword, node.LineKeyword.Kind());
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Line.Kind());
-            Assert.Equal(SyntaxKind.None, node.File.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.LineKeyword.Kind().Should().Be(SyntaxKind.LineKeyword);
+            node.Line.Kind().Should().Be(SyntaxKind.NumericLiteralToken);
+            node.File.Kind().Should().Be(SyntaxKind.None);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithLineKeyword(node.LineKeyword).WithLine(node.Line).WithFile(node.File).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13643,13 +13644,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineDirectivePosition();
 
-            Assert.Equal(SyntaxKind.OpenParenToken, node.OpenParenToken.Kind());
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Line.Kind());
-            Assert.Equal(SyntaxKind.CommaToken, node.CommaToken.Kind());
-            Assert.Equal(SyntaxKind.NumericLiteralToken, node.Character.Kind());
-            Assert.Equal(SyntaxKind.CloseParenToken, node.CloseParenToken.Kind());
+            node.OpenParenToken.Kind().Should().Be(SyntaxKind.OpenParenToken);
+            node.Line.Kind().Should().Be(SyntaxKind.NumericLiteralToken);
+            node.CommaToken.Kind().Should().Be(SyntaxKind.CommaToken);
+            node.Character.Kind().Should().Be(SyntaxKind.NumericLiteralToken);
+            node.CloseParenToken.Kind().Should().Be(SyntaxKind.CloseParenToken);
             var newNode = node.WithOpenParenToken(node.OpenParenToken).WithLine(node.Line).WithCommaToken(node.CommaToken).WithCharacter(node.Character).WithCloseParenToken(node.CloseParenToken);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13657,17 +13658,17 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLineSpanDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.LineKeyword, node.LineKeyword.Kind());
-            Assert.NotNull(node.Start);
-            Assert.Equal(SyntaxKind.MinusToken, node.MinusToken.Kind());
-            Assert.NotNull(node.End);
-            Assert.Equal(SyntaxKind.None, node.CharacterOffset.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.LineKeyword.Kind().Should().Be(SyntaxKind.LineKeyword);
+            node.Start.Should().NotBeNull();
+            node.MinusToken.Kind().Should().Be(SyntaxKind.MinusToken);
+            node.End.Should().NotBeNull();
+            node.CharacterOffset.Kind().Should().Be(SyntaxKind.None);
+            node.File.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithLineKeyword(node.LineKeyword).WithStart(node.Start).WithMinusToken(node.MinusToken).WithEnd(node.End).WithCharacterOffset(node.CharacterOffset).WithFile(node.File).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13675,15 +13676,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePragmaWarningDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.PragmaKeyword, node.PragmaKeyword.Kind());
-            Assert.Equal(SyntaxKind.WarningKeyword, node.WarningKeyword.Kind());
-            Assert.Equal(SyntaxKind.DisableKeyword, node.DisableOrRestoreKeyword.Kind());
-            Assert.Equal(default, node.ErrorCodes);
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.PragmaKeyword.Kind().Should().Be(SyntaxKind.PragmaKeyword);
+            node.WarningKeyword.Kind().Should().Be(SyntaxKind.WarningKeyword);
+            node.DisableOrRestoreKeyword.Kind().Should().Be(SyntaxKind.DisableKeyword);
+            node.ErrorCodes.Should().Be(default);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithPragmaKeyword(node.PragmaKeyword).WithWarningKeyword(node.WarningKeyword).WithDisableOrRestoreKeyword(node.DisableOrRestoreKeyword).WithErrorCodes(node.ErrorCodes).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13691,16 +13692,16 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GeneratePragmaChecksumDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.PragmaKeyword, node.PragmaKeyword.Kind());
-            Assert.Equal(SyntaxKind.ChecksumKeyword, node.ChecksumKeyword.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.Guid.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.Bytes.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.PragmaKeyword.Kind().Should().Be(SyntaxKind.PragmaKeyword);
+            node.ChecksumKeyword.Kind().Should().Be(SyntaxKind.ChecksumKeyword);
+            node.File.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.Guid.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.Bytes.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithPragmaKeyword(node.PragmaKeyword).WithChecksumKeyword(node.ChecksumKeyword).WithFile(node.File).WithGuid(node.Guid).WithBytes(node.Bytes).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13708,13 +13709,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateReferenceDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ReferenceKeyword, node.ReferenceKeyword.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.ReferenceKeyword.Kind().Should().Be(SyntaxKind.ReferenceKeyword);
+            node.File.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithReferenceKeyword(node.ReferenceKeyword).WithFile(node.File).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13722,13 +13723,13 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateLoadDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.LoadKeyword, node.LoadKeyword.Kind());
-            Assert.Equal(SyntaxKind.StringLiteralToken, node.File.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.LoadKeyword.Kind().Should().Be(SyntaxKind.LoadKeyword);
+            node.File.Kind().Should().Be(SyntaxKind.StringLiteralToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithLoadKeyword(node.LoadKeyword).WithFile(node.File).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13736,12 +13737,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateShebangDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.ExclamationToken, node.ExclamationToken.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.ExclamationToken.Kind().Should().Be(SyntaxKind.ExclamationToken);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithExclamationToken(node.ExclamationToken).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
 
         [Fact]
@@ -13749,14 +13750,14 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             var node = GenerateNullableDirectiveTrivia();
 
-            Assert.Equal(SyntaxKind.HashToken, node.HashToken.Kind());
-            Assert.Equal(SyntaxKind.NullableKeyword, node.NullableKeyword.Kind());
-            Assert.Equal(SyntaxKind.EnableKeyword, node.SettingToken.Kind());
-            Assert.Equal(SyntaxKind.None, node.TargetToken.Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, node.EndOfDirectiveToken.Kind());
-            Assert.Equal(new bool(), node.IsActive);
+            node.HashToken.Kind().Should().Be(SyntaxKind.HashToken);
+            node.NullableKeyword.Kind().Should().Be(SyntaxKind.NullableKeyword);
+            node.SettingToken.Kind().Should().Be(SyntaxKind.EnableKeyword);
+            node.TargetToken.Kind().Should().Be(SyntaxKind.None);
+            node.EndOfDirectiveToken.Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            node.IsActive.Should().Be(new bool());
             var newNode = node.WithHashToken(node.HashToken).WithNullableKeyword(node.NullableKeyword).WithSettingToken(node.SettingToken).WithTargetToken(node.TargetToken).WithEndOfDirectiveToken(node.EndOfDirectiveToken).WithIsActive(node.IsActive);
-            Assert.Equal(node, newNode);
+            newNode.Should().Be(node);
         }
         #endregion Red Factory and Property Tests
 
@@ -13770,11 +13771,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13784,7 +13785,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13796,11 +13797,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13810,7 +13811,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13822,11 +13823,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13836,7 +13837,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13848,11 +13849,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13862,7 +13863,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13874,11 +13875,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13888,7 +13889,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13900,11 +13901,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13914,7 +13915,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13926,11 +13927,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13940,7 +13941,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13952,11 +13953,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13966,7 +13967,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -13978,11 +13979,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -13992,7 +13993,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14004,11 +14005,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14018,7 +14019,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14030,11 +14031,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14044,7 +14045,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14056,11 +14057,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14070,7 +14071,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14082,11 +14083,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14096,7 +14097,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14108,11 +14109,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14122,7 +14123,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14134,11 +14135,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14148,7 +14149,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14160,11 +14161,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14174,7 +14175,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14186,11 +14187,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14200,7 +14201,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14212,11 +14213,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14226,7 +14227,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14238,11 +14239,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14252,7 +14253,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14264,11 +14265,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14278,7 +14279,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14290,11 +14291,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14304,7 +14305,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14316,11 +14317,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14330,7 +14331,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14342,11 +14343,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14356,7 +14357,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14368,11 +14369,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14382,7 +14383,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14394,11 +14395,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14408,7 +14409,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14420,11 +14421,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14434,7 +14435,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14446,11 +14447,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14460,7 +14461,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14472,11 +14473,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14486,7 +14487,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14498,11 +14499,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14512,7 +14513,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14524,11 +14525,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14538,7 +14539,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14550,11 +14551,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14564,7 +14565,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14576,11 +14577,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14590,7 +14591,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14602,11 +14603,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14616,7 +14617,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14628,11 +14629,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14642,7 +14643,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14654,11 +14655,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14668,7 +14669,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14680,11 +14681,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14694,7 +14695,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14706,11 +14707,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14720,7 +14721,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14732,11 +14733,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14746,7 +14747,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14758,11 +14759,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14772,7 +14773,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14784,11 +14785,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14798,7 +14799,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14810,11 +14811,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14824,7 +14825,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14836,11 +14837,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14850,7 +14851,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14862,11 +14863,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14876,7 +14877,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14888,11 +14889,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14902,7 +14903,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14914,11 +14915,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14928,7 +14929,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14940,11 +14941,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14954,7 +14955,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14966,11 +14967,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -14980,7 +14981,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -14992,11 +14993,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15006,7 +15007,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15018,11 +15019,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15032,7 +15033,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15044,11 +15045,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15058,7 +15059,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15070,11 +15071,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15084,7 +15085,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15096,11 +15097,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15110,7 +15111,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15122,11 +15123,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15136,7 +15137,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15148,11 +15149,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15162,7 +15163,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15174,11 +15175,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15188,7 +15189,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15200,11 +15201,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15214,7 +15215,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15226,11 +15227,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15240,7 +15241,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15252,11 +15253,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15266,7 +15267,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15278,11 +15279,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15292,7 +15293,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15304,11 +15305,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15318,7 +15319,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15330,11 +15331,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15344,7 +15345,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15356,11 +15357,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15370,7 +15371,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15382,11 +15383,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15396,7 +15397,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15408,11 +15409,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15422,7 +15423,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15434,11 +15435,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15448,7 +15449,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15460,11 +15461,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15474,7 +15475,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15486,11 +15487,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15500,7 +15501,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15512,11 +15513,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15526,7 +15527,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15538,11 +15539,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15552,7 +15553,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15564,11 +15565,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15578,7 +15579,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15590,11 +15591,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15604,7 +15605,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15616,11 +15617,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15630,7 +15631,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15642,11 +15643,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15656,7 +15657,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15668,11 +15669,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15682,7 +15683,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15694,11 +15695,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15708,7 +15709,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15720,11 +15721,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15734,7 +15735,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15746,11 +15747,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15760,7 +15761,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15772,11 +15773,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15786,7 +15787,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15798,11 +15799,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15812,7 +15813,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15824,11 +15825,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15838,7 +15839,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15850,11 +15851,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15864,7 +15865,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15876,11 +15877,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15890,7 +15891,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15902,11 +15903,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15916,7 +15917,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15928,11 +15929,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15942,7 +15943,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15954,11 +15955,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15968,7 +15969,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -15980,11 +15981,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -15994,7 +15995,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16006,11 +16007,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16020,7 +16021,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16032,11 +16033,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16046,7 +16047,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16058,11 +16059,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16072,7 +16073,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16084,11 +16085,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16098,7 +16099,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16110,11 +16111,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16124,7 +16125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16136,11 +16137,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16150,7 +16151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16162,11 +16163,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16176,7 +16177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16188,11 +16189,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16202,7 +16203,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16214,11 +16215,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16228,7 +16229,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16240,11 +16241,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16254,7 +16255,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16266,11 +16267,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16280,7 +16281,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16292,11 +16293,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16306,7 +16307,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16318,11 +16319,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16332,7 +16333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16344,11 +16345,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16358,7 +16359,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16370,11 +16371,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16384,7 +16385,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16396,11 +16397,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16410,7 +16411,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16422,11 +16423,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16436,7 +16437,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16448,11 +16449,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16462,7 +16463,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16474,11 +16475,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16488,7 +16489,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16500,11 +16501,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16514,7 +16515,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16526,11 +16527,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16540,7 +16541,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16552,11 +16553,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16566,7 +16567,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16578,11 +16579,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16592,7 +16593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16604,11 +16605,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16618,7 +16619,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16630,11 +16631,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16644,7 +16645,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16656,11 +16657,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16670,7 +16671,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16682,11 +16683,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16696,7 +16697,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16708,11 +16709,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16722,7 +16723,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16734,11 +16735,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16748,7 +16749,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16760,11 +16761,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16774,7 +16775,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16786,11 +16787,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16800,7 +16801,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16812,11 +16813,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16826,7 +16827,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16838,11 +16839,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16852,7 +16853,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16864,11 +16865,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16878,7 +16879,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16890,11 +16891,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16904,7 +16905,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16916,11 +16917,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16930,7 +16931,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16942,11 +16943,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16956,7 +16957,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16968,11 +16969,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -16982,7 +16983,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -16994,11 +16995,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17008,7 +17009,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17020,11 +17021,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17034,7 +17035,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17046,11 +17047,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17060,7 +17061,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17072,11 +17073,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17086,7 +17087,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17098,11 +17099,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17112,7 +17113,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17124,11 +17125,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17138,7 +17139,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17150,11 +17151,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17164,7 +17165,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17176,11 +17177,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17190,7 +17191,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17202,11 +17203,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17216,7 +17217,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17228,11 +17229,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17242,7 +17243,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17254,11 +17255,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17268,7 +17269,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17280,11 +17281,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17294,7 +17295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17306,11 +17307,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17320,7 +17321,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17332,11 +17333,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17346,7 +17347,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17358,11 +17359,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17372,7 +17373,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17384,11 +17385,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17398,7 +17399,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17410,11 +17411,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17424,7 +17425,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17436,11 +17437,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17450,7 +17451,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17462,11 +17463,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17476,7 +17477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17488,11 +17489,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17502,7 +17503,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17514,11 +17515,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17528,7 +17529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17540,11 +17541,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17554,7 +17555,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17566,11 +17567,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17580,7 +17581,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17592,11 +17593,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17606,7 +17607,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17618,11 +17619,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17632,7 +17633,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17644,11 +17645,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17658,7 +17659,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17670,11 +17671,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17684,7 +17685,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17696,11 +17697,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17710,7 +17711,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17722,11 +17723,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17736,7 +17737,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17748,11 +17749,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17762,7 +17763,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17774,11 +17775,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17788,7 +17789,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17800,11 +17801,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17814,7 +17815,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17826,11 +17827,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17840,7 +17841,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17852,11 +17853,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17866,7 +17867,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17878,11 +17879,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17892,7 +17893,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17904,11 +17905,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17918,7 +17919,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17930,11 +17931,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17944,7 +17945,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17956,11 +17957,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17970,7 +17971,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -17982,11 +17983,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -17996,7 +17997,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18008,11 +18009,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18022,7 +18023,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18034,11 +18035,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18048,7 +18049,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18060,11 +18061,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18074,7 +18075,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18086,11 +18087,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18100,7 +18101,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18112,11 +18113,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18126,7 +18127,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18138,11 +18139,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18152,7 +18153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18164,11 +18165,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18178,7 +18179,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18190,11 +18191,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18204,7 +18205,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18216,11 +18217,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18230,7 +18231,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18242,11 +18243,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18256,7 +18257,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18268,11 +18269,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18282,7 +18283,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18294,11 +18295,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18308,7 +18309,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18320,11 +18321,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18334,7 +18335,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18346,11 +18347,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18360,7 +18361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18372,11 +18373,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18386,7 +18387,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18398,11 +18399,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18412,7 +18413,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18424,11 +18425,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18438,7 +18439,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18450,11 +18451,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18464,7 +18465,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18476,11 +18477,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18490,7 +18491,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18502,11 +18503,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18516,7 +18517,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18528,11 +18529,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18542,7 +18543,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18554,11 +18555,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18568,7 +18569,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18580,11 +18581,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18594,7 +18595,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18606,11 +18607,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18620,7 +18621,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18632,11 +18633,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18646,7 +18647,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18658,11 +18659,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18672,7 +18673,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18684,11 +18685,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18698,7 +18699,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18710,11 +18711,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18724,7 +18725,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18736,11 +18737,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18750,7 +18751,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18762,11 +18763,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18776,7 +18777,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18788,11 +18789,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18802,7 +18803,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18814,11 +18815,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18828,7 +18829,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18840,11 +18841,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18854,7 +18855,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18866,11 +18867,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18880,7 +18881,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18892,11 +18893,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18906,7 +18907,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18918,11 +18919,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18932,7 +18933,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18944,11 +18945,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18958,7 +18959,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18970,11 +18971,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -18984,7 +18985,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -18996,11 +18997,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19010,7 +19011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19022,11 +19023,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19036,7 +19037,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19048,11 +19049,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19062,7 +19063,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19074,11 +19075,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19088,7 +19089,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19100,11 +19101,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19114,7 +19115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19126,11 +19127,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19140,7 +19141,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19152,11 +19153,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19166,7 +19167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19178,11 +19179,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19192,7 +19193,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19204,11 +19205,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19218,7 +19219,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19230,11 +19231,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19244,7 +19245,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19256,11 +19257,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19270,7 +19271,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19282,11 +19283,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19296,7 +19297,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19308,11 +19309,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19322,7 +19323,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19334,11 +19335,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19348,7 +19349,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19360,11 +19361,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19374,7 +19375,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19386,11 +19387,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19400,7 +19401,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19412,11 +19413,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19426,7 +19427,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19438,11 +19439,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19452,7 +19453,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19464,11 +19465,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19478,7 +19479,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19490,11 +19491,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19504,7 +19505,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19516,11 +19517,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19530,7 +19531,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19542,11 +19543,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19556,7 +19557,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19568,11 +19569,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19582,7 +19583,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19594,11 +19595,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19608,7 +19609,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19620,11 +19621,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19634,7 +19635,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19646,11 +19647,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19660,7 +19661,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19672,11 +19673,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19686,7 +19687,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19698,11 +19699,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19712,7 +19713,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19724,11 +19725,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19738,7 +19739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19750,11 +19751,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19764,7 +19765,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19776,11 +19777,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19790,7 +19791,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19802,11 +19803,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19816,7 +19817,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19828,11 +19829,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19842,7 +19843,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19854,11 +19855,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19868,7 +19869,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19880,11 +19881,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19894,7 +19895,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19906,11 +19907,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19920,7 +19921,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
 
         [Fact]
@@ -19932,11 +19933,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             if(!oldNode.IsMissing)
             {
-                Assert.NotEqual(oldNode, newNode);
+                newNode.Should().NotBe(oldNode);
             }
 
-            Assert.NotNull(newNode);
-            Assert.True(newNode.IsMissing, "No tokens => missing");
+            newNode.Should().NotBeNull();
+            newNode.IsMissing.Should().BeTrue("No tokens => missing");
         }
 
         [Fact]
@@ -19946,7 +19947,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 
-            Assert.Same(oldNode, newNode);
+            newNode.Should().BeSameAs(oldNode);
         }
         #endregion Red Rewriters
     }

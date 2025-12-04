@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                     continue;
                 }
 
-                Assert.False(string.IsNullOrEmpty(ErrorFacts.GetMessage(code, CultureInfo.InvariantCulture)), $"Message for error {code} is null or empty.");
+                string.IsNullOrEmpty(ErrorFacts.GetMessage(code, CultureInfo.InvariantCulture)).Should().BeFalse($"Message for error {code} is null or empty.");
             }
         }
 
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             var set = new HashSet<ErrorCode>();
             foreach (ErrorCode value in values)
             {
-                Assert.True(set.Add(value), $"{value} is duplicated!");
+                set.Add(value).Should().BeTrue($"{value} is duplicated!");
             }
         }
 
@@ -67,24 +67,24 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             CultureInfo englishCulture = CultureHelpers.EnglishCulture;
 
             DiagnosticInfo di1 = new DiagnosticInfo(provider, 1);
-            Assert.Equal(1, di1.Code);
-            Assert.Equal(DiagnosticSeverity.Error, di1.Severity);
-            Assert.Equal("MOCK0001", di1.MessageIdentifier);
-            Assert.Equal("The first error", di1.GetMessage(englishCulture));
+            di1.Code.Should().Be(1);
+            di1.Severity.Should().Be(DiagnosticSeverity.Error);
+            di1.MessageIdentifier.Should().Be("MOCK0001");
+            di1.GetMessage(englishCulture).Should().Be("The first error");
 
             DiagnosticInfo di2 = new DiagnosticInfo(provider, 1002, "Elvis", "Mort");
-            Assert.Equal(1002, di2.Code);
-            Assert.Equal(DiagnosticSeverity.Warning, di2.Severity);
-            Assert.Equal("MOCK1002", di2.MessageIdentifier);
-            Assert.Equal("The second warning about Elvis and Mort", di2.GetMessage(englishCulture));
+            di2.Code.Should().Be(1002);
+            di2.Severity.Should().Be(DiagnosticSeverity.Warning);
+            di2.MessageIdentifier.Should().Be("MOCK1002");
+            di2.GetMessage(englishCulture).Should().Be("The second warning about Elvis and Mort");
 
             Location l1 = new SourceLocation(syntaxTree, new TextSpan(5, 8));
             var d1 = new CSDiagnostic(di2, l1);
-            Assert.Equal(l1, d1.Location);
-            Assert.Same(syntaxTree, d1.Location.SourceTree);
-            Assert.Equal(new TextSpan(5, 8), d1.Location.SourceSpan);
-            Assert.Equal(0, d1.AdditionalLocations.Count());
-            Assert.Same(di2, d1.Info);
+            d1.Location.Should().Be(l1);
+            d1.Location.SourceTree.Should().BeSameAs(syntaxTree);
+            d1.Location.SourceSpan.Should().Be(new TextSpan(5, 8));
+            d1.AdditionalLocations.Count().Should().Be(0);
+            d1.Info.Should().BeSameAs(di2);
         }
 
         [Fact]
@@ -95,11 +95,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
             DiagnosticInfo di3 = new CustomErrorInfo(provider, "OtherSymbol", new SourceLocation(syntaxTree, new TextSpan(14, 8)));
             var d3 = new CSDiagnostic(di3, new SourceLocation(syntaxTree, new TextSpan(1, 1)));
-            Assert.Same(syntaxTree, d3.Location.SourceTree);
-            Assert.Equal(new TextSpan(1, 1), d3.Location.SourceSpan);
-            Assert.Equal(1, d3.AdditionalLocations.Count());
-            Assert.Equal(new TextSpan(14, 8), d3.AdditionalLocations.First().SourceSpan);
-            Assert.Equal("OtherSymbol", (d3.Info as CustomErrorInfo).OtherSymbol);
+            d3.Location.SourceTree.Should().BeSameAs(syntaxTree);
+            d3.Location.SourceSpan.Should().Be(new TextSpan(1, 1));
+            d3.AdditionalLocations.Count().Should().Be(1);
+            d3.AdditionalLocations.First().SourceSpan.Should().Be(new TextSpan(14, 8));
+            (d3.Info as CustomErrorInfo).OtherSymbol.Should().Be("OtherSymbol");
         }
 
         [WorkItem(537801, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537801")]
@@ -117,7 +117,7 @@ End namespace
 
             var comp = CreateCompilation(text);
             var actualErrors = comp.GetDiagnostics();
-            Assert.InRange(actualErrors.Count(), 1, int.MaxValue);
+            actualErrors.Count().Should().BeInRange(1, int.MaxValue);
         }
 
         [WorkItem(540086, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/540086")]
@@ -187,13 +187,13 @@ class X
                 string errorCodeName = errorCode.ToString();
                 if (errorCodeName.StartsWith("WRN", StringComparison.Ordinal))
                 {
-                    Assert.True(ErrorFacts.IsWarning(errorCode));
-                    Assert.NotEqual(0, ErrorFacts.GetWarningLevel(errorCode));
+                    ErrorFacts.IsWarning(errorCode).Should().BeTrue();
+                    ErrorFacts.GetWarningLevel(errorCode).Should().NotBe(0);
                 }
                 else if (errorCodeName.StartsWith("ERR", StringComparison.Ordinal))
                 {
-                    Assert.False(ErrorFacts.IsWarning(errorCode));
-                    Assert.Equal(0, ErrorFacts.GetWarningLevel(errorCode));
+                    ErrorFacts.IsWarning(errorCode).Should().BeFalse();
+                    ErrorFacts.GetWarningLevel(errorCode).Should().Be(0);
                 }
             }
         }
@@ -204,14 +204,14 @@ class X
         {
             // Check a few warning levels recently added
 
-            Assert.Equal(2, ErrorFacts.GetWarningLevel(ErrorCode.WRN_DeprecatedCollectionInitAddStr));
-            Assert.Equal(1, ErrorFacts.GetWarningLevel(ErrorCode.WRN_DefaultValueForUnconsumedLocation));
-            Assert.Equal(2, ErrorFacts.GetWarningLevel(ErrorCode.WRN_UnmatchedParamRefTag));
-            Assert.Equal(2, ErrorFacts.GetWarningLevel(ErrorCode.WRN_UnmatchedTypeParamRefTag));
-            Assert.Equal(1, ErrorFacts.GetWarningLevel(ErrorCode.WRN_ReferencedAssemblyReferencesLinkedPIA));
-            Assert.Equal(2, ErrorFacts.GetWarningLevel(ErrorCode.WRN_DynamicDispatchToConditionalMethod));
-            Assert.Equal(3, ErrorFacts.GetWarningLevel(ErrorCode.WRN_IsDynamicIsConfusing));
-            Assert.Equal(2, ErrorFacts.GetWarningLevel(ErrorCode.WRN_NoSources));
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_DeprecatedCollectionInitAddStr).Should().Be(2);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_DefaultValueForUnconsumedLocation).Should().Be(1);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_UnmatchedParamRefTag).Should().Be(2);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_UnmatchedTypeParamRefTag).Should().Be(2);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_ReferencedAssemblyReferencesLinkedPIA).Should().Be(1);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_DynamicDispatchToConditionalMethod).Should().Be(2);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_IsDynamicIsConfusing).Should().Be(3);
+            ErrorFacts.GetWarningLevel(ErrorCode.WRN_NoSources).Should().Be(2);
 
             // If a new warning is added, this test will fail and adding the new case with the expected error level will be required.
 
@@ -225,7 +225,7 @@ class X
                 string errorCodeName = errorCode.ToString();
                 if (errorCodeName.StartsWith("WRN", StringComparison.Ordinal))
                 {
-                    Assert.True(ErrorFacts.IsWarning(errorCode));
+                    ErrorFacts.IsWarning(errorCode).Should().BeTrue();
                     switch (errorCode)
                     {
                         case ErrorCode.WRN_DelaySignButNoKey:
@@ -273,17 +273,17 @@ class X
                         case ErrorCode.WRN_ObsoleteMembersShouldNotBeRequired:
                         case ErrorCode.WRN_OptionalParamValueMismatch:
                         case ErrorCode.WRN_ParamsArrayInLambdaOnly:
-                            Assert.Equal(1, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(1);
                             break;
                         case ErrorCode.WRN_MainIgnored:
                         case ErrorCode.WRN_UnqualifiedNestedTypeInCref:
                         case ErrorCode.WRN_NoRuntimeMetadataVersion:
-                            Assert.Equal(2, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(2);
                             break;
                         case ErrorCode.WRN_PdbLocalNameTooLong:
                         case ErrorCode.WRN_UnreferencedLocalFunction:
                         case ErrorCode.WRN_RecordEqualsWithoutGetHashCode:
-                            Assert.Equal(3, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(3);
                             break;
                         case ErrorCode.WRN_ConvertingNullableToNonNullable:
                         case ErrorCode.WRN_NullReferenceAssignment:
@@ -377,10 +377,10 @@ class X
                         case ErrorCode.WRN_RefReturnOnlyParameter:
                         case ErrorCode.WRN_RefReturnOnlyParameter2:
                         case ErrorCode.WRN_RefAssignValEscapeWider:
-                            Assert.Equal(1, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(1);
                             break;
                         case ErrorCode.WRN_InvalidVersionFormat:
-                            Assert.Equal(4, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(4);
                             break;
                         case ErrorCode.WRN_NubExprIsConstBool2:
                         case ErrorCode.WRN_StaticInAsOrIs:
@@ -399,20 +399,20 @@ class X
                         case ErrorCode.WRN_ParameterIsStaticClass:
                         case ErrorCode.WRN_ReturnTypeIsStaticClass:
                             // These are the warnings introduced with the warning "wave" shipped with dotnet 5 and C# 9.
-                            Assert.Equal(5, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(5);
                             break;
                         case ErrorCode.WRN_PartialMethodTypeDifference:
                             // These are the warnings introduced with the warning "wave" shipped with dotnet 6 and C# 10.
-                            Assert.Equal(6, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(6);
                             break;
                         case ErrorCode.WRN_LowerCaseTypeName:
                             // These are the warnings introduced with the warning "wave" shipped with dotnet 7 and C# 11.
-                            Assert.Equal(7, ErrorFacts.GetWarningLevel(errorCode));
+                            ErrorFacts.GetWarningLevel(errorCode).Should().Be(7);
                             break;
                         default:
                             // If a new warning is added, this test will fail
                             // and whoever is adding the new warning will have to update it with the expected error level.
-                            Assert.True(false, $"Please update this test case with a proper warning level ({ErrorFacts.GetWarningLevel(errorCode)}) for '{errorCodeName}'");
+                            false.Should().BeTrue($"Please update this test case with a proper warning level ({ErrorFacts.GetWarningLevel(errorCode)}) for '{errorCodeName}'");
                             break;
                     }
                 }
@@ -473,7 +473,7 @@ class X
                     ErrorCode.WRN_ParameterOccursAfterInterpolatedStringHandlerParameter
                 };
 
-                Assert.Contains(error, nullableUnrelatedWarnings);
+                nullableUnrelatedWarnings.Should().Contain(error);
             }
         }
 
@@ -1920,14 +1920,14 @@ public class C
             // to that inside #define directives except that very long identifiers inside #define
             // are truncated to 128 characters to maintain backwards compatibility with previous
             // versions of the compiler.
-            Assert.Equal(128, defineName.ValueText.Length);
-            Assert.Equal(2335, defineName.Text.Length);
+            defineName.ValueText.Length.Should().Be(128);
+            defineName.Text.Length.Should().Be(2335);
 
             // Since support for identifiers inside #pragma warning directives is new, 
             // we don't have any backwards compatibility constraints. So we can preserve the
             // identifier exactly as it appears in source.
-            Assert.Equal(2335, errorCodeName.ValueText.Length);
-            Assert.Equal(2335, errorCodeName.Text.Length);
+            errorCodeName.ValueText.Length.Should().Be(2335);
+            errorCodeName.Text.Length.Should().Be(2335);
         }
 
         [Fact]
@@ -2284,15 +2284,15 @@ public class C
     }
 }";
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text, path: "goo.cs");
-            Assert.Equal(PragmaWarningState.Default, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "public class").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "public static").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "public static").Start));
-            Assert.Equal(PragmaWarningState.Default, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int x").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int x").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int y").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int y").Start));
-            Assert.Equal(PragmaWarningState.Default, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int z").Start));
-            Assert.Equal(PragmaWarningState.Default, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int z").Start));
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "public class").Start).Should().Be(PragmaWarningState.Default);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "public static").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "public static").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int x").Start).Should().Be(PragmaWarningState.Default);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int x").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int y").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int y").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "int z").Start).Should().Be(PragmaWarningState.Default);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "int z").Start).Should().Be(PragmaWarningState.Default);
         }
 
         [Fact]
@@ -2313,9 +2313,9 @@ class Program
     }
 }";
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text, path: "goo.cs");
-            Assert.Equal(PragmaWarningState.Default, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "static void").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "var x").Start));
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "var y").Start));
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "static void").Start).Should().Be(PragmaWarningState.Default);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "var x").Start).Should().Be(PragmaWarningState.Disabled);
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(219), GetSpanIn(syntaxTree, "var y").Start).Should().Be(PragmaWarningState.Disabled);
         }
 
         [WorkItem(545407, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545407")]
@@ -2331,14 +2331,14 @@ class Program
     }
 }";
             SyntaxTree syntaxTree = SyntaxFactory.ParseSyntaxTree(text, path: "goo.cs");
-            Assert.Equal(PragmaWarningState.Disabled, syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "static void").Start));
+            syntaxTree.GetPragmaDirectiveWarningState(MessageProvider.Instance.GetIdForErrorCode(168), GetSpanIn(syntaxTree, "static void").Start).Should().Be(PragmaWarningState.Disabled);
         }
 
         private TextSpan GetSpanIn(SyntaxTree syntaxTree, string textToFind)
         {
             string s = syntaxTree.GetText().ToString();
             int index = s.IndexOf(textToFind, StringComparison.Ordinal);
-            Assert.True(index >= 0, "textToFind not found in the tree");
+            index >= 0, "textToFind not found in the tree".Should().BeTrue();
             return new TextSpan(index, textToFind.Length);
         }
 
@@ -2364,8 +2364,8 @@ public class Test
 }";
             var compilation = CreateCompilation(text);
 
-            Assert.Equal(1, compilation.GetDiagnostics().Length);
-            Assert.Equal(1, compilation.GetDiagnostics().Length);
+            compilation.GetDiagnostics().Length.Should().Be(1);
+            compilation.GetDiagnostics().Length.Should().Be(1);
         }
 
         [WorkItem(39992, "https://github.com/dotnet/roslyn/issues/39992")]
@@ -2402,6 +2402,7 @@ public class Test
         {
             var text = @"
 using System;
+using AwesomeAssertions;
 
 public class Test
 {
@@ -2836,7 +2837,7 @@ class Program
             var parsedArgs = CSharpCommandLineParser.Default.Parse(new[] { pathmapArg, "a.cs" }, TempRoot.Root, RuntimeEnvironment.GetRuntimeDirectory(), null);
             parsedArgs.Errors.Verify();
             var expected = new KeyValuePair<string, string>(expectedFrom, expectedTo);
-            Assert.Equal(expected, parsedArgs.PathMap[0]);
+            parsedArgs.PathMap[0].Should().Be(expected);
         }
 
         [Fact]
@@ -2850,11 +2851,11 @@ class Program
             }
 
             var sep = PathUtilities.DirectorySeparatorChar;
-            Assert.Equal(new KeyValuePair<string, string>("C:\\temp/goo" + sep, "/temp\\goo" + sep), parse("/pathmap:C:\\temp/goo=/temp\\goo", "a.cs").PathMap[0]);
-            Assert.Equal(new KeyValuePair<string, string>("noslash" + sep, "withoutslash" + sep), parse("/pathmap:noslash=withoutslash", "a.cs").PathMap[0]);
+            parse("/pathmap:C:\\temp/goo=/temp\\goo", "a.cs").PathMap[0].Should().Be(new KeyValuePair<string, string>("C:\\temp/goo" + sep, "/temp\\goo" + sep));
+            parse("/pathmap:noslash=withoutslash", "a.cs").PathMap[0].Should().Be(new KeyValuePair<string, string>("noslash" + sep, "withoutslash" + sep));
             var doublemap = parse("/pathmap:/temp=/goo,/temp/=/bar", "a.cs").PathMap;
-            Assert.Equal(new KeyValuePair<string, string>("/temp/", "/goo/"), doublemap[0]);
-            Assert.Equal(new KeyValuePair<string, string>("/temp/", "/bar/"), doublemap[1]);
+            doublemap[0].Should().Be(new KeyValuePair<string, string>("/temp/", "/goo/"));
+            doublemap[1].Should().Be(new KeyValuePair<string, string>("/temp/", "/bar/"));
         }
         #endregion
 
@@ -2902,11 +2903,11 @@ class Program
                     case ErrorCode.ERR_EncUpdateFailedDelegateTypeChanged:
                     case ErrorCode.ERR_CannotBeConvertedToUtf8:
                     case ErrorCode.ERR_FileTypeNonUniquePath:
-                        Assert.True(isBuildOnly, $"Check failed for ErrorCode.{errorCode}");
+                        isBuildOnly.Should().BeTrue($"Check failed for ErrorCode.{errorCode}");
                         break;
 
                     default:
-                        Assert.False(isBuildOnly, $"Check failed for ErrorCode.{errorCode}");
+                        isBuildOnly.Should().BeFalse($"Check failed for ErrorCode.{errorCode}");
                         break;
                 }
             }

@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -15,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
     {
         public static void CheckParents(SyntaxNodeOrToken nodeOrToken, SyntaxTree expectedSyntaxTree)
         {
-            Assert.Equal(expectedSyntaxTree, nodeOrToken.SyntaxTree);
+            nodeOrToken.SyntaxTree.Should().Be(expectedSyntaxTree);
 
             var span = nodeOrToken.Span;
 
@@ -26,11 +27,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 {
                     var tspan = trivia.Span;
                     var parentToken = trivia.Token;
-                    Assert.Equal(parentToken, token);
+                    token.Should().Be(parentToken);
                     if (trivia.HasStructure)
                     {
                         var parentTrivia = trivia.GetStructure().Parent;
-                        Assert.Null(parentTrivia);
+                        parentTrivia.Should().BeNull();
                         CheckParents((CSharpSyntaxNode)trivia.GetStructure(), expectedSyntaxTree);
                     }
                 }
@@ -39,11 +40,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 {
                     var tspan = trivia.Span;
                     var parentToken = trivia.Token;
-                    Assert.Equal(parentToken, token);
+                    token.Should().Be(parentToken);
                     if (trivia.HasStructure)
                     {
                         var parentTrivia = trivia.GetStructure().Parent;
-                        Assert.Null(parentTrivia);
+                        parentTrivia.Should().BeNull();
                         CheckParents(trivia.GetStructure(), expectedSyntaxTree);
                     }
                 }
@@ -54,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 foreach (var child in node.ChildNodesAndTokens())
                 {
                     var parent = child.Parent;
-                    Assert.Equal(node, parent);
+                    parent.Should().Be(node);
                     CheckParents(child, expectedSyntaxTree);
                 }
             }

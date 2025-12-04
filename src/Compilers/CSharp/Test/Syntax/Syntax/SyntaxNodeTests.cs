@@ -44,7 +44,7 @@ class C {
 
             var tree = SyntaxFactory.ParseSyntaxTree(builder.ToString());
             var directives = tree.GetRoot().GetDirectives();
-            Assert.Equal(2, directives.Count);
+            directives.Count.Should().Be(2);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ class C {
             var qname = (QualifiedNameSyntax)SyntaxFactory.ParseName("A.B");
             var qname2 = qname.WithRight(SyntaxFactory.IdentifierName("C"));
             var text = qname2.ToString();
-            Assert.Equal("A.C", text);
+            text.Should().Be("A.C");
         }
 
         [WorkItem(9229, "DevDiv_Projects/Roslyn")]
@@ -72,9 +72,9 @@ class C {
             var expression = SyntaxFactory.ParseExpression(text);
 
             var nodes = expression.ChildNodes().ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.IdentifierName, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.ArgumentList, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.IdentifierName);
+            nodes[1].Kind().Should().Be(SyntaxKind.ArgumentList);
         }
 
         [Fact]
@@ -85,14 +85,14 @@ class C {
             var e = expression.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "e");
 
             var nodes = e.Ancestors().ToList();
-            Assert.Equal(7, nodes.Count);
-            Assert.Equal(SyntaxKind.DivideExpression, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.MultiplyExpression, nodes[2].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[3].Kind());
-            Assert.Equal(SyntaxKind.SubtractExpression, nodes[4].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[5].Kind());
-            Assert.Equal(SyntaxKind.AddExpression, nodes[6].Kind());
+            nodes.Count.Should().Be(7);
+            nodes[0].Kind().Should().Be(SyntaxKind.DivideExpression);
+            nodes[1].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[2].Kind().Should().Be(SyntaxKind.MultiplyExpression);
+            nodes[3].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[4].Kind().Should().Be(SyntaxKind.SubtractExpression);
+            nodes[5].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[6].Kind().Should().Be(SyntaxKind.AddExpression);
         }
 
         [Fact]
@@ -103,15 +103,15 @@ class C {
             var e = expression.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "e");
 
             var nodes = e.AncestorsAndSelf().ToList();
-            Assert.Equal(8, nodes.Count);
-            Assert.Equal(SyntaxKind.IdentifierName, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.DivideExpression, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[2].Kind());
-            Assert.Equal(SyntaxKind.MultiplyExpression, nodes[3].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[4].Kind());
-            Assert.Equal(SyntaxKind.SubtractExpression, nodes[5].Kind());
-            Assert.Equal(SyntaxKind.ParenthesizedExpression, nodes[6].Kind());
-            Assert.Equal(SyntaxKind.AddExpression, nodes[7].Kind());
+            nodes.Count.Should().Be(8);
+            nodes[0].Kind().Should().Be(SyntaxKind.IdentifierName);
+            nodes[1].Kind().Should().Be(SyntaxKind.DivideExpression);
+            nodes[2].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[3].Kind().Should().Be(SyntaxKind.MultiplyExpression);
+            nodes[4].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[5].Kind().Should().Be(SyntaxKind.SubtractExpression);
+            nodes[6].Kind().Should().Be(SyntaxKind.ParenthesizedExpression);
+            nodes[7].Kind().Should().Be(SyntaxKind.AddExpression);
         }
 
         [Fact]
@@ -122,8 +122,8 @@ class C {
             var e = expression.DescendantNodes().OfType<IdentifierNameSyntax>().First(n => n.Identifier.Text == "e");
 
             var firstParens = e.FirstAncestorOrSelf<ExpressionSyntax>(n => n.Kind() == SyntaxKind.ParenthesizedExpression);
-            Assert.NotNull(firstParens);
-            Assert.Equal("(d / e)", firstParens.ToString());
+            firstParens.Should().NotBeNull();
+            firstParens.ToString().Should().Be("(d / e)");
         }
 
         [Fact]
@@ -133,43 +133,43 @@ class C {
             var statement = SyntaxFactory.ParseStatement(text);
 
             var nodes = statement.DescendantNodes().ToList();
-            Assert.Equal(1, nodes.Count);
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[0].Kind());
+            nodes.Count.Should().Be(1);
+            nodes[0].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(descendIntoTrivia: true).ToList();
-            Assert.Equal(3, nodes.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
+            nodes.Count.Should().Be(3);
+            nodes[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(n => n is StatementSyntax).ToList();
-            Assert.Equal(1, nodes.Count);
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[0].Kind());
+            nodes.Count.Should().Be(1);
+            nodes[0].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(n => n is StatementSyntax, descendIntoTrivia: true).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             // all over again with spans
             nodes = statement.DescendantNodes(statement.FullSpan).ToList();
-            Assert.Equal(1, nodes.Count);
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[0].Kind());
+            nodes.Count.Should().Be(1);
+            nodes[0].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(statement.FullSpan, descendIntoTrivia: true).ToList();
-            Assert.Equal(3, nodes.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
+            nodes.Count.Should().Be(3);
+            nodes[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(statement.FullSpan, n => n is StatementSyntax).ToList();
-            Assert.Equal(1, nodes.Count);
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[0].Kind());
+            nodes.Count.Should().Be(1);
+            nodes[0].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodes(statement.FullSpan, n => n is StatementSyntax, descendIntoTrivia: true).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
         }
 
         [Fact]
@@ -179,51 +179,51 @@ class C {
             var statement = SyntaxFactory.ParseStatement(text);
 
             var nodes = statement.DescendantNodesAndSelf().ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(descendIntoTrivia: true).ToList();
-            Assert.Equal(4, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[3].Kind());
+            nodes.Count.Should().Be(4);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodes[3].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(n => n is StatementSyntax).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(n => n is StatementSyntax, descendIntoTrivia: true).ToList();
-            Assert.Equal(3, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
+            nodes.Count.Should().Be(3);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             // all over again with spans
             nodes = statement.DescendantNodesAndSelf(statement.FullSpan).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(statement.FullSpan, descendIntoTrivia: true).ToList();
-            Assert.Equal(4, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[3].Kind());
+            nodes.Count.Should().Be(4);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodes[3].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(statement.FullSpan, n => n is StatementSyntax).ToList();
-            Assert.Equal(2, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[1].Kind());
+            nodes.Count.Should().Be(2);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
 
             nodes = statement.DescendantNodesAndSelf(statement.FullSpan, n => n is StatementSyntax, descendIntoTrivia: true).ToList();
-            Assert.Equal(3, nodes.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodes[0].Kind());
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodes[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodes[2].Kind());
+            nodes.Count.Should().Be(3);
+            nodes[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodes[1].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodes[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
         }
 
         [Fact]
@@ -233,32 +233,32 @@ class C {
             var statement = SyntaxFactory.ParseStatement(text);
 
             var nodesAndTokens = statement.DescendantNodesAndTokens().ToList();
-            Assert.Equal(4, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[3].Kind());
+            nodesAndTokens.Count.Should().Be(4);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.SemicolonToken);
 
             nodesAndTokens = statement.DescendantNodesAndTokens(descendIntoTrivia: true).ToList();
-            Assert.Equal(10, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.HashToken, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.IfKeyword, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[3].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[4].Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, nodesAndTokens[5].Kind());
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[6].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[7].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[8].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[9].Kind());
+            nodesAndTokens.Count.Should().Be(10);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.HashToken);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.IfKeyword);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[4].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[5].Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            nodesAndTokens[6].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[7].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[8].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[9].Kind().Should().Be(SyntaxKind.SemicolonToken);
 
             // with span
             nodesAndTokens = statement.DescendantNodesAndTokens(statement.FullSpan).ToList();
-            Assert.Equal(4, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[3].Kind());
+            nodesAndTokens.Count.Should().Be(4);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.SemicolonToken);
         }
 
         [Fact]
@@ -268,35 +268,35 @@ class C {
             var statement = SyntaxFactory.ParseStatement(text);
 
             var nodesAndTokens = statement.DescendantNodesAndTokensAndSelf().ToList();
-            Assert.Equal(5, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[3].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[4].Kind());
+            nodesAndTokens.Count.Should().Be(5);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[4].Kind().Should().Be(SyntaxKind.SemicolonToken);
 
             nodesAndTokens = statement.DescendantNodesAndTokensAndSelf(descendIntoTrivia: true).ToList();
-            Assert.Equal(11, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.HashToken, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.IfKeyword, nodesAndTokens[3].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[4].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[5].Kind());
-            Assert.Equal(SyntaxKind.EndOfDirectiveToken, nodesAndTokens[6].Kind());
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[7].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[8].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[9].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[10].Kind());
+            nodesAndTokens.Count.Should().Be(11);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.HashToken);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.IfKeyword);
+            nodesAndTokens[4].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[5].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[6].Kind().Should().Be(SyntaxKind.EndOfDirectiveToken);
+            nodesAndTokens[7].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[8].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[9].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[10].Kind().Should().Be(SyntaxKind.SemicolonToken);
 
             // with span
             nodesAndTokens = statement.DescendantNodesAndTokensAndSelf(statement.FullSpan).ToList();
-            Assert.Equal(5, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.ReturnStatement, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.ReturnKeyword, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.TrueLiteralExpression, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.TrueKeyword, nodesAndTokens[3].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, nodesAndTokens[4].Kind());
+            nodesAndTokens.Count.Should().Be(5);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.ReturnStatement);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.ReturnKeyword);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.TrueLiteralExpression);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.TrueKeyword);
+            nodesAndTokens[4].Kind().Should().Be(SyntaxKind.SemicolonToken);
         }
 
         [Fact]
@@ -305,9 +305,9 @@ class C {
             var text = "";
             var cu = SyntaxFactory.ParseCompilationUnit(text);
             var nodesAndTokens = cu.DescendantNodesAndTokensAndSelf().ToList();
-            Assert.Equal(2, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.CompilationUnit, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.EndOfFileToken, nodesAndTokens[1].Kind());
+            nodesAndTokens.Count.Should().Be(2);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.CompilationUnit);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.EndOfFileToken);
         }
 
         [Fact]
@@ -317,14 +317,14 @@ class C {
             var expr = SyntaxFactory.ParseExpression(text);
 
             var nodesAndTokens = expr.DescendantNodesAndTokensAndSelf(descendIntoTrivia: true).ToList();
-            Assert.Equal(7, nodesAndTokens.Count);
-            Assert.Equal(SyntaxKind.IdentifierName, nodesAndTokens[0].Kind());
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, nodesAndTokens[1].Kind());
-            Assert.Equal(SyntaxKind.XmlText, nodesAndTokens[2].Kind());
-            Assert.Equal(SyntaxKind.XmlTextLiteralToken, nodesAndTokens[3].Kind());
-            Assert.Equal(SyntaxKind.XmlTextLiteralNewLineToken, nodesAndTokens[4].Kind());
-            Assert.Equal(SyntaxKind.EndOfDocumentationCommentToken, nodesAndTokens[5].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, nodesAndTokens[6].Kind());
+            nodesAndTokens.Count.Should().Be(7);
+            nodesAndTokens[0].Kind().Should().Be(SyntaxKind.IdentifierName);
+            nodesAndTokens[1].Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            nodesAndTokens[2].Kind().Should().Be(SyntaxKind.XmlText);
+            nodesAndTokens[3].Kind().Should().Be(SyntaxKind.XmlTextLiteralToken);
+            nodesAndTokens[4].Kind().Should().Be(SyntaxKind.XmlTextLiteralNewLineToken);
+            nodesAndTokens[5].Kind().Should().Be(SyntaxKind.EndOfDocumentationCommentToken);
+            nodesAndTokens[6].Kind().Should().Be(SyntaxKind.IdentifierToken);
         }
 
         [Fact]
@@ -336,10 +336,10 @@ class C {
             var directives = expr.GetDirectives();
             var descendantDirectives = expr.DescendantNodesAndSelf(n => n.ContainsDirectives, descendIntoTrivia: true).OfType<DirectiveTriviaSyntax>().ToList();
 
-            Assert.Equal(directives.Count, descendantDirectives.Count);
+            descendantDirectives.Count.Should().Be(directives.Count);
             for (int i = 0; i < directives.Count; i++)
             {
-                Assert.Equal(directives[i], descendantDirectives[i]);
+                descendantDirectives[i].Should().Be(directives[i]);
             }
         }
 
@@ -348,11 +348,11 @@ class C {
         {
             // Empty compilation unit shouldn't have any directives in it.
             for (var kind = SyntaxKind.TildeToken; kind < SyntaxKind.ScopedKeyword; kind++)
-                Assert.False(SyntaxFactory.ParseCompilationUnit("").ContainsDirective(kind));
+                SyntaxFactory.ParseCompilationUnit("").ContainsDirective(kind).Should().BeFalse();
 
             // basic file shouldn't have any directives in it.
             for (var kind = SyntaxKind.TildeToken; kind < SyntaxKind.ScopedKeyword; kind++)
-                Assert.False(SyntaxFactory.ParseCompilationUnit("namespace N { }").ContainsDirective(kind));
+                SyntaxFactory.ParseCompilationUnit("namespace N { }").ContainsDirective(kind).Should().BeFalse();
 
             // directive in trailing trivia is not a thing
             for (var kind = SyntaxKind.TildeToken; kind < SyntaxKind.ScopedKeyword; kind++)
@@ -365,7 +365,7 @@ class C {
                     // (1,26): error CS1027: #endif directive expected
                     // namespace N { } #if false
                     TestBase.Diagnostic(ErrorCode.ERR_EndifDirectiveExpected, "").WithLocation(1, 26));
-                Assert.False(compilationUnit.ContainsDirective(kind));
+                compilationUnit.ContainsDirective(kind).Should().BeFalse();
             }
 
             testContainsHelper1("#define x", SyntaxKind.DefineDirectiveTrivia);
@@ -395,7 +395,7 @@ class C {
 
             void testContainsHelper1(string directive, params SyntaxKind[] directiveKinds)
             {
-                Assert.True(directiveKinds.Length > 0);
+                directiveKinds.Length > 0.Should().BeTrue();
 
                 // directive on its own.
                 testContainsHelper2(directiveKinds, SyntaxFactory.ParseCompilationUnit(directive));
@@ -471,14 +471,14 @@ class C {
 
             void testContainsHelper2(SyntaxKind[] directiveKinds, CompilationUnitSyntax compilationUnit)
             {
-                Assert.True(compilationUnit.ContainsDirectives);
+                compilationUnit.ContainsDirectives.Should().BeTrue();
                 foreach (var directiveKind in directiveKinds)
-                    Assert.True(compilationUnit.ContainsDirective(directiveKind));
+                    compilationUnit.ContainsDirective(directiveKind).Should().BeTrue();
 
                 for (var kind = SyntaxKind.TildeToken; kind < SyntaxKind.ScopedType; kind++)
                 {
                     if (!directiveKinds.Contains(kind))
-                        Assert.False(compilationUnit.ContainsDirective(kind));
+                        compilationUnit.ContainsDirective(kind).Should().BeFalse();
                 }
             }
         }
@@ -495,12 +495,12 @@ class C {
 
             var nodesWithMyAnnotations = exprWithAnnotations.DescendantNodesAndSelf(n => n.ContainsAnnotations).Where(n => n.HasAnnotation(myAnnotation)).ToList();
 
-            Assert.Equal(identifierNodes.Count, nodesWithMyAnnotations.Count);
+            nodesWithMyAnnotations.Count.Should().Be(identifierNodes.Count);
 
             for (int i = 0; i < identifierNodes.Count; i++)
             {
                 // compare text because node identity changed when adding the annotation
-                Assert.Equal(identifierNodes[i].ToString(), nodesWithMyAnnotations[i].ToString());
+                nodesWithMyAnnotations[i].ToString().Should().Be(identifierNodes[i].ToString());
             }
         }
 
@@ -510,11 +510,11 @@ class C {
             var s1 = "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens().ToList();
-            Assert.Equal(4, tokens.Count);
-            Assert.Equal(SyntaxKind.UsingKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[2].Kind());
-            Assert.Equal(SyntaxKind.EndOfFileToken, tokens[3].Kind());
+            tokens.Count.Should().Be(4);
+            tokens[0].Kind().Should().Be(SyntaxKind.UsingKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[2].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[3].Kind().Should().Be(SyntaxKind.EndOfFileToken);
         }
 
         [Fact]
@@ -523,11 +523,11 @@ class C {
             var s1 = "  using Goo  ;  ";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens().ToList();
-            Assert.Equal(4, tokens.Count);
-            Assert.Equal(SyntaxKind.UsingKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[2].Kind());
-            Assert.Equal(SyntaxKind.EndOfFileToken, tokens[3].Kind());
+            tokens.Count.Should().Be(4);
+            tokens[0].Kind().Should().Be(SyntaxKind.UsingKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[2].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[3].Kind().Should().Be(SyntaxKind.EndOfFileToken);
         }
 
         [Fact]
@@ -536,15 +536,15 @@ class C {
             var s1 = "extern alias Bar;\r\n" + "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens().ToList();
-            Assert.Equal(8, tokens.Count);
-            Assert.Equal(SyntaxKind.ExternKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.AliasKeyword, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[2].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[3].Kind());
-            Assert.Equal(SyntaxKind.UsingKeyword, tokens[4].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[5].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[6].Kind());
-            Assert.Equal(SyntaxKind.EndOfFileToken, tokens[7].Kind());
+            tokens.Count.Should().Be(8);
+            tokens[0].Kind().Should().Be(SyntaxKind.ExternKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.AliasKeyword);
+            tokens[2].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[3].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[4].Kind().Should().Be(SyntaxKind.UsingKeyword);
+            tokens[5].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[6].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[7].Kind().Should().Be(SyntaxKind.EndOfFileToken);
         }
 
         [Fact]
@@ -553,10 +553,10 @@ class C {
             var s1 = "extern alias Bar;\r\n" + "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens(new TextSpan(0, 16)).ToList();
-            Assert.Equal(3, tokens.Count);
-            Assert.Equal(SyntaxKind.ExternKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.AliasKeyword, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[2].Kind());
+            tokens.Count.Should().Be(3);
+            tokens[0].Kind().Should().Be(SyntaxKind.ExternKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.AliasKeyword);
+            tokens[2].Kind().Should().Be(SyntaxKind.IdentifierToken);
         }
 
         [Fact]
@@ -565,10 +565,10 @@ class C {
             var s1 = "extern alias Bar;\r\n" + "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens(new TextSpan(1, 14)).ToList();
-            Assert.Equal(3, tokens.Count);
-            Assert.Equal(SyntaxKind.ExternKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.AliasKeyword, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[2].Kind());
+            tokens.Count.Should().Be(3);
+            tokens[0].Kind().Should().Be(SyntaxKind.ExternKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.AliasKeyword);
+            tokens[2].Kind().Should().Be(SyntaxKind.IdentifierToken);
         }
 
         [Fact]
@@ -577,11 +577,11 @@ class C {
             var s1 = "extern alias Bar;\r\n" + "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens(new TextSpan(7, 17)).ToList();
-            Assert.Equal(4, tokens.Count);
-            Assert.Equal(SyntaxKind.AliasKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[2].Kind());
-            Assert.Equal(SyntaxKind.UsingKeyword, tokens[3].Kind());
+            tokens.Count.Should().Be(4);
+            tokens[0].Kind().Should().Be(SyntaxKind.AliasKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[2].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[3].Kind().Should().Be(SyntaxKind.UsingKeyword);
         }
 
         [Fact]
@@ -590,11 +590,11 @@ class C {
             var s1 = "extern alias Bar;\r\n" + "using Goo;";
             var t1 = SyntaxFactory.ParseSyntaxTree(s1);
             var tokens = t1.GetCompilationUnitRoot().DescendantTokens(new TextSpan(8, 15)).ToList();
-            Assert.Equal(4, tokens.Count);
-            Assert.Equal(SyntaxKind.AliasKeyword, tokens[0].Kind());
-            Assert.Equal(SyntaxKind.IdentifierToken, tokens[1].Kind());
-            Assert.Equal(SyntaxKind.SemicolonToken, tokens[2].Kind());
-            Assert.Equal(SyntaxKind.UsingKeyword, tokens[3].Kind());
+            tokens.Count.Should().Be(4);
+            tokens[0].Kind().Should().Be(SyntaxKind.AliasKeyword);
+            tokens[1].Kind().Should().Be(SyntaxKind.IdentifierToken);
+            tokens[2].Kind().Should().Be(SyntaxKind.SemicolonToken);
+            tokens[3].Kind().Should().Be(SyntaxKind.UsingKeyword);
         }
 
         [Fact]
@@ -604,11 +604,11 @@ class C {
             var expr = SyntaxFactory.ParseExpression(text);
 
             var list = expr.DescendantTrivia().ToList();
-            Assert.Equal(4, list.Count);
-            Assert.Equal(SyntaxKind.SingleLineCommentTrivia, list[0].Kind());
-            Assert.Equal(SyntaxKind.EndOfLineTrivia, list[1].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, list[2].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, list[3].Kind());
+            list.Count.Should().Be(4);
+            list[0].Kind().Should().Be(SyntaxKind.SingleLineCommentTrivia);
+            list[1].Kind().Should().Be(SyntaxKind.EndOfLineTrivia);
+            list[2].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
+            list[3].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
         }
 
         [Fact]
@@ -621,14 +621,14 @@ a + b";
             var expr = SyntaxFactory.ParseExpression(text);
 
             var list = expr.DescendantTrivia(descendIntoTrivia: true).ToList();
-            Assert.Equal(7, list.Count);
-            Assert.Equal(SyntaxKind.EndOfLineTrivia, list[0].Kind());
-            Assert.Equal(SyntaxKind.SingleLineDocumentationCommentTrivia, list[1].Kind());
-            Assert.Equal(SyntaxKind.DocumentationCommentExteriorTrivia, list[2].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, list[3].Kind());
-            Assert.Equal(SyntaxKind.DocumentationCommentExteriorTrivia, list[4].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, list[5].Kind());
-            Assert.Equal(SyntaxKind.WhitespaceTrivia, list[6].Kind());
+            list.Count.Should().Be(7);
+            list[0].Kind().Should().Be(SyntaxKind.EndOfLineTrivia);
+            list[1].Kind().Should().Be(SyntaxKind.SingleLineDocumentationCommentTrivia);
+            list[2].Kind().Should().Be(SyntaxKind.DocumentationCommentExteriorTrivia);
+            list[3].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
+            list[4].Kind().Should().Be(SyntaxKind.DocumentationCommentExteriorTrivia);
+            list[5].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
+            list[6].Kind().Should().Be(SyntaxKind.WhitespaceTrivia);
         }
 
         [Fact]
@@ -639,7 +639,7 @@ a + b";
 
             // var node = t1.GetCompilationUnitRoot().Usings[0].GetTokens(new TextSpan(6, 3)).First();
             var node = t1.GetCompilationUnitRoot().DescendantTokens(new TextSpan(6, 3)).First();
-            Assert.Equal("Goo", node.ToString());
+            node.ToString().Should().Be("Goo");
         }
 
         [Fact]
@@ -649,10 +649,10 @@ a + b";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
 
             var token = tree.GetCompilationUnitRoot().FindToken("class\n #i".Length);
-            Assert.Equal(SyntaxKind.IdentifierToken, token.Kind());
-            Assert.Equal("goo", token.ToString());
+            token.Kind().Should().Be(SyntaxKind.IdentifierToken);
+            token.ToString().Should().Be("goo");
             token = tree.GetCompilationUnitRoot().FindToken("class\n #i".Length, findInsideTrivia: true);
-            Assert.Equal(SyntaxKind.IfKeyword, token.Kind());
+            token.Kind().Should().Be(SyntaxKind.IfKeyword);
         }
 
         [Fact]
@@ -689,7 +689,7 @@ a + b";
             for (int i = 0; i < node.FullSpan.End; i++)
             {
                 var token = node.FindToken(i);
-                Assert.True(token.FullSpan.Contains(i));
+                token.FullSpan.Contains(i).Should().BeTrue();
             }
         }
 
@@ -701,8 +701,8 @@ a + b";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
 
             var root = tree.GetRoot();
-            Assert.Equal(root, root.FindNode(root.Span, findInsideTrivia: false));
-            Assert.Equal(root, root.FindNode(root.Span, findInsideTrivia: true));
+            root.FindNode(root.Span, findInsideTrivia: false).Should().Be(root);
+            root.FindNode(root.Span, findInsideTrivia: true).Should().Be(root);
 
             var classDecl = (TypeDeclarationSyntax)root.ChildNodes().First();
 
@@ -710,42 +710,42 @@ a + b";
             var identifier = root.DescendantNodes(descendIntoTrivia: true).Single(n => n is IdentifierNameSyntax);
             var position = identifier.Span.Start + 1;
 
-            Assert.Equal(classDecl, root.FindNode(identifier.Span, findInsideTrivia: false));
-            Assert.Equal(identifier, root.FindNode(identifier.Span, findInsideTrivia: true));
+            root.FindNode(identifier.Span, findInsideTrivia: false).Should().Be(classDecl);
+            root.FindNode(identifier.Span, findInsideTrivia: true).Should().Be(identifier);
 
             // Token span.
-            Assert.Equal(classDecl, root.FindNode(classDecl.Identifier.Span, findInsideTrivia: false));
+            root.FindNode(classDecl.Identifier.Span, findInsideTrivia: false).Should().Be(classDecl);
 
             // EOF Token span.
             var EOFSpan = new TextSpan(root.FullSpan.End, 0);
-            Assert.Equal(root, root.FindNode(EOFSpan, findInsideTrivia: false));
-            Assert.Equal(root, root.FindNode(EOFSpan, findInsideTrivia: true));
+            root.FindNode(EOFSpan, findInsideTrivia: false).Should().Be(root);
+            root.FindNode(EOFSpan, findInsideTrivia: true).Should().Be(root);
 
             // EOF Invalid span for childnode
             var classDecl2 = (TypeDeclarationSyntax)root.ChildNodes().Last();
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(EOFSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(EOFSpan)).Should().Throw<ArgumentOutOfRangeException>();
 
             // Check end position included in node span
             var nodeEndPositionSpan = new TextSpan(classDecl.FullSpan.End, 0);
 
-            Assert.Equal(classDecl2, root.FindNode(nodeEndPositionSpan, findInsideTrivia: false));
-            Assert.Equal(classDecl2, root.FindNode(nodeEndPositionSpan, findInsideTrivia: true));
-            Assert.Equal(classDecl2, classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: false));
-            Assert.Equal(classDecl2, classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: true));
+            root.FindNode(nodeEndPositionSpan, findInsideTrivia: false).Should().Be(classDecl2);
+            root.FindNode(nodeEndPositionSpan, findInsideTrivia: true).Should().Be(classDecl2);
+            classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: false).Should().Be(classDecl2);
+            classDecl2.FindNode(nodeEndPositionSpan, findInsideTrivia: true).Should().Be(classDecl2);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl.FindNode(nodeEndPositionSpan));
+            FluentActions.Invoking(() => classDecl.FindNode(nodeEndPositionSpan)).Should().Throw<ArgumentOutOfRangeException>();
 
             // Invalid spans.
             var invalidSpan = new TextSpan(100, 100);
-            Assert.Throws<ArgumentOutOfRangeException>(() => root.FindNode(invalidSpan));
+            FluentActions.Invoking(() => root.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(root.FullSpan.End - 1, 2);
-            Assert.Throws<ArgumentOutOfRangeException>(() => root.FindNode(invalidSpan));
+            FluentActions.Invoking(() => root.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(classDecl2.FullSpan.Start - 1, root.FullSpan.End);
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(invalidSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             invalidSpan = new TextSpan(classDecl.FullSpan.End, root.FullSpan.End);
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl2.FindNode(invalidSpan));
+            FluentActions.Invoking(() => classDecl2.FindNode(invalidSpan)).Should().Throw<ArgumentOutOfRangeException>();
             // Parent node's span.
-            Assert.Throws<ArgumentOutOfRangeException>(() => classDecl.FindNode(root.FullSpan));
+            FluentActions.Invoking(() => classDecl.FindNode(root.FullSpan)).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [WorkItem(539941, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/539941")]
@@ -763,10 +763,10 @@ a + b";
             // position points to the closing parenthesis on the line that has "void Bar()"
             // There should be no trivia at this position
             var trivia = tree.GetCompilationUnitRoot().FindTrivia(position);
-            Assert.Equal(SyntaxKind.None, trivia.Kind());
-            Assert.Equal(0, trivia.SpanStart);
-            Assert.Equal(0, trivia.Span.End);
-            Assert.Equal(default(SyntaxTrivia), trivia);
+            trivia.Kind().Should().Be(SyntaxKind.None);
+            trivia.SpanStart.Should().Be(0);
+            trivia.Span.End.Should().Be(0);
+            trivia.Should().Be(default(SyntaxTrivia));
         }
 
         [Fact]
@@ -774,7 +774,7 @@ a + b";
         {
             var text = "class goo { }";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.True(tree.GetCompilationUnitRoot().IsEquivalentTo(tree.GetCompilationUnitRoot()));
+            tree.GetCompilationUnitRoot().IsEquivalentTo(tree.GetCompilationUnitRoot()).Should().BeTrue();
         }
 
         [Fact]
@@ -782,7 +782,7 @@ a + b";
         {
             var text = "class goo { }";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.False(tree.GetCompilationUnitRoot().IsEquivalentTo(null));
+            tree.GetCompilationUnitRoot().IsEquivalentTo(null).Should().BeFalse();
         }
 
         [Fact]
@@ -791,8 +791,8 @@ a + b";
             var text = "class goo { }";
             var tree1 = SyntaxFactory.ParseSyntaxTree(text);
             var tree2 = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.NotEqual(tree1.GetCompilationUnitRoot(), tree2.GetCompilationUnitRoot());
-            Assert.True(tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()));
+            tree2.GetCompilationUnitRoot().Should().NotBe(tree1.GetCompilationUnitRoot());
+            tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()).Should().BeTrue();
         }
 
         [Fact]
@@ -800,8 +800,8 @@ a + b";
         {
             var tree1 = SyntaxFactory.ParseSyntaxTree("class goo { }");
             var tree2 = SyntaxFactory.ParseSyntaxTree("class bar { }");
-            Assert.NotEqual(tree1.GetCompilationUnitRoot(), tree2.GetCompilationUnitRoot());
-            Assert.False(tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()));
+            tree2.GetCompilationUnitRoot().Should().NotBe(tree1.GetCompilationUnitRoot());
+            tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()).Should().BeFalse();
         }
 
         [Fact]
@@ -809,8 +809,8 @@ a + b";
         {
             var tree1 = SyntaxFactory.ParseSyntaxTree("class goo { }");
             var tree2 = SyntaxFactory.ParseSyntaxTree(string.Empty);
-            Assert.NotEqual(tree1.GetCompilationUnitRoot(), tree2.GetCompilationUnitRoot());
-            Assert.False(tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()));
+            tree2.GetCompilationUnitRoot().Should().NotBe(tree1.GetCompilationUnitRoot());
+            tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()).Should().BeFalse();
         }
 
         [Fact]
@@ -820,10 +820,10 @@ a + b";
             var tree2 = SyntaxFactory.ParseSyntaxTree("class bar { void M() { } }");
             var m1 = ((TypeDeclarationSyntax)tree1.GetCompilationUnitRoot().Members[0]).Members[0];
             var m2 = ((TypeDeclarationSyntax)tree2.GetCompilationUnitRoot().Members[0]).Members[0];
-            Assert.Equal(SyntaxKind.MethodDeclaration, m1.Kind());
-            Assert.Equal(SyntaxKind.MethodDeclaration, m2.Kind());
-            Assert.NotEqual(m1, m2);
-            Assert.True(m1.IsEquivalentTo(m2));
+            m1.Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            m2.Kind().Should().Be(SyntaxKind.MethodDeclaration);
+            m2.Should().NotBe(m1);
+            m1.IsEquivalentTo(m2).Should().BeTrue();
         }
 
         [Fact]
@@ -831,7 +831,7 @@ a + b";
         {
             var tree1 = SyntaxFactory.ParseSyntaxTree("class goo {void M() { }}");
             var tree2 = SyntaxFactory.ParseSyntaxTree("class goo { void M() { } }");
-            Assert.False(tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()));
+            tree1.GetCompilationUnitRoot().IsEquivalentTo(tree2.GetCompilationUnitRoot()).Should().BeFalse();
         }
 
         [Fact]
@@ -839,7 +839,7 @@ a + b";
         {
             var text = "class goo { }";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.True(tree.GetCompilationUnitRoot().IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot()));
+            tree.GetCompilationUnitRoot().IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot()).Should().BeTrue();
         }
 
         [Fact]
@@ -847,7 +847,7 @@ a + b";
         {
             var text = "class goo { }";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.True(tree.GetCompilationUnitRoot().EndOfFileToken.IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot().EndOfFileToken));
+            tree.GetCompilationUnitRoot().EndOfFileToken.IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot().EndOfFileToken).Should().BeTrue();
         }
 
         [Fact]
@@ -855,7 +855,7 @@ a + b";
         {
             var text = "class goo { }";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.False(tree.GetCompilationUnitRoot().GetFirstToken().IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot().GetFirstToken().GetNextToken()));
+            tree.GetCompilationUnitRoot().GetFirstToken().IsIncrementallyIdenticalTo(tree.GetCompilationUnitRoot().GetFirstToken().GetNextToken()).Should().BeFalse();
         }
 
         [Fact]
@@ -864,7 +864,7 @@ a + b";
             var text = "class goo { }";
             var tree1 = SyntaxFactory.ParseSyntaxTree(text);
             var tree2 = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.True(tree1.GetCompilationUnitRoot().GetFirstToken().IsIncrementallyIdenticalTo(tree2.GetCompilationUnitRoot().GetFirstToken()));
+            tree1.GetCompilationUnitRoot().GetFirstToken().IsIncrementallyIdenticalTo(tree2.GetCompilationUnitRoot().GetFirstToken()).Should().BeTrue();
         }
 
         [Fact]
@@ -873,7 +873,7 @@ a + b";
             var text = "class goo { }";
             var tree1 = SyntaxFactory.ParseSyntaxTree(text);
             var tree2 = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.False(tree1.GetCompilationUnitRoot().IsIncrementallyIdenticalTo(tree2.GetCompilationUnitRoot()));
+            tree1.GetCompilationUnitRoot().IsIncrementallyIdenticalTo(tree2.GetCompilationUnitRoot()).Should().BeFalse();
         }
 
         [Fact]
@@ -882,9 +882,8 @@ a + b";
             var text = "class goo { void M() { } }";
             var tree1 = SyntaxFactory.ParseSyntaxTree(text);
             var tree2 = tree1.WithChangedText(tree1.GetText().WithChanges(new TextChange(default, " ")));
-            Assert.True(
-                tree1.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single().IsIncrementallyIdenticalTo(
-                tree2.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single()));
+            tree1.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single().IsIncrementallyIdenticalTo(
+                tree2.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single()).Should().BeTrue();
         }
 
         [Fact]
@@ -893,9 +892,8 @@ a + b";
             var text = "class goo { void M() { } }";
             var tree1 = SyntaxFactory.ParseSyntaxTree(text);
             var tree2 = tree1.WithChangedText(tree1.GetText().WithChanges(new TextChange(new TextSpan(22, 0), " return; ")));
-            Assert.False(
-                tree1.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single().IsIncrementallyIdenticalTo(
-                tree2.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single()));
+            tree1.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single().IsIncrementallyIdenticalTo(
+                tree2.GetCompilationUnitRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Single()).Should().BeFalse();
         }
 
         [Fact, WorkItem(536664, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/536664")]
@@ -910,7 +908,7 @@ a + b";
             var triviaAgain = tree.GetCompilationUnitRoot().Members[0].GetLeadingTrivia()[0];
 
             // should NOT return two distinct objects for trivia and triviaAgain - struct now.
-            Assert.True(SyntaxTrivia.Equals(trivia, triviaAgain));
+            SyntaxTrivia.Equals(trivia, triviaAgain).Should().BeTrue();
         }
 
         [Fact]
@@ -918,7 +916,7 @@ a + b";
         {
             var tree = SyntaxFactory.ParseSyntaxTree("public static class goo { }");
             var first = tree.GetCompilationUnitRoot().GetFirstToken();
-            Assert.Equal(SyntaxKind.PublicKeyword, first.Kind());
+            first.Kind().Should().Be(SyntaxKind.PublicKeyword);
         }
 
         [Fact]
@@ -926,7 +924,7 @@ a + b";
         {
             var tree = SyntaxFactory.ParseSyntaxTree("public static class goo { }");
             var first = tree.GetCompilationUnitRoot().GetFirstToken(includeZeroWidth: true);
-            Assert.Equal(SyntaxKind.PublicKeyword, first.Kind());
+            first.Kind().Should().Be(SyntaxKind.PublicKeyword);
         }
 
         [Fact]
@@ -934,7 +932,7 @@ a + b";
         {
             var tree = SyntaxFactory.ParseSyntaxTree("public static class goo { }");
             var last = tree.GetCompilationUnitRoot().GetLastToken();
-            Assert.Equal(SyntaxKind.CloseBraceToken, last.Kind());
+            last.Kind().Should().Be(SyntaxKind.CloseBraceToken);
         }
 
         [Fact]
@@ -942,12 +940,12 @@ a + b";
         {
             var tree = SyntaxFactory.ParseSyntaxTree("public static class goo { ");
             var last = tree.GetCompilationUnitRoot().GetLastToken(includeZeroWidth: true);
-            Assert.Equal(SyntaxKind.EndOfFileToken, last.Kind());
+            last.Kind().Should().Be(SyntaxKind.EndOfFileToken);
 
             last = tree.GetCompilationUnitRoot().Members[0].GetLastToken(includeZeroWidth: true);
-            Assert.Equal(SyntaxKind.CloseBraceToken, last.Kind());
-            Assert.True(last.IsMissing);
-            Assert.Equal(26, last.FullSpan.Start);
+            last.Kind().Should().Be(SyntaxKind.CloseBraceToken);
+            last.IsMissing.Should().BeTrue();
+            last.FullSpan.Start.Should().Be(26);
         }
 
         [Fact]
@@ -965,11 +963,11 @@ a + b";
         {
             var list1 = children.AsEnumerable().Reverse().ToList();
             var list2 = children.Reverse().ToList();
-            Assert.Equal(list1.Count, list2.Count);
+            list2.Count.Should().Be(list1.Count);
             for (int i = 0; i < list1.Count; i++)
             {
-                Assert.Equal(list1[i], list2[i]);
-                Assert.Equal(list1[i].FullSpan.Start, list2[i].FullSpan.Start);
+                list2[i].Should().Be(list1[i]);
+                list2[i].FullSpan.Start.Should().Be(list1[i].FullSpan.Start);
             }
         }
 
@@ -988,10 +986,10 @@ a + b";
             }
 
             // descendant tokens include EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1003,11 +1001,11 @@ a + b";
 using goo.bar;
 ";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var tokens = tree.GetCompilationUnitRoot().DescendantTokens(descendIntoTrivia: true).Where(SyntaxToken.NonZeroWidth).ToList();
-            Assert.Equal(6, tokens.Count);
-            Assert.Equal("garbage", tokens[0].Text);
+            tokens.Count.Should().Be(6);
+            tokens[0].Text.Should().Be("garbage");
 
             var list = new List<SyntaxToken>(tokens.Count);
             var token = tree.GetCompilationUnitRoot().GetFirstToken(includeSkipped: true);
@@ -1017,10 +1015,10 @@ using goo.bar;
                 token = token.GetNextToken(includeSkipped: true);
             }
 
-            Assert.Equal(tokens.Count, list.Count);
+            list.Count.Should().Be(tokens.Count);
             for (int i = 0; i < tokens.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1032,7 +1030,7 @@ using goo.bar;
 using goo.bar;
 ");
             var tokens = tree.GetCompilationUnitRoot().DescendantTokens().ToList();
-            Assert.Equal(6, tokens.Count);
+            tokens.Count.Should().Be(6);
 
             var list = new List<SyntaxToken>(tokens.Count);
             var token = tree.GetCompilationUnitRoot().GetFirstToken(includeSkipped: false);
@@ -1043,10 +1041,10 @@ using goo.bar;
             }
 
             // descendant tokens includes EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1065,10 +1063,10 @@ using goo.bar;
             }
 
             // descendant tokens includes EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1088,10 +1086,10 @@ using goo.bar;
             list.Reverse();
 
             // descendant tokens includes EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1103,11 +1101,11 @@ using goo.bar;
 using goo.bar;
 ";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var tokens = tree.GetCompilationUnitRoot().DescendantTokens(descendIntoTrivia: true).Where(SyntaxToken.NonZeroWidth).ToList();
-            Assert.Equal(6, tokens.Count);
-            Assert.Equal("garbage", tokens[0].Text);
+            tokens.Count.Should().Be(6);
+            tokens[0].Text.Should().Be("garbage");
 
             var list = new List<SyntaxToken>(tokens.Count);
             var token = tree.GetCompilationUnitRoot().GetLastToken(includeSkipped: true);
@@ -1118,10 +1116,10 @@ using goo.bar;
             }
             list.Reverse();
 
-            Assert.Equal(tokens.Count, list.Count);
+            list.Count.Should().Be(tokens.Count);
             for (int i = 0; i < tokens.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1133,10 +1131,10 @@ using goo.bar;
 using goo.bar;
 ";
             var tree = SyntaxFactory.ParseSyntaxTree(text);
-            Assert.Equal(text, tree.GetCompilationUnitRoot().ToFullString());
+            tree.GetCompilationUnitRoot().ToFullString().Should().Be(text);
 
             var tokens = tree.GetCompilationUnitRoot().DescendantTokens().ToList();
-            Assert.Equal(6, tokens.Count);
+            tokens.Count.Should().Be(6);
 
             var list = new List<SyntaxToken>(tokens.Count);
             var token = tree.GetCompilationUnitRoot().GetLastToken(includeSkipped: false);
@@ -1148,10 +1146,10 @@ using goo.bar;
             list.Reverse();
 
             // descendant tokens includes EOF
-            Assert.Equal(tokens.Count, list.Count + 1);
+            list.Count + 1.Should().Be(tokens.Count);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(tokens[i], list[i]);
+                list[i].Should().Be(tokens[i]);
             }
         }
 
@@ -1172,10 +1170,10 @@ using goo.bar;
             list.Reverse();
 
             // descendant tokens include EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1193,10 +1191,10 @@ using goo.bar;
                 token = token.GetNextToken(includeZeroWidth: true);
             }
 
-            Assert.Equal(tokens.Count, list.Count);
+            list.Count.Should().Be(tokens.Count);
             for (int i = 0; i < tokens.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1214,10 +1212,10 @@ using goo.bar;
                 token = token.GetNextToken(includeZeroWidth: true);
             }
 
-            Assert.Equal(tokens.Count, list.Count);
+            list.Count.Should().Be(tokens.Count);
             for (int i = 0; i < tokens.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1238,10 +1236,10 @@ using goo.bar;
             list.Reverse();
 
             // descendant tokens include EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(list[i], tokens[i]);
+                tokens[i].Should().Be(list[i]);
             }
         }
 
@@ -1261,10 +1259,10 @@ using goo.bar;
             list.Reverse();
 
             // descendant tokens includes EOF
-            Assert.Equal(tokens.Count - 1, list.Count);
+            list.Count.Should().Be(tokens.Count - 1);
             for (int i = 0; i < list.Count; i++)
             {
-                Assert.Equal(tokens[i], list[i]);
+                list[i].Should().Be(tokens[i]);
             }
         }
 
@@ -1279,10 +1277,10 @@ using goo.bar;
                 list.Add(child);
             }
 
-            Assert.Equal(children.Count, list.Count);
+            list.Count.Should().Be(children.Count);
             for (int i = 0; i < children.Count; i++)
             {
-                Assert.Equal(list[i], children[i]);
+                children[i].Should().Be(list[i]);
             }
         }
 
@@ -1298,10 +1296,10 @@ using goo.bar;
                 list.Add(child);
             }
 
-            Assert.Equal(children.Count, list.Count);
+            list.Count.Should().Be(children.Count);
             for (int i = 0; i < reversed.Count; i++)
             {
-                Assert.Equal(list[i], reversed[i]);
+                reversed[i].Should().Be(list[i]);
             }
         }
 
@@ -1311,15 +1309,15 @@ using goo.bar;
             var tree = SyntaxFactory.ParseSyntaxTree("public static class goo { }");
             var child = tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0];
             var member = (TypeDeclarationSyntax)tree.GetCompilationUnitRoot().Members[0];
-            Assert.Equal((SyntaxNodeOrToken)member, child);
+            child.Should().Be((SyntaxNodeOrToken)member);
 
             var name = member.Identifier;
             var nameChild = member.ChildNodesAndTokens()[3];
-            Assert.Equal((SyntaxNodeOrToken)name, nameChild);
+            nameChild.Should().Be((SyntaxNodeOrToken)name);
 
             var closeBraceToken = member.CloseBraceToken;
             var closeBraceChild = member.GetLastToken();
-            Assert.Equal((SyntaxNodeOrToken)closeBraceToken, closeBraceChild);
+            closeBraceChild.Should().Be((SyntaxNodeOrToken)closeBraceToken);
         }
 
         [Fact]
@@ -1327,10 +1325,10 @@ using goo.bar;
         {
             var tree = SyntaxFactory.ParseSyntaxTree("#define GOO");
             var trivia = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia()[0];
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, trivia.Kind());
-            Assert.True(trivia.HasStructure);
-            Assert.NotNull(trivia.GetStructure());
-            Assert.Null(trivia.GetStructure().Parent);
+            trivia.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
+            trivia.HasStructure.Should().BeTrue();
+            trivia.GetStructure().Should().NotBeNull();
+            trivia.GetStructure().Parent.Should().BeNull();
         }
 
         [Fact]
@@ -1338,12 +1336,12 @@ using goo.bar;
         {
             var tree = SyntaxFactory.ParseSyntaxTree("#define GOO");
             var trivia = tree.GetCompilationUnitRoot().EndOfFileToken.GetLeadingTrivia()[0];
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, trivia.Kind());
-            Assert.True(trivia.HasStructure);
-            Assert.NotNull(trivia.GetStructure());
+            trivia.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
+            trivia.HasStructure.Should().BeTrue();
+            trivia.GetStructure().Should().NotBeNull();
             var parentTrivia = trivia.GetStructure().ParentTrivia;
-            Assert.NotEqual(SyntaxKind.None, parentTrivia.Kind());
-            Assert.Equal(trivia, parentTrivia);
+            parentTrivia.Kind().Should().NotBe(SyntaxKind.None);
+            parentTrivia.Should().Be(trivia);
         }
 
         [Fact]
@@ -1352,21 +1350,21 @@ using goo.bar;
             var def = SyntaxFactory.DefineDirectiveTrivia(SyntaxFactory.Identifier("GOO"), false);
 
             // unrooted structured trivia should report parent trivia as default 
-            Assert.Equal(default(SyntaxTrivia), def.ParentTrivia);
+            def.ParentTrivia.Should().Be(default(SyntaxTrivia));
 
             var trivia = SyntaxFactory.Trivia(def);
             var structure = trivia.GetStructure();
-            Assert.NotEqual(def, structure);  // these should not be identity equals
-            Assert.True(def.IsEquivalentTo(structure)); // they should be equivalent though
-            Assert.Equal(trivia, structure.ParentTrivia); // parent trivia should be equal to original trivia
+            structure.Should().NotBe(def);  // these should not be identity equals
+            def.IsEquivalentTo(structure).Should().BeTrue(); // they should be equivalent though
+            structure.ParentTrivia.Should().Be(trivia); // parent trivia should be equal to original trivia
 
             // attach trivia to token and walk down to structured trivia and back up again
             var token = SyntaxFactory.Identifier(default(SyntaxTriviaList), "x", SyntaxTriviaList.Create(trivia));
             var tokenTrivia = token.TrailingTrivia[0];
             var tokenStructuredTrivia = tokenTrivia.GetStructure();
             var tokenStructuredParentTrivia = tokenStructuredTrivia.ParentTrivia;
-            Assert.Equal(tokenTrivia, tokenStructuredParentTrivia);
-            Assert.Equal(token, tokenStructuredParentTrivia.Token);
+            tokenStructuredParentTrivia.Should().Be(tokenTrivia);
+            tokenStructuredParentTrivia.Token.Should().Be(token);
         }
 
         [Fact]
@@ -1374,8 +1372,8 @@ using goo.bar;
         {
             var tree = SyntaxFactory.ParseSyntaxTree("#define GOO");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
         }
 
         [Fact]
@@ -1386,8 +1384,8 @@ using goo.bar;
 #undef GOO
 ");
             var d = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.UndefDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.UndefDirectiveTrivia);
         }
 
         [Fact]
@@ -1403,19 +1401,19 @@ class C {
 }
 ");
             var d1 = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d1);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d1.Kind());
+            d1.Should().NotBeNull();
+            d1.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             var d2 = d1.GetNextDirective();
-            Assert.NotNull(d2);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d2.Kind());
+            d2.Should().NotBeNull();
+            d2.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             var d3 = d2.GetNextDirective();
-            Assert.NotNull(d3);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d3.Kind());
+            d3.Should().NotBeNull();
+            d3.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var d4 = d3.GetNextDirective();
-            Assert.NotNull(d4);
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, d4.Kind());
+            d4.Should().NotBeNull();
+            d4.Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
             var d5 = d4.GetNextDirective();
-            Assert.Null(d5);
+            d5.Should().BeNull();
         }
 
         [Fact]
@@ -1431,19 +1429,19 @@ class C {
 }
 ");
             var d1 = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d1);
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, d1.Kind());
+            d1.Should().NotBeNull();
+            d1.Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
             var d2 = d1.GetPreviousDirective();
-            Assert.NotNull(d2);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d2.Kind());
+            d2.Should().NotBeNull();
+            d2.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var d3 = d2.GetPreviousDirective();
-            Assert.NotNull(d3);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d3.Kind());
+            d3.Should().NotBeNull();
+            d3.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             var d4 = d3.GetPreviousDirective();
-            Assert.NotNull(d4);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d4.Kind());
+            d4.Should().NotBeNull();
+            d4.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             var d5 = d4.GetPreviousDirective();
-            Assert.Null(d5);
+            d5.Should().BeNull();
         }
 
         [Fact]
@@ -1460,18 +1458,18 @@ class C {
             c = c.WithLeadingTrivia(c.GetLeadingTrivia().Concat(c.GetLeadingTrivia()));
 
             var leadingTriviaWithDuplicate = c.GetLeadingTrivia();
-            Assert.Equal(2, leadingTriviaWithDuplicate.Count);
+            leadingTriviaWithDuplicate.Count.Should().Be(2);
 
-            var firstDirective = Assert.IsType<RegionDirectiveTriviaSyntax>(leadingTriviaWithDuplicate[0].GetStructure());
-            var secondDirective = Assert.IsType<RegionDirectiveTriviaSyntax>(leadingTriviaWithDuplicate[1].GetStructure());
+            var firstDirective = leadingTriviaWithDuplicate[0].GetStructure().Should().BeOfType<RegionDirectiveTriviaSyntax>();
+            var secondDirective = leadingTriviaWithDuplicate[1].GetStructure().Should().BeOfType<RegionDirectiveTriviaSyntax>();
 
             // Test GetNextDirective works correctly
-            Assert.Same(secondDirective, firstDirective.GetNextDirective());
-            Assert.Null(secondDirective.GetNextDirective());
+            firstDirective.GetNextDirective().Should().BeSameAs(secondDirective);
+            secondDirective.GetNextDirective().Should().BeNull();
 
             // Test GetPreviousDirective works correctly
-            Assert.Null(firstDirective.GetPreviousDirective());
-            Assert.Same(secondDirective.GetPreviousDirective(), firstDirective);
+            firstDirective.GetPreviousDirective().Should().BeNull();
+            firstDirective.Should().BeSameAs(secondDirective.GetPreviousDirective());
         }
 
         [Fact]
@@ -1490,19 +1488,19 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             d = d.GetNextDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1521,27 +1519,27 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             d = d.GetNextDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
 
             // get directives related to elif
             var related2 = related[1].GetRelatedDirectives();
-            Assert.True(related.SequenceEqual(related2));
+            related.SequenceEqual(related2).Should().BeTrue();
 
             // get directives related to else
             var related3 = related[3].GetRelatedDirectives();
-            Assert.True(related.SequenceEqual(related3));
+            related.SequenceEqual(related3).Should().BeTrue();
         }
 
         [Fact]
@@ -1560,16 +1558,16 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1591,19 +1589,19 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             d = d.GetNextDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1625,19 +1623,19 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.DefineDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.DefineDirectiveTrivia);
             d = d.GetNextDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1659,16 +1657,16 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1689,16 +1687,16 @@ class C { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(5, related.Count);
-            Assert.Equal(SyntaxKind.IfDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[1].Kind());
-            Assert.Equal(SyntaxKind.ElifDirectiveTrivia, related[2].Kind());
-            Assert.Equal(SyntaxKind.ElseDirectiveTrivia, related[3].Kind());
-            Assert.Equal(SyntaxKind.EndIfDirectiveTrivia, related[4].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(5);
+            related[0].Kind().Should().Be(SyntaxKind.IfDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[2].Kind().Should().Be(SyntaxKind.ElifDirectiveTrivia);
+            related[3].Kind().Should().Be(SyntaxKind.ElseDirectiveTrivia);
+            related[4].Kind().Should().Be(SyntaxKind.EndIfDirectiveTrivia);
         }
 
         [Fact]
@@ -1712,13 +1710,13 @@ class A { }
 #endif
 ");
             var d = tree.GetCompilationUnitRoot().GetFirstDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.RegionDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.RegionDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(2, related.Count);
-            Assert.Equal(SyntaxKind.RegionDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.EndRegionDirectiveTrivia, related[1].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(2);
+            related[0].Kind().Should().Be(SyntaxKind.RegionDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.EndRegionDirectiveTrivia);
         }
 
         [Fact]
@@ -1733,13 +1731,13 @@ class A { }
 #endregion
 ");
             var d = tree.GetCompilationUnitRoot().GetLastDirective();
-            Assert.NotNull(d);
-            Assert.Equal(SyntaxKind.EndRegionDirectiveTrivia, d.Kind());
+            d.Should().NotBeNull();
+            d.Kind().Should().Be(SyntaxKind.EndRegionDirectiveTrivia);
             var related = d.GetRelatedDirectives();
-            Assert.NotNull(related);
-            Assert.Equal(2, related.Count);
-            Assert.Equal(SyntaxKind.RegionDirectiveTrivia, related[0].Kind());
-            Assert.Equal(SyntaxKind.EndRegionDirectiveTrivia, related[1].Kind());
+            related.Should().NotBeNull();
+            related.Count.Should().Be(2);
+            related[0].Kind().Should().Be(SyntaxKind.RegionDirectiveTrivia);
+            related[1].Kind().Should().Be(SyntaxKind.EndRegionDirectiveTrivia);
         }
 
         [WorkItem(536995, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/536995")]
@@ -1752,10 +1750,10 @@ class A { }
 }/*END*/");
             var rootNode = tree.GetCompilationUnitRoot();
 
-            Assert.Equal(rootNode.FullSpan.Length, rootNode.ToFullString().Length);
-            Assert.Equal(rootNode.Span.Length, rootNode.ToString().Length);
-            Assert.True(rootNode.ToString().Contains("/*END*/"));
-            Assert.False(rootNode.ToString().Contains("/*START*/"));
+            rootNode.ToFullString().Length.Should().Be(rootNode.FullSpan.Length);
+            rootNode.ToString().Length.Should().Be(rootNode.Span.Length);
+            rootNode.ToString().Contains("/*END*/").Should().BeTrue();
+            rootNode.ToString().Contains("/*START*/").Should().BeFalse();
         }
 
         [WorkItem(536996, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/536996")]
@@ -1770,10 +1768,10 @@ namespace Microsoft.CSharp.Test
 /*END*/");
             var rootNode = tree.GetCompilationUnitRoot();
 
-            Assert.Equal(rootNode.FullSpan.Length, rootNode.ToFullString().Length);
-            Assert.Equal(rootNode.Span.Length, rootNode.ToString().Length);
-            Assert.True(rootNode.ToString().Contains("/*END*/"));
-            Assert.False(rootNode.ToString().Contains("/*START*/"));
+            rootNode.ToFullString().Length.Should().Be(rootNode.FullSpan.Length);
+            rootNode.ToString().Length.Should().Be(rootNode.Span.Length);
+            rootNode.ToString().Contains("/*END*/").Should().BeTrue();
+            rootNode.ToString().Contains("/*START*/").Should().BeFalse();
         }
 
         [Fact]
@@ -1782,11 +1780,11 @@ namespace Microsoft.CSharp.Test
             var rootNode = SyntaxFactory.ParseSyntaxTree("using X; namespace Y { }").GetCompilationUnitRoot();
             var namespaceNode = rootNode.ChildNodesAndTokens()[1].AsNode();
             var nodeOrToken = (SyntaxNodeOrToken)namespaceNode;
-            Assert.True(nodeOrToken.IsNode);
-            Assert.Equal(namespaceNode, nodeOrToken.AsNode());
-            Assert.Equal(rootNode, nodeOrToken.Parent);
-            Assert.Equal(namespaceNode.FullSpan, nodeOrToken.FullSpan);
-            Assert.Equal(namespaceNode.Span, nodeOrToken.Span);
+            nodeOrToken.IsNode.Should().BeTrue();
+            nodeOrToken.AsNode().Should().Be(namespaceNode);
+            nodeOrToken.Parent.Should().Be(rootNode);
+            nodeOrToken.FullSpan.Should().Be(namespaceNode.FullSpan);
+            nodeOrToken.Span.Should().Be(namespaceNode.Span);
         }
 
         [Fact, WorkItem(537070, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537070")]
@@ -1796,11 +1794,11 @@ namespace Microsoft.CSharp.Test
 {
 }");
             var nodeOrToken = (SyntaxNodeOrToken)syntaxTree.GetRoot();
-            Assert.Equal(0, syntaxTree.GetDiagnostics().Count());
+            syntaxTree.GetDiagnostics().Count().Should().Be(0);
             Action<SyntaxNodeOrToken> walk = null;
             walk = (SyntaxNodeOrToken nOrT) =>
             {
-                Assert.Equal(0, syntaxTree.GetDiagnostics(nOrT).Count());
+                syntaxTree.GetDiagnostics(nOrT).Count().Should().Be(0);
                 foreach (var child in nOrT.ChildNodesAndTokens())
                 {
                     walk(child);
@@ -1814,7 +1812,7 @@ namespace Microsoft.CSharp.Test
         public void SyntaxTriviaDefaultIsDirective()
         {
             SyntaxTrivia trivia = new SyntaxTrivia();
-            Assert.False(trivia.IsDirective);
+            trivia.IsDirective.Should().BeFalse();
         }
 
         [Fact]
@@ -1832,38 +1830,38 @@ namespace Microsoft.CSharp.Test
 
             // Goo.Bar
             var qualified = SyntaxFactory.QualifiedName(goo, dot, bar);
-            Assert.Equal("Goo.Bar", qualified.ToString());
-            Assert.Equal("Bar", qualified.GetUnqualifiedName().Identifier.ValueText);
+            qualified.ToString().Should().Be("Goo.Bar");
+            qualified.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
 
             // Bar<int>
             var generic = SyntaxFactory.GenericName(bar.Identifier, SyntaxFactory.TypeArgumentList(lt, gp, gt));
-            Assert.Equal("Bar<int>", generic.ToString());
-            Assert.Equal("Bar", generic.GetUnqualifiedName().Identifier.ValueText);
+            generic.ToString().Should().Be("Bar<int>");
+            generic.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
 
             // Goo.Bar<int>
             var qualifiedGeneric = SyntaxFactory.QualifiedName(goo, dot, generic);
-            Assert.Equal("Goo.Bar<int>", qualifiedGeneric.ToString());
-            Assert.Equal("Bar", qualifiedGeneric.GetUnqualifiedName().Identifier.ValueText);
+            qualifiedGeneric.ToString().Should().Be("Goo.Bar<int>");
+            qualifiedGeneric.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
 
             // alias::Goo
             var alias = SyntaxFactory.AliasQualifiedName(externAlias, cc, goo);
-            Assert.Equal("alias::Goo", alias.ToString());
-            Assert.Equal("Goo", alias.GetUnqualifiedName().Identifier.ValueText);
+            alias.ToString().Should().Be("alias::Goo");
+            alias.GetUnqualifiedName().Identifier.ValueText.Should().Be("Goo");
 
             // alias::Bar<int>
             var aliasGeneric = SyntaxFactory.AliasQualifiedName(externAlias, cc, generic);
-            Assert.Equal("alias::Bar<int>", aliasGeneric.ToString());
-            Assert.Equal("Bar", aliasGeneric.GetUnqualifiedName().Identifier.ValueText);
+            aliasGeneric.ToString().Should().Be("alias::Bar<int>");
+            aliasGeneric.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
 
             // alias::Goo.Bar
             var aliasQualified = SyntaxFactory.QualifiedName(alias, dot, bar);
-            Assert.Equal("alias::Goo.Bar", aliasQualified.ToString());
-            Assert.Equal("Bar", aliasQualified.GetUnqualifiedName().Identifier.ValueText);
+            aliasQualified.ToString().Should().Be("alias::Goo.Bar");
+            aliasQualified.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
 
             // alias::Goo.Bar<int>
             var aliasQualifiedGeneric = SyntaxFactory.QualifiedName(alias, dot, generic);
-            Assert.Equal("alias::Goo.Bar<int>", aliasQualifiedGeneric.ToString());
-            Assert.Equal("Bar", aliasQualifiedGeneric.GetUnqualifiedName().Identifier.ValueText);
+            aliasQualifiedGeneric.ToString().Should().Be("alias::Goo.Bar<int>");
+            aliasQualifiedGeneric.GetUnqualifiedName().Identifier.ValueText.Should().Be("Bar");
         }
 
         [Fact]
@@ -1871,8 +1869,8 @@ namespace Microsoft.CSharp.Test
         {
             var someToken = SyntaxFactory.MissingToken(SyntaxKind.IntKeyword);
             var list = SyntaxFactory.TokenList(someToken, someToken);
-            Assert.Equal(someToken, someToken);
-            Assert.NotEqual(list[0], list[1]);
+            someToken.Should().Be(someToken);
+            list[1].Should().NotBe(list[0]);
         }
 
         [Fact]
@@ -1887,19 +1885,19 @@ namespace Microsoft.CSharp.Test
                 );
 
             var sizes = spec.Sizes;
-            Assert.Equal(4, sizes.Count);
-            Assert.Equal(3, sizes.SeparatorCount);
+            sizes.Count.Should().Be(4);
+            sizes.SeparatorCount.Should().Be(3);
 
-            Assert.NotEqual(sizes[0], sizes[1]);
-            Assert.NotEqual(sizes[0], sizes[2]);
-            Assert.NotEqual(sizes[0], sizes[3]);
-            Assert.NotEqual(sizes[1], sizes[2]);
-            Assert.NotEqual(sizes[1], sizes[3]);
-            Assert.NotEqual(sizes[2], sizes[3]);
+            sizes[1].Should().NotBe(sizes[0]);
+            sizes[2].Should().NotBe(sizes[0]);
+            sizes[3].Should().NotBe(sizes[0]);
+            sizes[2].Should().NotBe(sizes[1]);
+            sizes[3].Should().NotBe(sizes[1]);
+            sizes[3].Should().NotBe(sizes[2]);
 
-            Assert.NotEqual(sizes.GetSeparator(0), sizes.GetSeparator(1));
-            Assert.NotEqual(sizes.GetSeparator(0), sizes.GetSeparator(2));
-            Assert.NotEqual(sizes.GetSeparator(1), sizes.GetSeparator(2));
+            sizes.GetSeparator(1).Should().NotBe(sizes.GetSeparator(0));
+            sizes.GetSeparator(2).Should().NotBe(sizes.GetSeparator(0));
+            sizes.GetSeparator(2).Should().NotBe(sizes.GetSeparator(1));
         }
 
         [Fact]
@@ -1907,7 +1905,7 @@ namespace Microsoft.CSharp.Test
         {
             // create zero width structured trivia (not sure how these come about but its not impossible)
             var zeroWidth = SyntaxFactory.ElseDirectiveTrivia(SyntaxFactory.MissingToken(SyntaxKind.HashToken), SyntaxFactory.MissingToken(SyntaxKind.ElseKeyword), SyntaxFactory.MissingToken(SyntaxKind.EndOfDirectiveToken), false, false);
-            Assert.Equal(0, zeroWidth.Width);
+            zeroWidth.Width.Should().Be(0);
 
             // create token with more than one instance of same zero width structured trivia!
             var someToken = SyntaxFactory.Identifier(default(SyntaxTriviaList), "goo", SyntaxFactory.TriviaList(SyntaxFactory.Trivia(zeroWidth), SyntaxFactory.Trivia(zeroWidth)));
@@ -1915,12 +1913,12 @@ namespace Microsoft.CSharp.Test
             // create node with this token
             var someNode = SyntaxFactory.IdentifierName(someToken);
 
-            Assert.Equal(2, someNode.Identifier.TrailingTrivia.Count);
-            Assert.True(someNode.Identifier.TrailingTrivia[0].HasStructure);
-            Assert.True(someNode.Identifier.TrailingTrivia[1].HasStructure);
+            someNode.Identifier.TrailingTrivia.Count.Should().Be(2);
+            someNode.Identifier.TrailingTrivia[0].HasStructure.Should().BeTrue();
+            someNode.Identifier.TrailingTrivia[1].HasStructure.Should().BeTrue();
 
             // prove that trivia have different identity
-            Assert.False(someNode.Identifier.TrailingTrivia[0].Equals(someNode.Identifier.TrailingTrivia[1]));
+            someNode.Identifier.TrailingTrivia[0].Equals(someNode.Identifier.TrailingTrivia[1]).Should().BeFalse();
 
             var tt0 = someNode.Identifier.TrailingTrivia[0];
             var tt1 = someNode.Identifier.TrailingTrivia[1];
@@ -1929,14 +1927,14 @@ namespace Microsoft.CSharp.Test
             var str1 = tt1.GetStructure();
 
             // prove that structures have different identity
-            Assert.NotEqual(str0, str1);
+            str1.Should().NotBe(str0);
 
             // prove that structured trivia can get back to original trivia with correct identity
             var tr0 = str0.ParentTrivia;
-            Assert.Equal(tt0, tr0);
+            tr0.Should().Be(tt0);
 
             var tr1 = str1.ParentTrivia;
-            Assert.Equal(tt1, tr1);
+            tr1.Should().Be(tt1);
         }
 
         [Fact]
@@ -1944,7 +1942,7 @@ namespace Microsoft.CSharp.Test
         {
             // create zero width structured trivia (not sure how these come about but its not impossible)
             var zeroWidth = SyntaxFactory.ElseDirectiveTrivia(SyntaxFactory.MissingToken(SyntaxKind.HashToken), SyntaxFactory.MissingToken(SyntaxKind.ElseKeyword), SyntaxFactory.MissingToken(SyntaxKind.EndOfDirectiveToken), false, false);
-            Assert.Equal(0, zeroWidth.Width);
+            zeroWidth.Width.Should().Be(0);
 
             // create token with more than one instance of same zero width structured trivia!
             var someToken = SyntaxFactory.Identifier(default(SyntaxTriviaList), "", SyntaxFactory.TriviaList(SyntaxFactory.Trivia(zeroWidth), SyntaxFactory.Trivia(zeroWidth)));
@@ -1952,12 +1950,12 @@ namespace Microsoft.CSharp.Test
             // create node with this token
             var someNode = SyntaxFactory.IdentifierName(someToken);
 
-            Assert.Equal(2, someNode.Identifier.TrailingTrivia.Count);
-            Assert.True(someNode.Identifier.TrailingTrivia[0].HasStructure);
-            Assert.True(someNode.Identifier.TrailingTrivia[1].HasStructure);
+            someNode.Identifier.TrailingTrivia.Count.Should().Be(2);
+            someNode.Identifier.TrailingTrivia[0].HasStructure.Should().BeTrue();
+            someNode.Identifier.TrailingTrivia[1].HasStructure.Should().BeTrue();
 
             // prove that trivia have different identity
-            Assert.False(someNode.Identifier.TrailingTrivia[0].Equals(someNode.Identifier.TrailingTrivia[1]));
+            someNode.Identifier.TrailingTrivia[0].Equals(someNode.Identifier.TrailingTrivia[1]).Should().BeFalse();
 
             var tt0 = someNode.Identifier.TrailingTrivia[0];
             var tt1 = someNode.Identifier.TrailingTrivia[1];
@@ -1966,14 +1964,14 @@ namespace Microsoft.CSharp.Test
             var str1 = tt1.GetStructure();
 
             // prove that structures have different identity
-            Assert.NotEqual(str0, str1);
+            str1.Should().NotBe(str0);
 
             // prove that structured trivia can get back to original trivia with correct identity
             var tr0 = str0.ParentTrivia;
-            Assert.Equal(tt0, tr0);
+            tr0.Should().Be(tt0);
 
             var tr1 = str1.ParentTrivia;
-            Assert.Equal(tt1, tr1);
+            tr1.Should().Be(tt1);
         }
 
         [WorkItem(537059, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/537059")]
@@ -1988,7 +1986,7 @@ class Test
 ");
 
             // Verify the kind of the CSharpSyntaxNode "int IX.GOO" is MethodDeclaration and NOT FieldDeclaration
-            Assert.Equal(SyntaxKind.MethodDeclaration, tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0].ChildNodesAndTokens()[3].Kind());
+            tree.GetCompilationUnitRoot().ChildNodesAndTokens()[0].ChildNodesAndTokens()[3].Kind().Should().Be(SyntaxKind.MethodDeclaration);
         }
 
         [WorkItem(538360, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/538360")]
@@ -2008,8 +2006,8 @@ class Test
                 SyntaxKind.EndOfFileToken,
             };
 
-            Assert.Equal(expectedTokenKinds.Count(), actualTokens.Count()); //redundant but helps debug
-            Assert.True(expectedTokenKinds.SequenceEqual(actualTokens.Select(t => t.Kind())));
+            actualTokens.Count().Should().Be(expectedTokenKinds.Count()); //redundant but helps debug
+            expectedTokenKinds.SequenceEqual(actualTokens.Select(t => t.Kind())).Should().BeTrue();
         }
 
         [WorkItem(538360, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/538360")]
@@ -2029,8 +2027,8 @@ class Test
                 SyntaxKind.EndOfFileToken,
             };
 
-            Assert.Equal(expectedTokenKinds.Count(), actualTokens.Count()); //redundant but helps debug
-            Assert.True(expectedTokenKinds.SequenceEqual(actualTokens.Select(t => (SyntaxKind)t.RawKind)));
+            actualTokens.Count().Should().Be(expectedTokenKinds.Count()); //redundant but helps debug
+            expectedTokenKinds.SequenceEqual(actualTokens.Select(t => (SyntaxKind)t.RawKind)).Should().BeTrue();
         }
 
         [Fact]
@@ -2041,25 +2039,25 @@ class Test
             MethodDeclarationSyntax method = root.Members[0].Members[0];
 
             var nodeLocation = method.GetLocation();
-            Assert.True(nodeLocation.IsInSource);
-            Assert.Equal(tree, nodeLocation.SourceTree);
-            Assert.Equal(method.Span, nodeLocation.SourceSpan);
+            nodeLocation.IsInSource.Should().BeTrue();
+            nodeLocation.SourceTree.Should().Be(tree);
+            nodeLocation.SourceSpan.Should().Be(method.Span);
 
             var tokenLocation = method.Identifier.GetLocation();
-            Assert.True(tokenLocation.IsInSource);
-            Assert.Equal(tree, tokenLocation.SourceTree);
-            Assert.Equal(method.Identifier.Span, tokenLocation.SourceSpan);
+            tokenLocation.IsInSource.Should().BeTrue();
+            tokenLocation.SourceTree.Should().Be(tree);
+            tokenLocation.SourceSpan.Should().Be(method.Identifier.Span);
 
             var triviaLocation = method.ReturnType.GetLastToken().TrailingTrivia[0].GetLocation();
-            Assert.True(triviaLocation.IsInSource);
-            Assert.Equal(tree, triviaLocation.SourceTree);
-            Assert.Equal(method.ReturnType.GetLastToken().TrailingTrivia[0].Span, triviaLocation.SourceSpan);
+            triviaLocation.IsInSource.Should().BeTrue();
+            triviaLocation.SourceTree.Should().Be(tree);
+            triviaLocation.SourceSpan.Should().Be(method.ReturnType.GetLastToken().TrailingTrivia[0].Span);
 
             var textSpan = new TextSpan(5, 10);
             var spanLocation = tree.GetLocation(textSpan);
-            Assert.True(spanLocation.IsInSource);
-            Assert.Equal(tree, spanLocation.SourceTree);
-            Assert.Equal(textSpan, spanLocation.SourceSpan);
+            spanLocation.IsInSource.Should().BeTrue();
+            spanLocation.SourceTree.Should().Be(tree);
+            spanLocation.SourceSpan.Should().Be(textSpan);
         }
 
         [Fact]
@@ -2068,7 +2066,7 @@ class Test
             var expr = SyntaxFactory.ParseExpression("a + b");
             var bex = (BinaryExpressionSyntax)expr;
             var expr2 = bex.ReplaceNode(bex.Right, SyntaxFactory.ParseExpression("c"));
-            Assert.Equal("a + c", expr2.ToFullString());
+            expr2.ToFullString().Should().Be("a + c");
         }
 
         [Fact]
@@ -2082,7 +2080,7 @@ class Test
                 (node, rewritten) => SyntaxFactory.ParenthesizedExpression(rewritten));
 
             var replacedText = replaced.ToFullString();
-            Assert.Equal("(((a )+ (b ))+ (c ))+ (d)", replacedText);
+            replacedText.Should().Be("(((a )+ (b ))+ (c ))+ (d)");
         }
 
         [Fact]
@@ -2094,19 +2092,19 @@ class Test
 
             // replace first with multiple
             var newNode = invocation.ReplaceNode(invocation.ArgumentList.Arguments[0], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(c,d, b)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(c,d, b)");
 
             // replace last with multiple
             newNode = invocation.ReplaceNode(invocation.ArgumentList.Arguments[1], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(a, c,d)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(a, c,d)");
 
             // replace first with empty list
             newNode = invocation.ReplaceNode(invocation.ArgumentList.Arguments[0], new SyntaxNode[] { });
-            Assert.Equal("m(b)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(b)");
 
             // replace last with empty list
             newNode = invocation.ReplaceNode(invocation.ArgumentList.Arguments[1], new SyntaxNode[] { });
-            Assert.Equal("m(a)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(a)");
         }
 
         [Fact]
@@ -2119,10 +2117,10 @@ class Test
             var stat2 = SyntaxFactory.ParseStatement("m2(y)");
 
             // you cannot replace a node that is a single node member with multiple nodes
-            Assert.Throws<InvalidOperationException>(() => ifstatement.ReplaceNode(then, new[] { stat1, stat2 }));
+            FluentActions.Invoking(() => ifstatement.ReplaceNode(then, new[] { stat1, stat2 })).Should().Throw<InvalidOperationException>();
 
             // you cannot replace a node that is a single node member with an empty list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.ReplaceNode(then, new StatementSyntax[] { }));
+            FluentActions.Invoking(() => ifstatement.ReplaceNode(then, new StatementSyntax[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2134,19 +2132,19 @@ class Test
 
             // insert before first
             var newNode = invocation.InsertNodesBefore(invocation.ArgumentList.Arguments[0], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(c,d,a, b)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(c,d,a, b)");
 
             // insert after first
             newNode = invocation.InsertNodesAfter(invocation.ArgumentList.Arguments[0], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(a,c,d, b)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(a,c,d, b)");
 
             // insert before last
             newNode = invocation.InsertNodesBefore(invocation.ArgumentList.Arguments[1], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(a,c,d, b)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(a,c,d, b)");
 
             // insert after last
             newNode = invocation.InsertNodesAfter(invocation.ArgumentList.Arguments[1], new SyntaxNode[] { argC, argD });
-            Assert.Equal("m(a, b,c,d)", newNode.ToFullString());
+            newNode.ToFullString().Should().Be("m(a, b,c,d)");
         }
 
         [Fact]
@@ -2159,10 +2157,10 @@ class Test
             var stat2 = SyntaxFactory.ParseStatement("m2(y)");
 
             // you cannot insert nodes before/after a node that is not part of a list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.InsertNodesBefore(then, new[] { stat1, stat2 }));
+            FluentActions.Invoking(() => ifstatement.InsertNodesBefore(then, new[] { stat1, stat2 })).Should().Throw<InvalidOperationException>();
 
             // you cannot insert nodes before/after a node that is not part of a list
-            Assert.Throws<InvalidOperationException>(() => ifstatement.InsertNodesAfter(then, new StatementSyntax[] { }));
+            FluentActions.Invoking(() => ifstatement.InsertNodesAfter(then, new StatementSyntax[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2174,19 +2172,19 @@ class Test
 
             // replace first with multiple
             var newBlock = block.ReplaceNode(block.Statements[0], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var z = 30; var q = 40; var y = 20; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var z = 30; var q = 40; var y = 20; }");
 
             // replace second with multiple
             newBlock = block.ReplaceNode(block.Statements[1], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var x = 10; var z = 30; var q = 40; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var x = 10; var z = 30; var q = 40; }");
 
             // replace first with empty list
             newBlock = block.ReplaceNode(block.Statements[0], new SyntaxNode[] { });
-            Assert.Equal("{ var y = 20; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var y = 20; }");
 
             // replace second with empty list
             newBlock = block.ReplaceNode(block.Statements[1], new SyntaxNode[] { });
-            Assert.Equal("{ var x = 10; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var x = 10; }");
         }
 
         [Fact]
@@ -2198,19 +2196,19 @@ class Test
 
             // insert before first
             var newBlock = block.InsertNodesBefore(block.Statements[0], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var z = 30; var q = 40; var x = 10; var y = 20; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var z = 30; var q = 40; var x = 10; var y = 20; }");
 
             // insert after first
             newBlock = block.InsertNodesAfter(block.Statements[0], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var x = 10; var z = 30; var q = 40; var y = 20; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var x = 10; var z = 30; var q = 40; var y = 20; }");
 
             // insert before last
             newBlock = block.InsertNodesBefore(block.Statements[1], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var x = 10; var z = 30; var q = 40; var y = 20; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var x = 10; var z = 30; var q = 40; var y = 20; }");
 
             // insert after last
             newBlock = block.InsertNodesAfter(block.Statements[1], new[] { stmt1, stmt2 });
-            Assert.Equal("{ var x = 10; var y = 20; var z = 30; var q = 40; }", newBlock.ToFullString());
+            newBlock.ToFullString().Should().Be("{ var x = 10; var y = 20; var z = 30; var q = 40; }");
         }
 
         [Fact]
@@ -2219,7 +2217,7 @@ class Test
             var expr = SyntaxFactory.ParseExpression("a + b");
             var bToken = expr.DescendantTokens().First(t => t.Text == "b");
             var expr2 = expr.ReplaceToken(bToken, SyntaxFactory.ParseToken("c"));
-            Assert.Equal("a + c", expr2.ToString());
+            expr2.ToString().Should().Be("a + c");
         }
 
         [Fact]
@@ -2229,7 +2227,7 @@ class Test
             var d = SyntaxFactory.ParseToken("d ");
             var tokens = expr.DescendantTokens().Where(t => t.IsKind(SyntaxKind.IdentifierToken)).ToList();
             var replaced = expr.ReplaceTokens(tokens, (tok, tok2) => d);
-            Assert.Equal("d + d + d ", replaced.ToFullString());
+            replaced.ToFullString().Should().Be("d + d + d ");
         }
 
         [Fact]
@@ -2241,13 +2239,13 @@ class Test
             var partialToken = SyntaxFactory.ParseToken("partial ");
 
             var cu1 = cu.ReplaceToken(privateToken, publicToken);
-            Assert.Equal("public class C { }", cu1.ToFullString());
+            cu1.ToFullString().Should().Be("public class C { }");
 
             var cu2 = cu.ReplaceToken(privateToken, new[] { publicToken, partialToken });
-            Assert.Equal("public partial class C { }", cu2.ToFullString());
+            cu2.ToFullString().Should().Be("public partial class C { }");
 
             var cu3 = cu.ReplaceToken(privateToken, new SyntaxToken[] { });
-            Assert.Equal("class C { }", cu3.ToFullString());
+            cu3.ToFullString().Should().Be("class C { }");
         }
 
         [Fact]
@@ -2260,10 +2258,10 @@ class Test
             var identifierB = SyntaxFactory.ParseToken("B");
 
             // you cannot replace a token that is a single token member with multiple tokens
-            Assert.Throws<InvalidOperationException>(() => cu.ReplaceToken(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.ReplaceToken(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
 
             // you cannot replace a token that is a single token member with an empty list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.ReplaceToken(identifierC, new SyntaxToken[] { }));
+            FluentActions.Invoking(() => cu.ReplaceToken(identifierC, new SyntaxToken[] { })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2275,10 +2273,10 @@ class Test
             var staticToken = SyntaxFactory.ParseToken("static ");
 
             var cu1 = cu.InsertTokensBefore(publicToken, new[] { staticToken });
-            Assert.Equal("static public class C { }", cu1.ToFullString());
+            cu1.ToFullString().Should().Be("static public class C { }");
 
             var cu2 = cu.InsertTokensAfter(publicToken, new[] { staticToken });
-            Assert.Equal("public static class C { }", cu2.ToFullString());
+            cu2.ToFullString().Should().Be("public static class C { }");
         }
 
         [Fact]
@@ -2291,10 +2289,10 @@ class Test
             var identifierB = SyntaxFactory.ParseToken("B");
 
             // you cannot insert a token before/after a token that is not part of a list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.InsertTokensBefore(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.InsertTokensBefore(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
 
             // you cannot insert a token before/after a token that is not part of a list of tokens
-            Assert.Throws<InvalidOperationException>(() => cu.InsertTokensAfter(identifierC, new[] { identifierA, identifierB }));
+            FluentActions.Invoking(() => cu.InsertTokensAfter(identifierC, new[] { identifierA, identifierB })).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -2308,7 +2306,7 @@ class Test
             var expr2 = expr.ReplaceToken(token, SyntaxFactory.Token(token.Kind()));
             var text2 = expr2.ToFullString();
 
-            Assert.Equal("return x;", text2);
+            text2.Should().Be("return x;");
         }
 
         [Fact]
@@ -2323,7 +2321,7 @@ class Test
             var expr2 = expr.ReplaceToken(token, SyntaxFactory.Token(SyntaxTriviaList.Create(SyntaxFactory.Whitespace("garbage")), token.Kind(), default(SyntaxTriviaList)));
             var text2 = expr2.ToFullString();
 
-            Assert.Equal("/// Goo\r\ngarbage return x;", text2);
+            text2.Should().Be("/// Goo\r\ngarbage return x;");
         }
 
         [Fact]
@@ -2336,7 +2334,7 @@ class Test
             var cu2 = cu.ReplaceToken(token, SyntaxFactory.Token(SyntaxTriviaList.Create(SyntaxFactory.Whitespace("  ")), token.Kind(), default(SyntaxTriviaList)));
             var text2 = cu2.ToFullString();
 
-            Assert.Equal("  ", text2);
+            text2.Should().Be("  ");
         }
 
         [Fact]
@@ -2351,7 +2349,7 @@ class Test
             var twoSpace = SyntaxFactory.Whitespace("  ");
             var expr2 = expr.ReplaceTrivia(deepTrivia, (tr, tr2) => twoSpace);
 
-            Assert.Equal("#if  true\r\na + \r\n#endif\r\n + b", expr2.ToFullString());
+            expr2.ToFullString().Should().Be("#if  true\r\na + \r\n#endif\r\n + b");
         }
 
         [Fact]
@@ -2361,7 +2359,7 @@ class Test
             var trivia = expr.DescendantTokens().First(t => t.Text == "a").TrailingTrivia[0];
             var twoSpaces = SyntaxFactory.Whitespace("  ");
             var expr2 = expr.ReplaceTrivia(trivia, twoSpaces);
-            Assert.Equal("a  + b", expr2.ToFullString());
+            expr2.ToFullString().Should().Be("a  + b");
         }
 
         [Fact]
@@ -2371,7 +2369,7 @@ class Test
             var twoSpaces = SyntaxFactory.Whitespace("  ");
             var trivia = expr.DescendantTrivia().Where(tr => tr.IsKind(SyntaxKind.WhitespaceTrivia)).ToList();
             var replaced = expr.ReplaceTrivia(trivia, (tr, tr2) => twoSpaces);
-            Assert.Equal("a  +  b", replaced.ToFullString());
+            replaced.ToFullString().Should().Be("a  +  b");
         }
 
         [Fact]
@@ -2379,21 +2377,21 @@ class Test
         {
             var ex = SyntaxFactory.ParseExpression("/* c */ identifier");
             var leadingTrivia = ex.GetLeadingTrivia();
-            Assert.Equal(2, leadingTrivia.Count);
+            leadingTrivia.Count.Should().Be(2);
             var comment1 = leadingTrivia[0];
-            Assert.Equal(SyntaxKind.MultiLineCommentTrivia, comment1.Kind());
+            comment1.Kind().Should().Be(SyntaxKind.MultiLineCommentTrivia);
 
             var newComment1 = SyntaxFactory.ParseLeadingTrivia("/* a */")[0];
             var newComment2 = SyntaxFactory.ParseLeadingTrivia("/* b */")[0];
 
             var ex1 = ex.ReplaceTrivia(comment1, newComment1);
-            Assert.Equal("/* a */ identifier", ex1.ToFullString());
+            ex1.ToFullString().Should().Be("/* a */ identifier");
 
             var ex2 = ex.ReplaceTrivia(comment1, new[] { newComment1, newComment2 });
-            Assert.Equal("/* a *//* b */ identifier", ex2.ToFullString());
+            ex2.ToFullString().Should().Be("/* a *//* b */ identifier");
 
             var ex3 = ex.ReplaceTrivia(comment1, new SyntaxTrivia[] { });
-            Assert.Equal(" identifier", ex3.ToFullString());
+            ex3.ToFullString().Should().Be(" identifier");
         }
 
         [Fact]
@@ -2401,18 +2399,18 @@ class Test
         {
             var ex = SyntaxFactory.ParseExpression("/* c */ identifier");
             var leadingTrivia = ex.GetLeadingTrivia();
-            Assert.Equal(2, leadingTrivia.Count);
+            leadingTrivia.Count.Should().Be(2);
             var comment1 = leadingTrivia[0];
-            Assert.Equal(SyntaxKind.MultiLineCommentTrivia, comment1.Kind());
+            comment1.Kind().Should().Be(SyntaxKind.MultiLineCommentTrivia);
 
             var newComment1 = SyntaxFactory.ParseLeadingTrivia("/* a */")[0];
             var newComment2 = SyntaxFactory.ParseLeadingTrivia("/* b */")[0];
 
             var ex1 = ex.InsertTriviaBefore(comment1, new[] { newComment1, newComment2 });
-            Assert.Equal("/* a *//* b *//* c */ identifier", ex1.ToFullString());
+            ex1.ToFullString().Should().Be("/* a *//* b *//* c */ identifier");
 
             var ex2 = ex.InsertTriviaAfter(comment1, new[] { newComment1, newComment2 });
-            Assert.Equal("/* c *//* a *//* b */ identifier", ex2.ToFullString());
+            ex2.ToFullString().Should().Be("/* c *//* a *//* b */ identifier");
         }
 
         [Fact]
@@ -2422,7 +2420,7 @@ class Test
             var trivia = id.TrailingTrivia[0];
             var twoSpace = SyntaxFactory.Whitespace("  ");
             var id2 = id.ReplaceTrivia(trivia, twoSpace);
-            Assert.Equal("a  ", id2.ToFullString());
+            id2.ToFullString().Should().Be("a  ");
         }
 
         [Fact]
@@ -2434,7 +2432,7 @@ class Test
             var id2 = id.ReplaceTrivia(id.GetAllTrivia(), (tr, tr2) => SyntaxFactory.Space);
 
             // should be 3 spaces (one for original space, comment and end-of-line)
-            Assert.Equal("a   ", id2.ToFullString());
+            id2.ToFullString().Should().Be("a   ");
         }
 
         [Fact]
@@ -2443,12 +2441,12 @@ class Test
             var expr = SyntaxFactory.ParseExpression("m(a, b, /* trivia */ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("m(a , /* trivia */ c)", text);
+            text.Should().Be("m(a , /* trivia */ c)");
         }
 
         [Fact]
@@ -2458,13 +2456,13 @@ class Test
 c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"m(a,  /* trivia */
-c)", text);
+            text.Should().Be(@"m(a,  /* trivia */
+c)");
         }
 
         [Fact]
@@ -2474,13 +2472,13 @@ c)", text);
 /* trivia */ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"m(a, 
-/* trivia */ c)", text);
+            text.Should().Be(@"m(a, 
+/* trivia */ c)");
         }
 
         [Fact]
@@ -2491,14 +2489,14 @@ c)", text);
     /*arg3:*/ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"SomeMethod(/*arg1:*/ a,
+            text.Should().Be(@"SomeMethod(/*arg1:*/ a,
     /*arg2:*/ 
-    /*arg3:*/ c)", text);
+    /*arg3:*/ c)");
         }
 
         [Fact]
@@ -2512,17 +2510,17 @@ c)", text);
            c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"SomeMethod(// comment about a
+            text.Should().Be(@"SomeMethod(// comment about a
            a,
            // some comment about b
            
            // some comment about c
-           c)", text);
+           c)");
         }
 
         [Fact]
@@ -2531,12 +2529,12 @@ c)", text);
             var expr = SyntaxFactory.ParseExpression("m(a, b, /* trivia */ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("m(a, /* trivia */ c)", text);
+            text.Should().Be("m(a, /* trivia */ c)");
         }
 
         [Fact]
@@ -2547,12 +2545,12 @@ c)", text);
 c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"m(a, c)", text);
+            text.Should().Be(@"m(a, c)");
         }
 
         [Fact]
@@ -2563,12 +2561,12 @@ c)");
 /* trivia */ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"m(a, /* trivia */ c)", text);
+            text.Should().Be(@"m(a, /* trivia */ c)");
         }
 
         [Fact]
@@ -2579,13 +2577,13 @@ c)");
     /*arg3:*/ c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"SomeMethod(/*arg1:*/ a,
-    /*arg3:*/ c)", text);
+            text.Should().Be(@"SomeMethod(/*arg1:*/ a,
+    /*arg3:*/ c)");
         }
 
         [Fact]
@@ -2599,15 +2597,15 @@ c)");
            c)");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal(@"SomeMethod(// comment about a
+            text.Should().Be(@"SomeMethod(// comment about a
            a,
            // some comment about c
-           c)", text);
+           c)");
         }
 
         [Fact]
@@ -2616,12 +2614,12 @@ c)");
             var expr = SyntaxFactory.ParseExpression("m(/* before */ a /* after */)");
 
             var n = expr.DescendantTokens().Where(t => t.Text == "a").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(n);
+            n.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(n, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("m(/* before */  /* after */)", text);
+            text.Should().Be("m(/* before */  /* after */)");
         }
 
         [Fact]
@@ -2630,12 +2628,12 @@ c)");
             var expr = SyntaxFactory.ParseExpression("m(/* before */ a /* after */, b, c)");
 
             var n = expr.DescendantTokens().Where(t => t.Text == "a").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(n);
+            n.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(n, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("m(/* before */  /* after */ b, c)", text);
+            text.Should().Be("m(/* before */  /* after */ b, c)");
         }
 
         [Fact]
@@ -2644,12 +2642,12 @@ c)");
             var expr = SyntaxFactory.ParseExpression("m(a, b, /* before */ c /* after */)");
 
             var n = expr.DescendantTokens().Where(t => t.Text == "c").Select(t => t.Parent.FirstAncestorOrSelf<ArgumentSyntax>()).FirstOrDefault();
-            Assert.NotNull(n);
+            n.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(n, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("m(a, b /* before */  /* after */)", text);
+            text.Should().Be("m(a, b /* before */  /* after */)");
         }
 
         [Fact]
@@ -2658,12 +2656,12 @@ c)");
             var expr = SyntaxFactory.ParseStatement("{ a; b; /* trivia */ c }");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<StatementSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepNoTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("{ a; c }", text);
+            text.Should().Be("{ a; c }");
         }
 
         [Fact]
@@ -2672,12 +2670,12 @@ c)");
             var expr = SyntaxFactory.ParseStatement("{ a; b; /* trivia */ c }");
 
             var b = expr.DescendantTokens().Where(t => t.Text == "b").Select(t => t.Parent.FirstAncestorOrSelf<StatementSyntax>()).FirstOrDefault();
-            Assert.NotNull(b);
+            b.Should().NotBeNull();
 
             var expr2 = expr.RemoveNode(b, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = expr2.ToFullString();
-            Assert.Equal("{ a;  /* trivia */ c }", text);
+            text.Should().Be("{ a;  /* trivia */ c }");
         }
 
         [Fact]
@@ -2689,14 +2687,14 @@ c)");
             var cu = SyntaxFactory.ParseCompilationUnit("class C { void M() { } /* trivia */ }");
 
             var m = cu.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             // remove the body block from the method syntax (since it can be set to null)
             var m2 = m.RemoveNode(m.Body, SyntaxRemoveOptions.KeepExteriorTrivia);
 
             var text = m2.ToFullString();
 
-            Assert.Equal("void M()  /* trivia */ ", text);
+            text.Should().Be("void M()  /* trivia */ ");
         }
 
         [Fact]
@@ -2723,13 +2721,13 @@ class C
 }";
 
             var m = cu.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepExteriorTrivia | SyntaxRemoveOptions.KeepUnbalancedDirectives);
 
             var text = cu2.ToFullString();
 
-            Assert.Equal(expectedText, text);
+            text.Should().Be(expectedText);
         }
 
         [Fact]
@@ -2758,13 +2756,13 @@ class C
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepUnbalancedDirectives);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -2798,13 +2796,13 @@ class C
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepDirectives);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -2830,13 +2828,13 @@ class C
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -2847,13 +2845,13 @@ class C
             var cu = SyntaxFactory.ParseCompilationUnit(@"class A { } class B { } // test");
 
             var m = cu.DescendantNodes().OfType<TypeDeclarationSyntax>().LastOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
             var text = cu2.ToFullString();
 
-            Assert.Equal("class A { } ", text);
+            text.Should().Be("class A { } ");
         }
 
         [Fact]
@@ -2863,13 +2861,13 @@ class C
             var cu = SyntaxFactory.ParseCompilationUnit(@"class A { } class B { } #endregion");
 
             var m = cu.DescendantNodes().OfType<TypeDeclarationSyntax>().LastOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine | SyntaxRemoveOptions.KeepDirectives);
 
             var text = cu2.ToFullString();
 
-            Assert.Equal("class A { } \r\n#endregion", text);
+            text.Should().Be("class A { } \r\n#endregion");
         }
 
         [Fact]
@@ -2884,7 +2882,7 @@ class A
 
             var cu2 = cu.RemoveNode(cu, SyntaxRemoveOptions.KeepEndOfLine);
 
-            Assert.Null(cu2);
+            cu2.Should().BeNull();
         }
 
         [Fact]
@@ -2922,13 +2920,13 @@ int b
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -2963,13 +2961,13 @@ int b
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3007,13 +3005,13 @@ int b
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3049,13 +3047,13 @@ void M(
 }";
 
             var m = cu.DescendantNodes().OfType<ParameterSyntax>().FirstOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepTrailingTrivia);
 
             var text = cu2.ToFullString();
 
-            Assert.Equal(expectedText, text);
+            text.Should().Be(expectedText);
         }
 
         [Fact]
@@ -3091,13 +3089,13 @@ int a
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().LastOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3131,13 +3129,13 @@ int a
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().LastOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3174,13 +3172,13 @@ int a
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<ParameterSyntax>().LastOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3215,13 +3213,13 @@ int a /* after comma */
 }";
 
             var m = cu.DescendantNodes().OfType<ParameterSyntax>().LastOrDefault();
-            Assert.NotNull(m);
+            m.Should().NotBeNull();
 
             var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepLeadingTrivia);
 
             var text = cu2.ToFullString();
 
-            Assert.Equal(expectedText, text);
+            text.Should().Be(expectedText);
         }
 
         [Fact]
@@ -3239,13 +3237,13 @@ class A { } #endregion";
             TestWithWindowsAndUnixEndOfLines(inputText, expectedText, (cu, expected) =>
             {
                 var m = cu.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
-                Assert.NotNull(m);
+                m.Should().NotBeNull();
 
                 var cu2 = cu.RemoveNode(m, SyntaxRemoveOptions.KeepEndOfLine | SyntaxRemoveOptions.KeepDirectives);
 
                 var text = cu2.ToFullString();
 
-                Assert.Equal(expected, text);
+                text.Should().Be(expected);
             });
         }
 
@@ -3260,8 +3258,8 @@ class A { } #endregion";
 
             var list = (SeparatedSyntaxList<ParameterSyntax>)method.ParameterList.Parameters;
 
-            Assert.Equal(SyntaxKind.CommaToken, ((SyntaxToken)list.GetSeparator(0)).Kind());
-            Assert.Equal(SyntaxKind.CommaToken, ((SyntaxToken)list.GetSeparator(1)).Kind());
+            ((SyntaxToken)list.GetSeparator(0)).Kind().Should().Be(SyntaxKind.CommaToken);
+            ((SyntaxToken)list.GetSeparator(1)).Kind().Should().Be(SyntaxKind.CommaToken);
 
             foreach (var index in new int[] { -1, 2 })
             {
@@ -3274,27 +3272,27 @@ class A { } #endregion";
                 {
                     exceptionThrown = true;
                 }
-                Assert.True(exceptionThrown);
+                exceptionThrown.Should().BeTrue();
             }
 
             var internalParameterList = (InternalSyntax.ParameterListSyntax)method.ParameterList.Green;
             var internalParameters = internalParameterList.Parameters;
 
-            Assert.Equal(2, internalParameters.SeparatorCount);
-            Assert.Equal(SyntaxKind.CommaToken, (new SyntaxToken(internalParameters.GetSeparator(0))).Kind());
-            Assert.Equal(SyntaxKind.CommaToken, (new SyntaxToken(internalParameters.GetSeparator(1))).Kind());
+            internalParameters.SeparatorCount.Should().Be(2);
+            (new SyntaxToken(internalParameters.GetSeparator(0))).Kind().Should().Be(SyntaxKind.CommaToken);
+            (new SyntaxToken(internalParameters.GetSeparator(1))).Kind().Should().Be(SyntaxKind.CommaToken);
 
-            Assert.Equal(3, internalParameters.Count);
-            Assert.Equal("a", internalParameters[0].Identifier.ValueText);
-            Assert.Equal("b", internalParameters[1].Identifier.ValueText);
-            Assert.Equal("c", internalParameters[2].Identifier.ValueText);
+            internalParameters.Count.Should().Be(3);
+            internalParameters[0].Identifier.ValueText.Should().Be("a");
+            internalParameters[1].Identifier.ValueText.Should().Be("b");
+            internalParameters[2].Identifier.ValueText.Should().Be("c");
         }
 
         [Fact]
         public void ThrowIfUnderlyingNodeIsNullForList()
         {
             var list = new SyntaxNodeOrTokenList();
-            Assert.Equal(0, list.Count);
+            list.Count.Should().Be(0);
 
             foreach (var index in new int[] { -1, 0, 23 })
             {
@@ -3307,7 +3305,7 @@ class A { } #endregion";
                 {
                     exceptionThrown = true;
                 }
-                Assert.True(exceptionThrown);
+                exceptionThrown.Should().BeTrue();
             }
         }
 
@@ -3319,8 +3317,8 @@ class A { } #endregion";
             var token = syntaxTree.FindNodeOrTokenByKind(SyntaxKind.GreaterThanToken);
             var diag = syntaxTree.GetDiagnostics(token).ToList();
 
-            Assert.True(token.IsMissing);
-            Assert.Equal(1, diag.Count);
+            token.IsMissing.Should().BeTrue();
+            diag.Count.Should().Be(1);
         }
 
         [WorkItem(541325, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/541325")]
@@ -3369,8 +3367,8 @@ public class Test1
             var token = syntaxTree.GetCompilationUnitRoot().FindToken(code.IndexOf("using Lib;", StringComparison.Ordinal));
             var diag = syntaxTree.GetDiagnostics(token).ToList();
 
-            Assert.True(token.IsMissing);
-            Assert.Equal(3, diag.Count);
+            token.IsMissing.Should().BeTrue();
+            diag.Count.Should().Be(3);
         }
 
         [WorkItem(541630, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/541630")]
@@ -3389,7 +3387,7 @@ public class Test1
 
             foreach (var diag in tree.GetDiagnostics(trivia))
             {
-                Assert.NotNull(diag);
+                diag.Should().NotBeNull();
                 // TODO: Please add any additional validations if necessary.
             }
         }
@@ -3405,14 +3403,14 @@ public class Test1
             var paramList = delegateDecl.ParameterList;
 
             // For (non-EOF) tokens, IsMissing is true if and only if Width is 0.
-            Assert.True(compilationUnit.DescendantTokens(node => true).
+            compilationUnit.DescendantTokens(node => true).
                 Where(token => token.Kind() != SyntaxKind.EndOfFileToken).
-                All(token => token.IsMissing == (token.Width == 0)));
+                All(token => token.IsMissing == (token.Width == 0)).Should().BeTrue();
 
             // For non-terminals, Is true if Width is 0, but the converse may not hold.
-            Assert.True(paramList.IsMissing);
-            Assert.NotEqual(0, paramList.Width);
-            Assert.NotEqual(0, paramList.FullWidth);
+            paramList.IsMissing.Should().BeTrue();
+            paramList.Width.Should().NotBe(0);
+            paramList.FullWidth.Should().NotBe(0);
         }
 
         [WorkItem(542457, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/542457")]
@@ -3430,10 +3428,10 @@ class Program
             var @class = (ClassDeclarationSyntax)compilationUnit.Members.Single();
             var method = (MethodDeclarationSyntax)@class.Members.Single();
             var newModifiers = method.Modifiers.Add(SyntaxFactory.Token(default(SyntaxTriviaList), SyntaxKind.UnsafeKeyword, SyntaxFactory.TriviaList(SyntaxFactory.Space)));
-            Assert.Equal("    static unsafe ", newModifiers.ToFullString());
-            Assert.Equal(2, newModifiers.Count);
-            Assert.Equal(SyntaxKind.StaticKeyword, newModifiers[0].Kind());
-            Assert.Equal(SyntaxKind.UnsafeKeyword, newModifiers[1].Kind());
+            newModifiers.ToFullString().Should().Be("    static unsafe ");
+            newModifiers.Count.Should().Be(2);
+            newModifiers[0].Kind().Should().Be(SyntaxKind.StaticKeyword);
+            newModifiers[1].Kind().Should().Be(SyntaxKind.UnsafeKeyword);
         }
 
         [Fact]
@@ -3447,9 +3445,9 @@ class Program
             SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, intType });
             SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, intType, commaToken });
 
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { commaToken }));
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, commaToken }));
-            Assert.Throws<ArgumentException>(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, intType }));
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { commaToken })).Should().Throw<ArgumentException>();
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, commaToken, commaToken })).Should().Throw<ArgumentException>();
+            FluentActions.Invoking(() => SyntaxFactory.SeparatedList<TypeSyntax>(new SyntaxNodeOrToken[] { intType, intType })).Should().Throw<ArgumentException>();
         }
 
         [WorkItem(543310, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543310")]
@@ -3457,10 +3455,10 @@ class Program
         public void SyntaxDotParseCompilationUnitContainingOnlyWhitespace()
         {
             var node = SyntaxFactory.ParseCompilationUnit("  ");
-            Assert.True(node.HasLeadingTrivia);
-            Assert.Equal(1, node.GetLeadingTrivia().Count);
-            Assert.Equal(1, node.DescendantTrivia().Count());
-            Assert.Equal("  ", node.GetLeadingTrivia().First().ToString());
+            node.HasLeadingTrivia.Should().BeTrue();
+            node.GetLeadingTrivia().Count.Should().Be(1);
+            node.DescendantTrivia().Count().Should().Be(1);
+            node.GetLeadingTrivia().First().ToString().Should().Be("  ");
         }
 
         [WorkItem(543310, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/543310")]
@@ -3468,10 +3466,10 @@ class Program
         public void SyntaxTreeDotParseCompilationUnitContainingOnlyWhitespace()
         {
             var node = SyntaxFactory.ParseSyntaxTree("  ").GetCompilationUnitRoot();
-            Assert.True(node.HasLeadingTrivia);
-            Assert.Equal(1, node.GetLeadingTrivia().Count);
-            Assert.Equal(1, node.DescendantTrivia().Count());
-            Assert.Equal("  ", node.GetLeadingTrivia().First().ToString());
+            node.HasLeadingTrivia.Should().BeTrue();
+            node.GetLeadingTrivia().Count.Should().Be(1);
+            node.DescendantTrivia().Count().Should().Be(1);
+            node.GetLeadingTrivia().First().ToString().Should().Be("  ");
         }
 
         [Fact]
@@ -3482,20 +3480,20 @@ class Program
             var children = root.DescendantNodesAndTokens();
 
             var nodeOrToken = children.First();
-            Assert.Equal("class A { }", nodeOrToken.ToString());
-            Assert.Equal(text, nodeOrToken.ToString());
+            nodeOrToken.ToString().Should().Be("class A { }");
+            nodeOrToken.ToString().Should().Be(text);
 
             var node = (SyntaxNode)children.First(n => n.IsNode);
-            Assert.Equal("class A { }", node.ToString());
-            Assert.Equal(text, node.ToFullString());
+            node.ToString().Should().Be("class A { }");
+            node.ToFullString().Should().Be(text);
 
             var token = (SyntaxToken)children.First(n => n.IsToken);
-            Assert.Equal("class", token.ToString());
-            Assert.Equal("class ", token.ToFullString());
+            token.ToString().Should().Be("class");
+            token.ToFullString().Should().Be("class ");
 
             var trivia = root.DescendantTrivia().First();
-            Assert.Equal(" ", trivia.ToString());
-            Assert.Equal(" ", trivia.ToFullString());
+            trivia.ToString().Should().Be(" ");
+            trivia.ToFullString().Should().Be(" ");
         }
 
         [WorkItem(545116, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/545116")]
@@ -3511,14 +3509,14 @@ class C
 }
 ";
             var root = SyntaxFactory.ParseCompilationUnit(text);
-            Assert.InRange(0, root.FullSpan.Start, root.FullSpan.End);
+            0.Should().BeInRange(root.FullSpan.Start, root.FullSpan.End);
             var rootTrivia = root.FindTrivia(0);
-            Assert.Equal("// This is trivia", rootTrivia.ToString().Trim());
+            rootTrivia.ToString().Trim().Should().Be("// This is trivia");
 
             var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().Single();
-            Assert.NotInRange(0, method.FullSpan.Start, method.FullSpan.End);
+            0.Should().NotBeInRange(method.FullSpan.Start, method.FullSpan.End);
             var methodTrivia = method.FindTrivia(0);
-            Assert.Equal(default(SyntaxTrivia), methodTrivia);
+            methodTrivia.Should().Be(default(SyntaxTrivia));
         }
 
         [Fact]
@@ -3529,31 +3527,31 @@ class C
             var emptyTokenList = SyntaxFactory.TokenList(emptyToken, emptyToken);
 
             // elements should be not equal
-            Assert.NotEqual(emptyTokenList[0].TrailingTrivia[0], emptyTokenList[1].TrailingTrivia[0]);
+            emptyTokenList[1].TrailingTrivia[0].Should().NotBe(emptyTokenList[0].TrailingTrivia[0]);
 
             // lists should be not equal
-            Assert.NotEqual(emptyTokenList[0].TrailingTrivia, emptyTokenList[1].TrailingTrivia);
+            emptyTokenList[1].TrailingTrivia.Should().NotBe(emptyTokenList[0].TrailingTrivia);
 
             // Two lists with the same parent node, but different indexes should NOT be the same.
             var emptyTriviaList = SyntaxFactory.TriviaList(emptyWhitespace, emptyWhitespace);
             emptyToken = emptyToken.WithLeadingTrivia(emptyTriviaList).WithTrailingTrivia(emptyTriviaList);
 
             // elements should be not equal
-            Assert.NotEqual(emptyToken.LeadingTrivia[0], emptyToken.TrailingTrivia[0]);
+            emptyToken.TrailingTrivia[0].Should().NotBe(emptyToken.LeadingTrivia[0]);
 
             // lists should be not equal
-            Assert.NotEqual(emptyToken.LeadingTrivia, emptyToken.TrailingTrivia);
+            emptyToken.TrailingTrivia.Should().NotBe(emptyToken.LeadingTrivia);
         }
 
         [Fact]
         public void Test_SyntaxTree_ParseTextInvalidArguments()
         {
             // Invalid arguments - Validate Exceptions     
-            Assert.Throws<System.ArgumentNullException>(delegate
+            FluentActions.Invoking(delegate
             {
                 SourceText st = null;
                 var treeFromSource_invalid2 = SyntaxFactory.ParseSyntaxTree(st);
-            });
+            }).Should().Throw<System.ArgumentNullException>();
         }
 
         [Fact]
@@ -3582,7 +3580,7 @@ namespace HelloWorld
             var ThirdUsingClause = root.Usings[2];
 
             var ChangesForDifferentTrees = FirstUsingClause.SyntaxTree.GetChanges(SecondUsingClause.SyntaxTree);
-            Assert.Equal(0, ChangesForDifferentTrees.Count);
+            ChangesForDifferentTrees.Count.Should().Be(0);
 
             // Do a transform to Replace and Existing Tree
             NameSyntax name = SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("Collections.Generic"));
@@ -3593,17 +3591,17 @@ namespace HelloWorld
             root = root.ReplaceNode(ThirdUsingClause, newUsingClause);
 
             var ChangesFromTransform = ThirdUsingClause.SyntaxTree.GetChanges(newUsingClause.SyntaxTree);
-            Assert.Equal(2, ChangesFromTransform.Count);
+            ChangesFromTransform.Count.Should().Be(2);
 
             // Using the Common Syntax Changes Method
             SyntaxTree x = ThirdUsingClause.SyntaxTree;
             SyntaxTree y = newUsingClause.SyntaxTree;
 
             var changes2UsingCommonSyntax = x.GetChanges(y);
-            Assert.Equal(2, changes2UsingCommonSyntax.Count);
+            changes2UsingCommonSyntax.Count.Should().Be(2);
 
             // Verify Changes from CS Specific SyntaxTree and Common SyntaxTree are the same
-            Assert.Equal(ChangesFromTransform, changes2UsingCommonSyntax);
+            changes2UsingCommonSyntax.Should().Be(ChangesFromTransform);
         }
 
         [Fact, WorkItem(658329, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/658329")]
@@ -3632,11 +3630,11 @@ namespace HelloWorld
             var ThirdUsingClause = root.Usings[2];
 
             var ChangesForDifferentTrees = FirstUsingClause.SyntaxTree.GetChanges(SecondUsingClause.SyntaxTree);
-            Assert.Equal(0, ChangesForDifferentTrees.Count);
+            ChangesForDifferentTrees.Count.Should().Be(0);
 
             // With null tree
             SyntaxTree BlankTree = null;
-            Assert.Throws<ArgumentNullException>(() => FirstUsingClause.SyntaxTree.GetChanges(BlankTree));
+            FluentActions.Invoking(() => FirstUsingClause.SyntaxTree.GetChanges(BlankTree)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact, WorkItem(658329, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/658329")]
@@ -3645,6 +3643,7 @@ namespace HelloWorld
             string SourceText = @"using System;
 using System.Linq;
 using System.Collections;
+using AwesomeAssertions;
 
 namespace HelloWorld
 {
@@ -3665,11 +3664,11 @@ namespace HelloWorld
             var ThirdUsingClause = root.Usings[2];
 
             var ChangesForDifferentTrees = FirstUsingClause.SyntaxTree.GetChangedSpans(SecondUsingClause.SyntaxTree);
-            Assert.Equal(0, ChangesForDifferentTrees.Count);
+            ChangesForDifferentTrees.Count.Should().Be(0);
 
             // With null tree
             SyntaxTree BlankTree = null;
-            Assert.Throws<ArgumentNullException>(() => FirstUsingClause.SyntaxTree.GetChangedSpans(BlankTree));
+            FluentActions.Invoking(() => FirstUsingClause.SyntaxTree.GetChangedSpans(BlankTree)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -3677,103 +3676,103 @@ namespace HelloWorld
         {
             // token constructed using factory w/o specifying trivia (should have zero-width elastic trivia)
             var idToken = SyntaxFactory.Identifier("goo");
-            Assert.True(idToken.HasLeadingTrivia);
-            Assert.Equal(1, idToken.LeadingTrivia.Count);
-            Assert.Equal(0, idToken.LeadingTrivia.Span.Length); // zero-width elastic trivia
-            Assert.True(idToken.HasTrailingTrivia);
-            Assert.Equal(1, idToken.TrailingTrivia.Count);
-            Assert.Equal(0, idToken.TrailingTrivia.Span.Length); // zero-width elastic trivia
+            idToken.HasLeadingTrivia.Should().BeTrue();
+            idToken.LeadingTrivia.Count.Should().Be(1);
+            idToken.LeadingTrivia.Span.Length.Should().Be(0); // zero-width elastic trivia
+            idToken.HasTrailingTrivia.Should().BeTrue();
+            idToken.TrailingTrivia.Count.Should().Be(1);
+            idToken.TrailingTrivia.Span.Length.Should().Be(0); // zero-width elastic trivia
 
             // token constructed by parser w/o trivia
             idToken = SyntaxFactory.ParseToken("x");
-            Assert.False(idToken.HasLeadingTrivia);
-            Assert.Equal(0, idToken.LeadingTrivia.Count);
-            Assert.False(idToken.HasTrailingTrivia);
-            Assert.Equal(0, idToken.TrailingTrivia.Count);
+            idToken.HasLeadingTrivia.Should().BeFalse();
+            idToken.LeadingTrivia.Count.Should().Be(0);
+            idToken.HasTrailingTrivia.Should().BeFalse();
+            idToken.TrailingTrivia.Count.Should().Be(0);
 
             // token constructed by parser with trivia
             idToken = SyntaxFactory.ParseToken(" x  ");
-            Assert.True(idToken.HasLeadingTrivia);
-            Assert.Equal(1, idToken.LeadingTrivia.Count);
-            Assert.Equal(1, idToken.LeadingTrivia.Span.Length);
-            Assert.True(idToken.HasTrailingTrivia);
-            Assert.Equal(1, idToken.TrailingTrivia.Count);
-            Assert.Equal(2, idToken.TrailingTrivia.Span.Length);
+            idToken.HasLeadingTrivia.Should().BeTrue();
+            idToken.LeadingTrivia.Count.Should().Be(1);
+            idToken.LeadingTrivia.Span.Length.Should().Be(1);
+            idToken.HasTrailingTrivia.Should().BeTrue();
+            idToken.TrailingTrivia.Count.Should().Be(1);
+            idToken.TrailingTrivia.Span.Length.Should().Be(2);
 
             // node constructed using factory w/o specifying trivia
             SyntaxNode namedNode = SyntaxFactory.IdentifierName("goo");
-            Assert.True(namedNode.HasLeadingTrivia);
-            Assert.Equal(1, namedNode.GetLeadingTrivia().Count);
-            Assert.Equal(0, namedNode.GetLeadingTrivia().Span.Length);  // zero-width elastic trivia
-            Assert.True(namedNode.HasTrailingTrivia);
-            Assert.Equal(1, namedNode.GetTrailingTrivia().Count);
-            Assert.Equal(0, namedNode.GetTrailingTrivia().Span.Length);  // zero-width elastic trivia
+            namedNode.HasLeadingTrivia.Should().BeTrue();
+            namedNode.GetLeadingTrivia().Count.Should().Be(1);
+            namedNode.GetLeadingTrivia().Span.Length.Should().Be(0);  // zero-width elastic trivia
+            namedNode.HasTrailingTrivia.Should().BeTrue();
+            namedNode.GetTrailingTrivia().Count.Should().Be(1);
+            namedNode.GetTrailingTrivia().Span.Length.Should().Be(0);  // zero-width elastic trivia
 
             // node constructed by parse w/o trivia
             namedNode = SyntaxFactory.ParseExpression("goo");
-            Assert.False(namedNode.HasLeadingTrivia);
-            Assert.Equal(0, namedNode.GetLeadingTrivia().Count);
-            Assert.False(namedNode.HasTrailingTrivia);
-            Assert.Equal(0, namedNode.GetTrailingTrivia().Count);
+            namedNode.HasLeadingTrivia.Should().BeFalse();
+            namedNode.GetLeadingTrivia().Count.Should().Be(0);
+            namedNode.HasTrailingTrivia.Should().BeFalse();
+            namedNode.GetTrailingTrivia().Count.Should().Be(0);
 
             // node constructed by parse with trivia
             namedNode = SyntaxFactory.ParseExpression(" goo  ");
-            Assert.True(namedNode.HasLeadingTrivia);
-            Assert.Equal(1, namedNode.GetLeadingTrivia().Count);
-            Assert.Equal(1, namedNode.GetLeadingTrivia().Span.Length);
-            Assert.True(namedNode.HasTrailingTrivia);
-            Assert.Equal(1, namedNode.GetTrailingTrivia().Count);
-            Assert.Equal(2, namedNode.GetTrailingTrivia().Span.Length);
+            namedNode.HasLeadingTrivia.Should().BeTrue();
+            namedNode.GetLeadingTrivia().Count.Should().Be(1);
+            namedNode.GetLeadingTrivia().Span.Length.Should().Be(1);
+            namedNode.HasTrailingTrivia.Should().BeTrue();
+            namedNode.GetTrailingTrivia().Count.Should().Be(1);
+            namedNode.GetTrailingTrivia().Span.Length.Should().Be(2);
 
             // nodeOrToken with token constructed from factory w/o specifying trivia
             SyntaxNodeOrToken nodeOrToken = SyntaxFactory.Identifier("goo");
-            Assert.True(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.Equal(0, nodeOrToken.GetLeadingTrivia().Span.Length); // zero-width elastic trivia
-            Assert.True(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(1, nodeOrToken.GetTrailingTrivia().Count);
-            Assert.Equal(0, nodeOrToken.GetTrailingTrivia().Span.Length); // zero-width elastic trivia
+            nodeOrToken.HasLeadingTrivia.Should().BeTrue();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetLeadingTrivia().Span.Length.Should().Be(0); // zero-width elastic trivia
+            nodeOrToken.HasTrailingTrivia.Should().BeTrue();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetTrailingTrivia().Span.Length.Should().Be(0); // zero-width elastic trivia
 
             // nodeOrToken with node constructed from factory w/o specifying trivia
             nodeOrToken = SyntaxFactory.IdentifierName("goo");
-            Assert.True(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.Equal(0, nodeOrToken.GetLeadingTrivia().Span.Length); // zero-width elastic trivia
-            Assert.True(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(1, nodeOrToken.GetTrailingTrivia().Count);
-            Assert.Equal(0, nodeOrToken.GetTrailingTrivia().Span.Length); // zero-width elastic trivia
+            nodeOrToken.HasLeadingTrivia.Should().BeTrue();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetLeadingTrivia().Span.Length.Should().Be(0); // zero-width elastic trivia
+            nodeOrToken.HasTrailingTrivia.Should().BeTrue();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetTrailingTrivia().Span.Length.Should().Be(0); // zero-width elastic trivia
 
             // nodeOrToken with token parsed from factory w/o trivia
             nodeOrToken = SyntaxFactory.ParseToken("goo");
-            Assert.False(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(0, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.False(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(0, nodeOrToken.GetTrailingTrivia().Count);
+            nodeOrToken.HasLeadingTrivia.Should().BeFalse();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(0);
+            nodeOrToken.HasTrailingTrivia.Should().BeFalse();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(0);
 
             // nodeOrToken with node parsed from factory w/o trivia
             nodeOrToken = SyntaxFactory.ParseExpression("goo");
-            Assert.False(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(0, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.False(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(0, nodeOrToken.GetTrailingTrivia().Count);
+            nodeOrToken.HasLeadingTrivia.Should().BeFalse();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(0);
+            nodeOrToken.HasTrailingTrivia.Should().BeFalse();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(0);
 
             // nodeOrToken with token parsed from factory with trivia
             nodeOrToken = SyntaxFactory.ParseToken(" goo  ");
-            Assert.True(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Span.Length); // zero-width elastic trivia
-            Assert.True(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(1, nodeOrToken.GetTrailingTrivia().Count);
-            Assert.Equal(2, nodeOrToken.GetTrailingTrivia().Span.Length); // zero-width elastic trivia
+            nodeOrToken.HasLeadingTrivia.Should().BeTrue();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetLeadingTrivia().Span.Length.Should().Be(1); // zero-width elastic trivia
+            nodeOrToken.HasTrailingTrivia.Should().BeTrue();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetTrailingTrivia().Span.Length.Should().Be(2); // zero-width elastic trivia
 
             // nodeOrToken with node parsed from factory with trivia
             nodeOrToken = SyntaxFactory.ParseExpression(" goo  ");
-            Assert.True(nodeOrToken.HasLeadingTrivia);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Count);
-            Assert.Equal(1, nodeOrToken.GetLeadingTrivia().Span.Length); // zero-width elastic trivia
-            Assert.True(nodeOrToken.HasTrailingTrivia);
-            Assert.Equal(1, nodeOrToken.GetTrailingTrivia().Count);
-            Assert.Equal(2, nodeOrToken.GetTrailingTrivia().Span.Length); // zero-width elastic trivia
+            nodeOrToken.HasLeadingTrivia.Should().BeTrue();
+            nodeOrToken.GetLeadingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetLeadingTrivia().Span.Length.Should().Be(1); // zero-width elastic trivia
+            nodeOrToken.HasTrailingTrivia.Should().BeTrue();
+            nodeOrToken.GetTrailingTrivia().Count.Should().Be(1);
+            nodeOrToken.GetTrailingTrivia().Span.Length.Should().Be(2); // zero-width elastic trivia
         }
 
         [WorkItem(6536, "https://github.com/dotnet/roslyn/issues/6536")]
@@ -3810,8 +3809,8 @@ namespace HelloWorld
 
             var firstParens = e.FirstAncestorOrSelf<ExpressionSyntax>(n => n.Kind() == SyntaxKind.ParenthesizedExpression);
 
-            Assert.False(firstParens.Contains(a));  // fixing #8625 allows this to return quicker
-            Assert.True(firstParens.Contains(e));
+            firstParens.Contains(a).Should().BeFalse();  // fixing #8625 allows this to return quicker
+            firstParens.Contains(e).Should().BeTrue();
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3820,7 +3819,7 @@ namespace HelloWorld
             var text = "static delegate(int i) { }";
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async delegate(int i) { }", withAsync);
+            withAsync.Should().Be("static async delegate(int i) { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3829,7 +3828,7 @@ namespace HelloWorld
             var text = "static (a) => { }";
             var expression = (ParenthesizedLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async (a) => { }", withAsync);
+            withAsync.Should().Be("static async (a) => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3838,7 +3837,7 @@ namespace HelloWorld
             var text = "static a => { }";
             var expression = (SimpleLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async a => { }", withAsync);
+            withAsync.Should().Be("static async a => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3847,7 +3846,7 @@ namespace HelloWorld
             var text = "static async/**/delegate(int i) { }";
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async delegate(int i) { }", withAsync);
+            withAsync.Should().Be("static async delegate(int i) { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3856,7 +3855,7 @@ namespace HelloWorld
             var text = "static async/**/(a) => { }";
             var expression = (ParenthesizedLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async (a) => { }", withAsync);
+            withAsync.Should().Be("static async (a) => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3865,7 +3864,7 @@ namespace HelloWorld
             var text = "static async/**/a => { }";
             var expression = (SimpleLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space)).ToString();
-            Assert.Equal("static async a => { }", withAsync);
+            withAsync.Should().Be("static async a => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3874,7 +3873,7 @@ namespace HelloWorld
             var text = "static async/**/delegate(int i) { }";
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal("static delegate(int i) { }", withAsync);
+            withAsync.Should().Be("static delegate(int i) { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3883,7 +3882,7 @@ namespace HelloWorld
             var text = "static async (a) => { }";
             var expression = (ParenthesizedLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal("static (a) => { }", withAsync);
+            withAsync.Should().Be("static (a) => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3892,7 +3891,7 @@ namespace HelloWorld
             var text = "static async/**/a => { }";
             var expression = (SimpleLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal("static a => { }", withAsync);
+            withAsync.Should().Be("static a => { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3901,7 +3900,7 @@ namespace HelloWorld
             var text = "static delegate(int i) { }";
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal(text, withAsync);
+            withAsync.Should().Be(text);
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3910,7 +3909,7 @@ namespace HelloWorld
             var text = "static (a) => { }";
             var expression = (ParenthesizedLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal(text, withAsync);
+            withAsync.Should().Be(text);
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3919,7 +3918,7 @@ namespace HelloWorld
             var text = "static a => { }";
             var expression = (SimpleLambdaExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default).ToString();
-            Assert.Equal(text, withAsync);
+            withAsync.Should().Be(text);
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3929,7 +3928,7 @@ namespace HelloWorld
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var newAsync = SyntaxFactory.Token(SyntaxKind.AsyncKeyword).WithTrailingTrivia(SyntaxFactory.Space);
             var withAsync = expression.WithAsyncKeyword(newAsync).ToString();
-            Assert.Equal("static async async/*async2*/delegate(int i) { }", withAsync);
+            withAsync.Should().Be("static async async/*async2*/delegate(int i) { }");
         }
 
         [Fact, WorkItem(54239, "https://github.com/dotnet/roslyn/issues/54239")]
@@ -3938,8 +3937,8 @@ namespace HelloWorld
             var text = "static async/*async1*/ async/*async2*/ delegate(int i) { }";
             var expression = (AnonymousMethodExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var withAsync = expression.WithAsyncKeyword(default);
-            Assert.Equal("static delegate(int i) { }", withAsync.ToString());
-            Assert.Equal(default, withAsync.AsyncKeyword);
+            withAsync.ToString().Should().Be("static delegate(int i) { }");
+            withAsync.AsyncKeyword.Should().Be(default);
         }
 
         private static void TestWithWindowsAndUnixEndOfLines(string inputText, string expectedText, Action<CompilationUnitSyntax, string> action)
@@ -3967,7 +3966,7 @@ namespace HelloWorld
             var expression = (StackAllocArrayCreationExpressionSyntax)SyntaxFactory.ParseExpression(text);
             var replacedKeyword = SyntaxFactory.Token(SyntaxKind.StackAllocKeyword).WithTrailingTrivia(SyntaxFactory.Space);
             var newExpression = expression.Update(replacedKeyword, expression.Type).ToString();
-            Assert.Equal("stackalloc int[50]", newExpression);
+            newExpression.Should().Be("stackalloc int[50]");
         }
 
         [Fact]
@@ -3977,8 +3976,8 @@ namespace HelloWorld
             var text = "(string s!!)";
             var parameter = SyntaxFactory.ParseParameterList(text).Parameters[0];
             var newParameter = parameter.Update(parameter.AttributeLists, parameter.Modifiers, parameter.Type, parameter.Identifier, parameter.Default);
-            Assert.Equal("string s!!", newParameter.ToFullString());
-            Assert.Equal("string s", newParameter.ToString());
+            newParameter.ToFullString().Should().Be("string s!!");
+            newParameter.ToString().Should().Be("string s");
         }
     }
 }

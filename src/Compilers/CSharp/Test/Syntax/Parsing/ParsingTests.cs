@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Test.Utilities;
 using Xunit;
 using Xunit.Abstractions;
+using AwesomeAssertions;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 {
@@ -41,7 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 if (hasNext)
                 {
                     DumpAndCleanup();
-                    Assert.False(hasNext, "Test contains unconsumed syntax left over from UsingNode()");
+                    hasNext.Should().BeFalse("Test contains unconsumed syntax left over from UsingNode()");
                 }
             }
         }
@@ -109,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             if (consumeFullText)
             {
                 // we validate the text roundtrips
-                Assert.Equal(text, node.ToFullString());
+                node.ToFullString().Should().Be(text);
             }
 
             var actualErrors = node.GetDiagnostics();
@@ -131,7 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         protected void Validate(string text, CSharpSyntaxNode node, params DiagnosticDescription[] expectedErrors)
         {
             // we validate the text roundtrips
-            Assert.Equal(text, node.ToFullString());
+            node.ToFullString().Should().Be(text);
             var actualErrors = node.GetDiagnostics();
             actualErrors.Verify(expectedErrors);
         }
@@ -195,15 +196,15 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             try
             {
-                Assert.True(_treeEnumerator!.MoveNext());
+                _treeEnumerator!.MoveNext().Should().BeTrue();
                 var current = _treeEnumerator.Current;
 
-                Assert.Equal(kind, current.Kind());
-                Assert.False(current.IsMissing);
+                current.Kind().Should().Be(kind);
+                current.IsMissing.Should().BeFalse();
 
                 if (value != null)
                 {
-                    Assert.Equal(current.ToString(), value);
+                    value.Should().Be(current.ToString());
                 }
 
                 return current;
@@ -223,10 +224,10 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         {
             try
             {
-                Assert.True(_treeEnumerator!.MoveNext());
+                _treeEnumerator!.MoveNext().Should().BeTrue();
                 SyntaxNodeOrToken current = _treeEnumerator.Current;
-                Assert.Equal(kind, current.Kind());
-                Assert.True(current.IsMissing);
+                current.Kind().Should().Be(kind);
+                current.IsMissing.Should().BeTrue();
                 return current;
             }
             catch when (DumpAndCleanup())
@@ -245,7 +246,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             {
                 var tk = _treeEnumerator.Current.Kind();
                 DumpAndCleanup();
-                Assert.False(true, "Found unexpected node or token of kind: " + tk);
+                true.Should().BeFalse("Found unexpected node or token of kind: " + tk);
             }
         }
 
